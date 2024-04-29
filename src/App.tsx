@@ -1,8 +1,9 @@
-import { useState } from 'react';
-import reactLogo from './assets/react.svg';
-import viteLogo from '/vite.svg';
-import './App.css';
 import { Button } from '@mui/material';
+import { useState } from 'react';
+import './App.css';
+import reactLogo from './assets/react.svg';
+// import viteLogo from '/vite.svg';
+import Button1 from './components/Button';
 
 function App() {
   const [count, setCount] = useState(0);
@@ -10,12 +11,12 @@ function App() {
   return (
     <>
       <div>
-        <Button>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse
-          voluptate doloribus, nam earum libero,{' '}
-        </Button>
+        <Button1
+          value={`Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse
+          voluptate doloribus, nam earum libero`}
+        ></Button1>
         <a href="https://vitejs.dev" target="_blank" rel="noreferrer">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
+          {/* <img src={viteLogo} className="logo" alt="Vite logo" /> */}
         </a>
         <a href="https://react.dev" target="_blank" rel="noreferrer">
           <img src={reactLogo} className="logo react" alt="React logo" />
@@ -23,10 +24,7 @@ function App() {
       </div>
       <h1>Vite + React</h1>
       <div className="card">
-        <Button
-          variant="contained"
-          onClick={() => setCount(count => count + 1)}
-        >
+        <Button variant="contained" onClick={() => setCount(prev => prev + 1)}>
           count is {count}
         </Button>
         <p>

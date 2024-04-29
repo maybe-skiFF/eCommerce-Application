@@ -1,7 +1,7 @@
-export const Button = () => {
-  return (
-    <button>
-      <h1>Welcome to my app</h1>
-    </button>
-  );
-};
+interface IProps {
+  value: string;
+}
+
+export default function Button1(props: IProps) {
+  return <button>{props.value}</button>;
+}
