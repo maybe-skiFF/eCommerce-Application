@@ -35,14 +35,6 @@ module.exports = {
       'warn',
       { allowConstantExport: true },
     ],
-    // 'import/no-extraneous-dependencies': ['error', { peerDependencies: true }],
     'import/prefer-default-export': ['off'],
-    // 'react/no-restricted-strings': [
-    //   'error',
-    //   {
-    //     message: 'Использование кириллических символов запрещено',
-    //     patterns: ['с'],
-    //   },
-    // ],
   },
 };
