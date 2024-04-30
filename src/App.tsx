@@ -1,3 +1,4 @@
+import { Button } from '@mui/material';
 import { useState } from 'react';
 import './App.css';
 import { Button } from './components/Button';
@@ -14,10 +15,7 @@ function App() {
       </div>
       <h1>Vite + React</h1>
       <div className="card">
-        <Button
-          variant="contained"
-          onClick={() => setCount(count => count + 1)}
-        >
+        <Button variant="contained" onClick={() => setCount(prev => prev + 1)}>
           count is {count}
         </Button>
         <p>
