@@ -1,7 +1,7 @@
-export const Button = () => {
+export const Button = ({children}: {children: React.ReactNode }) => {
   return (
     <button>
-      <h1>Welcome to my app</h1>
+      <h1>{children}</h1>
     </button>
   );
 };
