@@ -1,3 +1,94 @@
+# The Best Store 🛍️🌐
+The Best Store is a store that offers a wide selection of food and drinks to suit every taste. You can order urgent delivery, make a pre-order (for a specific time and date) or, after checking the availability of goods, purchase everything in our departments.
+# Our purpose 🎯
+Our goal is to free you from worries about food. Spend this time with your loved ones and leave all the routine to us. Our chefs are skilled, our couriers are fast, and our support is responsive.
+
+## Our technologies ⚙️
+- HTML5 ![Image]('./src/assets/icons/html-5.svg')
+Used to host our application
+---
+- CSS3 ![Image]('./src/assets/icons/css.svg')
+Used to decorate our application
+---
+- Material UI ![Image]('./src/assets/icons/material-ui.svg')
+Used to decorate our application
+---
+- TypeScript ![Image]('./src/assets/icons/typescript.svg')
+Helps the application to be functional
+```
+npm run build
+npm run lint
+```
+---
+- React ⚛️
+Helps the application to be functional
+---
+- GitHub ![Image]('./src/assets/icons/github-svg.svg')
+Helps our team work together no matter where they are
+---
+- Vite ![Image]('./src/assets/icons/vite.svg')
+Will build our application
+Called: 
+```
+npm run dev
+npm run build
+npm run preview
+```
+---
+- NPM ![Image]('./src/assets/icons/npm.svg')
+Will build our application
+---
+- Husky 🐕
+Will check our code before publishing
+```
+npm run prepare
+```
+---
+- ESLint ![Image]('./src/assets/icons/eslint.svg')
+Will check our code before publishing
+```
+npm run lint
+npm run pre-commit
+```
+---
+- Prettier ![Image]('./src/assets/icons/prettier.svg')
+Will check our code before publishing
+```
+npm run format
+npm run pre-commit
+```
+---
+- Jest ![Image]('./src/assets/icons/jest.svg')
+Will check our application for errors
+```
+npm run test
+```
+---
+- CommerceTools 🛠️
+Provides information for our application
+---
+
+## Installation 👨‍💻
+Use the package manager [npm] (https://nodejs.org/en/learn/getting-started/an-introduction-to-the-npm-package-manager) to install The Best Store.
+```
+npm install -i
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
