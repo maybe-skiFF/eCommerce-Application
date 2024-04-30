@@ -4,16 +4,16 @@ The Best Store is a store that offers a wide selection of food and drinks to sui
 Our goal is to free you from worries about food. Spend this time with your loved ones and leave all the routine to us. Our chefs are skilled, our couriers are fast, and our support is responsive.
 
 ## Our technologies ⚙️
-- HTML5 ![Image]('./src/assets/icons/html-5.svg')
+- HTML5 
 Used to host our application
 ---
-- CSS3 ![Image]('./src/assets/icons/css.svg')
+- CSS3 
 Used to decorate our application
 ---
-- Material UI ![Image]('./src/assets/icons/material-ui.svg')
+- Material UI 
 Used to decorate our application
 ---
-- TypeScript ![Image]('./src/assets/icons/typescript.svg')
+- TypeScript 
 Helps the application to be functional
 ```
 npm run build
@@ -23,10 +23,10 @@ npm run lint
 - React ⚛️
 Helps the application to be functional
 ---
-- GitHub ![Image]('./src/assets/icons/github-svg.svg')
+- GitHub 
 Helps our team work together no matter where they are
 ---
-- Vite ![Image]('./src/assets/icons/vite.svg')
+- Vite 
 Will build our application
 Called: 
 ```
@@ -35,7 +35,7 @@ npm run build
 npm run preview
 ```
 ---
-- NPM ![Image]('./src/assets/icons/npm.svg')
+- NPM 
 Will build our application
 ---
 - Husky 🐕
@@ -44,21 +44,21 @@ Will check our code before publishing
 npm run prepare
 ```
 ---
-- ESLint ![Image]('./src/assets/icons/eslint.svg')
+- ESLint 
 Will check our code before publishing
 ```
 npm run lint
 npm run pre-commit
 ```
 ---
-- Prettier ![Image]('./src/assets/icons/prettier.svg')
+- Prettier 
 Will check our code before publishing
 ```
 npm run format
 npm run pre-commit
 ```
 ---
-- Jest ![Image]('./src/assets/icons/jest.svg')
+- Jest 
 Will check our application for errors
 ```
 npm run test
