@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -11,20 +12,22 @@ import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { checkValidationField } from 'src/utils/checkValidashionField';
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
-export default function SignInSide() {
+export default function SignInSide(): React.ReactNode {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     console.log({
-      email: data.get('email'),
+      name: data.get('name'),
       password: data.get('password'),
     });
   };
-
+  const [correctName, setCorrectName] = useState(false);
+  const [correctPassword, setCorrectPassword] = useState(false);
   return (
     <ThemeProvider theme={defaultTheme}>
       <Grid container component="main" sx={{ height: '100vh' }}>
@@ -72,11 +75,14 @@ export default function SignInSide() {
                 margin="normal"
                 required
                 fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
+                id="name"
+                label="Your name"
+                name="name"
+                autoComplete="name"
                 autoFocus
+                onInput={() => {
+                  setCorrectName(checkValidationField('name'));
+                }}
               />
               <TextField
                 margin="normal"
@@ -87,6 +93,9 @@ export default function SignInSide() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                onInput={() => {
+                  setCorrectPassword(checkValidationField('password'));
+                }}
               />
               <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}
@@ -96,6 +105,7 @@ export default function SignInSide() {
                 type="submit"
                 fullWidth
                 variant="contained"
+                disabled={!correctName || !correctPassword}
                 sx={{ mt: 3, mb: 2 }}
               >
                 Sign In
