@@ -4,24 +4,32 @@ export const checkValidationField = (location: string): boolean | string => {
   const element: HTMLInputElement | null = document.getElementById(
     location,
   ) as HTMLInputElement;
+  const label = document.getElementById(`${location}-label`);
   let resultCheck: boolean | string = '';
   if (location === 'name') {
-    reName.test(element.value)
-      ? (resultCheck = true)
-      : (resultCheck += ' You have to use only latin letters');
+    if (reName.test(element.value)) {
+      resultCheck = true;
+      label!.style.cssText = '';
+    } else {
+      resultCheck += ' You have to use only latin letters';
+    }
+
     if (element.value.length < 4) {
       resultCheck += ' The length must be 4 characters minimum';
+      label!.style.cssText = 'font-size:50%';
     }
   }
   if (location === 'password') {
-    rePassword.test(element.value)
-      ? (resultCheck = true)
-      : (resultCheck += ' You have to use only numbers');
+    if (rePassword.test(element.value)) {
+      resultCheck = true;
+      label!.style.cssText = '';
+    } else {
+      resultCheck += ' You have to use only numbers';
+    }
     if (element.value.length < 6) {
       resultCheck += ' The length must be 6 characters minimum';
-      element.classList.add('MuiInputLabel-sizeSmall');
+      label!.style.fontSize = '50%';
     }
   }
-  console.log(resultCheck);
   return resultCheck;
 };
