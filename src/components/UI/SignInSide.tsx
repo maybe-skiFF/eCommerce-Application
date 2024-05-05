@@ -11,6 +11,7 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
+// import FormHelperText from '@mui/material/FormHelperText';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { checkValidationField } from 'src/utils/checkValidashionField';
 
@@ -28,6 +29,10 @@ export default function SignInSide(): React.ReactNode {
   };
   const [correctName, setCorrectName] = useState(false);
   const [correctPassword, setCorrectPassword] = useState(false);
+  const [correctNameColor, setCorrectNameColor] = useState(false);
+  const [correctPasswordColor, setCorrectPasswordColor] = useState(false);
+  const [labelName, setLabelName] = useState('Name');
+  const [labelPassword, setLabelPassword] = useState('Password');
   return (
     <ThemeProvider theme={defaultTheme}>
       <Grid container component="main" sx={{ height: '100vh' }}>
@@ -76,12 +81,21 @@ export default function SignInSide(): React.ReactNode {
                 required
                 fullWidth
                 id="name"
-                label="Your name"
+                label={labelName}
                 name="name"
                 autoComplete="name"
                 autoFocus
+                error={correctNameColor}
                 onInput={() => {
-                  setCorrectName(checkValidationField('name'));
+                  const resultCheck = checkValidationField('name');
+                  if (typeof resultCheck === 'string') {
+                    setLabelName(resultCheck);
+                    setCorrectNameColor(true);
+                  } else {
+                    setCorrectName(resultCheck);
+                    setCorrectNameColor(!resultCheck);
+                    setLabelName('Name');
+                  }
                 }}
               />
               <TextField
@@ -89,12 +103,21 @@ export default function SignInSide(): React.ReactNode {
                 required
                 fullWidth
                 name="password"
-                label="Password"
+                label={labelPassword}
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                error={correctPasswordColor}
                 onInput={() => {
-                  setCorrectPassword(checkValidationField('password'));
+                  const resultCheck = checkValidationField('password');
+                  if (typeof resultCheck === 'string') {
+                    setLabelPassword(resultCheck);
+                    setCorrectPasswordColor(true);
+                  } else {
+                    setCorrectPassword(resultCheck);
+                    setCorrectPasswordColor(!resultCheck);
+                    setLabelPassword('Password');
+                  }
                 }}
               />
               <FormControlLabel
