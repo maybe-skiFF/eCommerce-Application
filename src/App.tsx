@@ -1,11 +1,14 @@
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+
 import './App.css';
-// import { Button } from './components/UI/Button';
-import SignInSide from './components/UI/SignInSide';
+import RegistrationPage from './components/UI/RegistrationPage';
+
+const defaultTheme = createTheme();
 function App() {
   return (
-    <>
-      <SignInSide />
-    </>
+    <ThemeProvider theme={defaultTheme}>
+      <RegistrationPage />
+    </ThemeProvider>
   );
 }
 
