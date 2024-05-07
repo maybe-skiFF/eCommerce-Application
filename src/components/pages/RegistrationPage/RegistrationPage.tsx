@@ -10,7 +10,7 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
-import { IconButton } from '@mui/material';
+import { IconButton, InputAdornment } from '@mui/material';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
@@ -122,6 +122,7 @@ export default function RegistrationPage(): ReactNode {
               helperText={helperEmail}
               FormHelperTextProps={{
                 sx: {
+                  width: '100%',
                   color: 'transparent',
                 },
               }}
@@ -146,6 +147,7 @@ export default function RegistrationPage(): ReactNode {
               FormHelperTextProps={{
                 sx: {
                   color: 'transparent',
+                  width: '100%',
                 },
               }}
               onInput={(event: ChangeEvent<HTMLInputElement>) => {
@@ -154,14 +156,19 @@ export default function RegistrationPage(): ReactNode {
                 );
                 getBehaviorPassword(resultCheck);
               }}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
             />
-            <IconButton
-              onClick={handleClickShowPassword}
-              onMouseDown={handleMouseDownPassword}
-            >
-              {showPassword ? <VisibilityOff /> : <Visibility />}
-            </IconButton>
-
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
               label={SERVICE_MESSAGES.rememberMe}
