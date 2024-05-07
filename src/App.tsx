@@ -1,7 +1,7 @@
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 import './App.css';
-import RegistrationPage from './components/UI/RegistrationPage';
+import RegistrationPage from './components/pages/RegistrationPage/RegistrationPage';
 
 const defaultTheme = createTheme();
 function App() {

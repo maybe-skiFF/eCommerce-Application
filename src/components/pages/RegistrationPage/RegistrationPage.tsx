@@ -11,13 +11,20 @@ import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 
+import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
 import {
   checkValidationFieldEmail,
   checkValidationFieldPassword,
 } from 'src/utils/checkValidationField';
-import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
-
 export default function RegistrationPage(): ReactNode {
+  const [correctEmail, setCorrectEmail] = useState<boolean>(true);
+  const [correctPassword, setCorrectPassword] = useState<boolean>(true);
+  const [helperEmail, setHelperEmail] = useState<string>(
+    SERVICE_MESSAGES.isNoValid,
+  );
+  const [helperPassword, setHelperPassword] = useState<string>(
+    SERVICE_MESSAGES.useOnlyNumbers,
+  );
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -26,17 +33,25 @@ export default function RegistrationPage(): ReactNode {
       password: data.get('password'),
     });
   };
-  const [correctEmail, setCorrectEmail] = useState<boolean>(false);
-  const [correctPassword, setCorrectPassword] = useState<boolean>(false);
-  const [correctEmailColor, setCorrectEmailColor] = useState<boolean>(false);
-  const [correctPasswordColor, setCorrectPasswordColor] =
-    useState<boolean>(false);
-  const [helperEmail, setHelperEmail] = useState<string>(
-    SERVICE_MESSAGES.isNoValid,
-  );
-  const [helperPassword, setHelperPassword] = useState<string>(
-    SERVICE_MESSAGES.useOnlyNumbers,
-  );
+  const getBehaviorEmail = (value: string) => {
+    if (!value) {
+      setHelperEmail(SERVICE_MESSAGES.isNoValid);
+      setCorrectEmail(true);
+    } else {
+      setCorrectEmail(false);
+      setHelperEmail(value);
+    }
+  };
+  const getBehaviorPassword = (value: string) => {
+    if (!value) {
+      setHelperPassword(SERVICE_MESSAGES.useOnlyNumbers);
+      setCorrectPassword(true);
+    } else {
+      setCorrectPassword(false);
+      setHelperPassword(value);
+    }
+  };
+
   return (
     <Grid container component="main" sx={{ height: '100vh' }}>
       <CssBaseline />
@@ -87,7 +102,7 @@ export default function RegistrationPage(): ReactNode {
               name="email"
               autoComplete="email"
               autoFocus
-              error={correctEmailColor}
+              error={!correctEmail}
               helperText={helperEmail}
               FormHelperTextProps={{
                 sx: {
@@ -98,15 +113,7 @@ export default function RegistrationPage(): ReactNode {
                 const resultCheck: string = checkValidationFieldEmail(
                   event.target.value,
                 );
-                if (!resultCheck) {
-                  setHelperEmail(SERVICE_MESSAGES.isNoValid);
-                  setCorrectEmailColor(false);
-                  setCorrectEmail(true);
-                } else {
-                  setCorrectEmail(false);
-                  setCorrectEmailColor(true);
-                  setHelperEmail(resultCheck);
-                }
+                getBehaviorEmail(resultCheck);
               }}
             />
             <TextField
@@ -118,7 +125,7 @@ export default function RegistrationPage(): ReactNode {
               type="password"
               id="password"
               autoComplete="current-password"
-              error={correctPasswordColor}
+              error={!correctPassword}
               helperText={helperPassword}
               FormHelperTextProps={{
                 sx: {
@@ -129,20 +136,12 @@ export default function RegistrationPage(): ReactNode {
                 const resultCheck: string = checkValidationFieldPassword(
                   event.target.value,
                 );
-                if (!resultCheck) {
-                  setHelperPassword(SERVICE_MESSAGES.useOnlyNumbers);
-                  setCorrectPasswordColor(false);
-                  setCorrectPassword(true);
-                } else {
-                  setCorrectPassword(false);
-                  setCorrectPasswordColor(true);
-                  setHelperPassword(resultCheck);
-                }
+                getBehaviorPassword(resultCheck);
               }}
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
+              label={SERVICE_MESSAGES.rememberMe}
             />
             <Button
               type="submit"
