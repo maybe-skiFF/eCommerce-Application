@@ -1,8 +1,11 @@
 export const SERVICE_MESSAGES = {
   signIn: 'Sign in ',
   isNoValid: 'This is no valid email ',
-  useOnlyNumbers: 'You have to use only numbers ',
-  useMore: 'You must use at least 8 symbols ',
+  useLowerCase: 'You must use at least one lowercase letter',
+  useUpperCase: 'You must use at least one uppercase letter ',
+  useNumber: 'Password must have at least one digit',
+  useMore: 'Password must have at least 8 symbols ',
   checkDone: '',
   rememberMe: 'Remember me ',
+  dontUseSpase: 'Password must not contain whitespace.',
 };

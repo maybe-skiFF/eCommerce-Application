@@ -1,24 +1,29 @@
 import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
 
-const reEmail = new RegExp(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g);
-const rePassword = new RegExp(/[a-zA-Z]{8,20}/g);
+const reEmail = new RegExp(/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/g);
+const reUpperCase = new RegExp(/(?=.*[A-Z])./g);
+const reLowerCase = new RegExp(/(?=.*[a-z])./g);
+const reDigits = new RegExp(/(?=.*\d)./g);
+
 const checkValidationFieldEmail = (value: string): string => {
-  return reEmail.test(value)
-    ? SERVICE_MESSAGES.checkDone
-    : SERVICE_MESSAGES.isNoValid;
+  return !reEmail.test(value)
+    ? SERVICE_MESSAGES.isNoValid
+    : value.length < 8
+      ? SERVICE_MESSAGES.useMore
+      : SERVICE_MESSAGES.checkDone;
 };
 
 const checkValidationFieldPassword = (value: string): string => {
-  let resultCheck = '';
-  if (rePassword.test(value)) {
-    resultCheck = SERVICE_MESSAGES.checkDone;
-  } else {
-    resultCheck = SERVICE_MESSAGES.useOnlyNumbers;
-  }
-
-  if (value.length < 8) {
-    resultCheck = SERVICE_MESSAGES.useMore;
-  }
-  return resultCheck;
+  return /\s/.test(value)
+    ? SERVICE_MESSAGES.dontUseSpase
+    : !reDigits.test(value)
+      ? SERVICE_MESSAGES.useNumber
+      : value.length < 8
+        ? SERVICE_MESSAGES.useMore
+        : !reLowerCase.test(value)
+          ? SERVICE_MESSAGES.useLowerCase
+          : !reUpperCase.test(value)
+            ? SERVICE_MESSAGES.useUpperCase
+            : SERVICE_MESSAGES.checkDone;
 };
 export { checkValidationFieldEmail, checkValidationFieldPassword };

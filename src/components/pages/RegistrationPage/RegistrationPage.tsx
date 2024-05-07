@@ -1,4 +1,4 @@
-import { useState, ReactNode, FormEvent, ChangeEvent } from 'react';
+import { useState, ReactNode, FormEvent, ChangeEvent, MouseEvent } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -10,6 +10,9 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
+import { IconButton } from '@mui/material';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
 import {
@@ -17,13 +20,15 @@ import {
   checkValidationFieldPassword,
 } from 'src/utils/checkValidationField';
 export default function RegistrationPage(): ReactNode {
-  const [correctEmail, setCorrectEmail] = useState<boolean>(true);
-  const [correctPassword, setCorrectPassword] = useState<boolean>(true);
+  const [correctEmail, setCorrectEmail] = useState<boolean>(false);
+  const [correctPassword, setCorrectPassword] = useState<boolean>(false);
+  const [errorEmail, setErrorEmail] = useState<boolean>(false);
+  const [errorPassword, setErrorPassword] = useState<boolean>(false);
   const [helperEmail, setHelperEmail] = useState<string>(
-    SERVICE_MESSAGES.isNoValid,
+    SERVICE_MESSAGES.useLowerCase,
   );
   const [helperPassword, setHelperPassword] = useState<string>(
-    SERVICE_MESSAGES.useOnlyNumbers,
+    SERVICE_MESSAGES.useLowerCase,
   );
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -37,19 +42,30 @@ export default function RegistrationPage(): ReactNode {
     if (!value) {
       setHelperEmail(SERVICE_MESSAGES.isNoValid);
       setCorrectEmail(true);
+      setErrorEmail(false);
     } else {
       setCorrectEmail(false);
       setHelperEmail(value);
+      setErrorEmail(true);
     }
   };
   const getBehaviorPassword = (value: string) => {
     if (!value) {
-      setHelperPassword(SERVICE_MESSAGES.useOnlyNumbers);
+      setHelperPassword(SERVICE_MESSAGES.useMore);
       setCorrectPassword(true);
+      setErrorPassword(false);
     } else {
       setCorrectPassword(false);
       setHelperPassword(value);
+      setErrorPassword(true);
     }
+  };
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleClickShowPassword = () => setShowPassword(show => !show);
+
+  const handleMouseDownPassword = (event: MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
   };
 
   return (
@@ -102,7 +118,7 @@ export default function RegistrationPage(): ReactNode {
               name="email"
               autoComplete="email"
               autoFocus
-              error={!correctEmail}
+              error={errorEmail}
               helperText={helperEmail}
               FormHelperTextProps={{
                 sx: {
@@ -122,10 +138,10 @@ export default function RegistrationPage(): ReactNode {
               fullWidth
               name="password"
               label="Password"
-              type="password"
+              type={showPassword ? 'text' : 'password'}
               id="password"
               autoComplete="current-password"
-              error={!correctPassword}
+              error={errorPassword}
               helperText={helperPassword}
               FormHelperTextProps={{
                 sx: {
@@ -139,6 +155,13 @@ export default function RegistrationPage(): ReactNode {
                 getBehaviorPassword(resultCheck);
               }}
             />
+            <IconButton
+              onClick={handleClickShowPassword}
+              onMouseDown={handleMouseDownPassword}
+            >
+              {showPassword ? <VisibilityOff /> : <Visibility />}
+            </IconButton>
+
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
               label={SERVICE_MESSAGES.rememberMe}
