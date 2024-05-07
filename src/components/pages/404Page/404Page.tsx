@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Button } from '@mui/material';
-import '../styles/404Page.css';
+import './404Page.css';
 
 export function Page404() {
   return (
