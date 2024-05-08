@@ -4,7 +4,7 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 
 import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
-import { SubmitBlock } from './Input_Email_Password';
+import { SubmitBlock } from './SubmitBlock';
 
 export const LoginForm = () => {
   return (

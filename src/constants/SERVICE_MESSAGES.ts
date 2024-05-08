@@ -1,6 +1,6 @@
 export const SERVICE_MESSAGES = {
   signIn: 'Sign in ',
-  startCheck: '',
+  startCheck: 'start',
   isNoValid: 'Email address must be  formatted (e.g., user@example.com).',
   useLowerCase: 'You must use at least one lowercase letter',
   useUpperCase: 'You must use at least one uppercase letter ',
