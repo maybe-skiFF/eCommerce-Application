@@ -30,6 +30,7 @@ export default function RegistrationPage(): ReactNode {
   const [helperPassword, setHelperPassword] = useState<string>(
     SERVICE_MESSAGES.useLowerCase,
   );
+  const [showPassword, setShowPassword] = useState<boolean>(false);
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -60,7 +61,6 @@ export default function RegistrationPage(): ReactNode {
       setErrorPassword(true);
     }
   };
-  const [showPassword, setShowPassword] = useState(false);
 
   const handleClickShowPassword = () => setShowPassword(show => !show);
 
