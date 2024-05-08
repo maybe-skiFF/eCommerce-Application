@@ -1,19 +1,17 @@
 import { Link } from 'react-router-dom';
 import { Button } from '@mui/material';
-import './404Page.css';
+import styles from './404Page.module.scss';
+import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
 
 export function Page404() {
   return (
-    <div className="page404Wrapper">
+    <div className={styles.page404Wrapper}>
       <img
-        className="Page404Img"
+        className={styles.Page404Img}
         src="../src/assets/image/404-image.jpeg"
         alt="404-image"
       />
-      <p className="Page404Text">
-        The page you are looking for might be removed or is temporarily
-        unavailable
-      </p>
+      <p className={styles.Page404Text}>{SERVICE_MESSAGES.page404Text}</p>
       <Link to="/">
         <Button variant="contained">Back To MainPage</Button>
       </Link>
