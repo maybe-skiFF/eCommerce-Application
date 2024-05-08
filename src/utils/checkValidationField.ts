@@ -1,29 +1,36 @@
 import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
 
+const reEmail = new RegExp(/^[\w-.]+@([\w-]+\.)+[\w-]{2,5}$/g);
+const reUpperCase = new RegExp(/(?=.*[A-Z])./g);
+const reLowerCase = new RegExp(/(?=.*[a-z])./g);
+const reDigits = new RegExp(/(?=.*\d)./g);
+
 const checkValidationFieldEmail = (value: string): string => {
-  const reName = new RegExp(/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/i);
-  let resultCheck = '';
-  if (reName.test(value)) {
-    resultCheck = SERVICE_MESSAGES.checkDone;
-  } else {
-    resultCheck = SERVICE_MESSAGES.isNoValid;
+  if (!reEmail.test(value)) {
+    return SERVICE_MESSAGES.isNoValid;
   }
-  console.log(resultCheck);
-  return resultCheck;
+  if (value.length < 8) {
+    return SERVICE_MESSAGES.useMore;
+  }
+  return SERVICE_MESSAGES.checkDone;
 };
 
 const checkValidationFieldPassword = (value: string): string => {
-  const rePassword = new RegExp(/\d{5,20}/gi);
-  let resultCheck = '';
-  if (rePassword.test(value)) {
-    resultCheck = SERVICE_MESSAGES.checkDone;
-  } else {
-    resultCheck = SERVICE_MESSAGES.useOnlyNumbers;
+  if (value.match(/\s/)) {
+    return SERVICE_MESSAGES.dontUseSpase;
   }
-  if (value.length < 6) {
-    resultCheck = SERVICE_MESSAGES.useMore6;
+  if (!value.match(reDigits)) {
+    return SERVICE_MESSAGES.useNumber;
   }
-  console.log(resultCheck);
-  return resultCheck;
+  if (!value.match(reLowerCase)) {
+    return SERVICE_MESSAGES.useLowerCase;
+  }
+  if (!value.match(reUpperCase)) {
+    return SERVICE_MESSAGES.useUpperCase;
+  }
+  if (value.length < 8) {
+    return SERVICE_MESSAGES.useMore;
+  }
+  return SERVICE_MESSAGES.checkDone;
 };
 export { checkValidationFieldEmail, checkValidationFieldPassword };
