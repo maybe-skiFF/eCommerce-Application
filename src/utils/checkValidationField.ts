@@ -1,7 +1,7 @@
 import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
 
 const reEmail = new RegExp(/[\w+]@[\w+]\.[\w+]{2,30}/);
-const reDomain = new RegExp(/[\w+]\.[\w+]{2,10}$/);
+const reDomain = new RegExp(/[a-z+]\.[\w+]{2,10}$/);
 const reDogSign = new RegExp(/(?=.*@)./g);
 const reUpperCase = new RegExp(/(?=.*[A-Z])./g);
 const reLowerCase = new RegExp(/(?=.*[a-z])./g);

@@ -18,6 +18,7 @@ import {
   checkValidationFieldPassword,
 } from 'src/utils/checkValidationField';
 
+import { getProject } from 'src/serverPart/ApiRoot';
 export const SubmitBlock = () => {
   const [currentStatusEmail, setCurrentStatusEmail] = useState<string>(
     SERVICE_MESSAGES.startCheck,
@@ -51,6 +52,7 @@ export const SubmitBlock = () => {
     if (data.get('password') === '') {
       setCurrentStatusPassword(SERVICE_MESSAGES.notEmpty);
     }
+    getProject().then(console.log).catch(console.error);
     console.log({
       name: data.get('email'),
       password: data.get('password'),
