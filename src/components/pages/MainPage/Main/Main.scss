@@ -21,3 +21,45 @@
     text-align: center;
   }
 }
+
+.shop__list {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  width: 100%;
+  height: 80vh;
+}
+
+.shop__item {
+  width: 400px;
+  height: 600px;
+  border: 1px solid #ebedf0;
+  margin-bottom: 20px;
+  box-sizing: border-box;
+}
+
+.item__image {
+  width: 100%;
+  height: 300px;
+  box-sizing: border-box;
+  border: 1px solid #ebedf0;
+}
+
+.item__title {
+  padding: 10px;
+  font-size: 24px;
+  color: black;
+}
+
+.item__text {
+  padding: 10px;
+  font-size: 16px;
+  color: rgb(26, 30, 35);
+}
+
+.item__price {
+  padding: 10px;
+  font-size: 24px;
+  font-weight: 700;
+}
