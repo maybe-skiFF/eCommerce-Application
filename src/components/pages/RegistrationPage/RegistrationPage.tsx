@@ -8,7 +8,7 @@ import { PATHS } from 'src/constants/PATHS';
 
 export function RegistrationPage(): ReactNode {
   return (
-    <Grid container component="main" sx={{ height: '100vh' }}>
+    <Grid container component="main" sx={{ height: '96vh' }}>
       <CssBaseline />
       <Grid
         item
