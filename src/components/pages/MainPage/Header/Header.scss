@@ -8,17 +8,27 @@
   justify-content: space-between;
   align-items: center;
   padding: 20px 40px;
+  box-sizing: border-box;
 
   &__title {
     font-size: 36px;
     line-height: 48px;
     font-style: italic;
+    font-weight: 700;
   }
 }
 
 .link {
   text-decoration: none;
   color: black;
+  display: flex;
+  align-items: center;
+
+  & img {
+    width: 36px;
+    height: 36px;
+    margin-right: 20px;
+  }
 }
 
 .icons {

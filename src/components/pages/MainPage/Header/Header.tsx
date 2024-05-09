@@ -6,6 +6,7 @@ function Header() {
   return (
     <header className="header container">
       <a className='link' href="/" >
+        <img src="../../../../../public/shop.svg" alt="logo" />
         <h1 className="header__title">
           simple clothes
         </h1>
