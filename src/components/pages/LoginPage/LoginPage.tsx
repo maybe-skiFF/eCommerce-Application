@@ -1,7 +1,11 @@
+import { LoginForm } from "src/components/forms/LoginForm";
+import Header from "../MainPage/Header/Header";
+
 export function LoginPage() {
   return (
-    <div>
-      <h1>LoginPage</h1>
-    </div>
+    <>
+      <Header />
+      <LoginForm />
+    </>
   );
 }
