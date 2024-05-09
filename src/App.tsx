@@ -1,17 +1,14 @@
-import './App.css';
-import { Button } from './components/UI/Button';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 
+import './App.css';
+import { RegistrationPage } from './components/pages/RegistrationPage/RegistrationPage';
+
+const defaultTheme = createTheme();
 function App() {
   return (
-    <>
-      <div>
-        <Button>Here we are</Button>
-      </div>
-      <h1>Vite + React</h1>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <ThemeProvider theme={defaultTheme}>
+      <RegistrationPage />
+    </ThemeProvider>
   );
 }
 
