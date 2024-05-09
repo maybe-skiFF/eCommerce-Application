@@ -1,13 +1,15 @@
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
+import { RouterProvider } from 'react-router-dom';
+import { router } from './components/router/router';
+
 import './App.css';
-import { RegistrationPage } from './components/pages/RegistrationPage/RegistrationPage';
 
 const defaultTheme = createTheme();
 function App() {
   return (
     <ThemeProvider theme={defaultTheme}>
-      <RegistrationPage />
+      <RouterProvider router={router} />
     </ThemeProvider>
   );
 }
