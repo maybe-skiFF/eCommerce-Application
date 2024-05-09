@@ -1,16 +1,24 @@
 import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
 
-const reEmail = new RegExp(/^[\w-.]+@([\w-]+\.)+[\w-]{2,5}$/g);
+const reEmail = new RegExp(/[\w+]@[\w+]\.[\w+]{2,30}/);
+const reDomain = new RegExp(/[\w+]\.[\w+]{2,10}$/);
+const reDogSign = new RegExp(/(?=.*@)./g);
 const reUpperCase = new RegExp(/(?=.*[A-Z])./g);
 const reLowerCase = new RegExp(/(?=.*[a-z])./g);
 const reDigits = new RegExp(/(?=.*\d)./g);
 
 const checkValidationFieldEmail = (value: string): string => {
-  if (!reEmail.test(value)) {
-    return SERVICE_MESSAGES.isNoValid;
+  if (!reDomain.test(value)) {
+    return SERVICE_MESSAGES.useDomainName;
   }
-  if (value.length < 8) {
-    return SERVICE_MESSAGES.useMore;
+  if (value.match(/\s/)) {
+    return SERVICE_MESSAGES.dontUseSpase;
+  }
+  if (!value.match(reDogSign)) {
+    return SERVICE_MESSAGES.useDogSign;
+  }
+  if (reEmail.test(value)) {
+    return SERVICE_MESSAGES.isNoValid;
   }
   return SERVICE_MESSAGES.checkDone;
 };
