@@ -4,8 +4,9 @@
 }
 
 .footer {
-  padding: 0 10px;
   box-sizing: border-box;
+  margin: 0 auto;
+  padding: 0 10px;
 }
 
 .info {
@@ -24,12 +25,6 @@
 .contact__item,
 .social__item {
   margin-top: 10px;
-  display: flex;
-  align-items: center;
-
-  & span {
-    margin-left: 5px;
-  }
 
   & a {
     text-decoration: none;
@@ -48,4 +43,13 @@
   justify-content: space-between;
   height: 80px;
   align-items: center;
+
+  &__text {
+    font-size: 24px;
+
+    & a {
+      text-decoration: none;
+      color: black;
+    }
+  }
 }

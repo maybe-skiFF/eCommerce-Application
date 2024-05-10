@@ -1,3 +1,8 @@
+.main {
+  margin: 0 auto;
+  padding: 20px 40px;
+}
+
 .container {
   width: 100%;
   max-width: 1280px;
@@ -7,6 +12,7 @@
   width: 100%;
   display: flex;
   justify-content: center;
+  margin-top: 20px;
 
   &__item {
     width: 200px;
@@ -67,4 +73,10 @@
   padding: 10px;
   font-size: 24px;
   font-weight: 700;
+}
+
+@media (max-width: 769px) {
+  .shop__item {
+    width: 350px;
+  }
 }

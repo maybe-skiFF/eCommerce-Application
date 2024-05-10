@@ -15,7 +15,7 @@ export default function Main() {
   };
 
   return (
-    <main className='container'>
+    <main className='main container'>
       <ChoiceGender selectedGender={selectedGender} handleChange={handleChange} />
       <ShowMainImage selectedGender={selectedGender} />
       <ShowShopCard />
