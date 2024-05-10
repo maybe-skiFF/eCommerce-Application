@@ -5,7 +5,6 @@ import Box from '@mui/material/Box';
 
 import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
 import { SubmitBlock } from './SubmitBlock';
-
 export const LoginForm = () => {
   return (
     <Box

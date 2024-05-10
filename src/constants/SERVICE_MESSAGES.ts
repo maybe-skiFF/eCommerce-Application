@@ -15,4 +15,7 @@ export const SERVICE_MESSAGES = {
   dontUseSpase: 'Password must not contain whitespace.',
   page404Text:
     'The page you are looking for might be removed or is temporarily unavailable',
+  noAccount: `Don't have an account?`,
+  haveAccount: 'Already have an account?',
+  defaultAddress: 'Set as default address',
 };

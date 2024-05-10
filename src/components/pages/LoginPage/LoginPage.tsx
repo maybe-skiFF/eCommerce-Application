@@ -2,8 +2,10 @@ import { ReactNode } from 'react';
 import CssBaseline from '@mui/material/CssBaseline';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
+import { Link } from '@mui/material';
 
 import { LoginForm } from './../../forms/LoginForm';
+import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
 import { PATHS } from 'src/constants/PATHS';
 
 export function LoginPage(): ReactNode {
@@ -28,6 +30,14 @@ export function LoginPage(): ReactNode {
       />
       <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
         <LoginForm />
+      </Grid>
+      <Grid container justifyContent="flex-end">
+        <Grid item>
+          <Link href="/registration" variant="body2">
+            {SERVICE_MESSAGES.noAccount}
+            {SERVICE_MESSAGES.signIn}
+          </Link>
+        </Grid>
       </Grid>
     </Grid>
   );

@@ -27,9 +27,7 @@ const createCustomerDraft = (customerData: customerData) => {
     ],
   };
 };
-export const createCustomer = async (
-  customerData: customerData,
-): Promise<void> => {
+const createCustomer = async (customerData: customerData): Promise<void> => {
   await apiRoot
     .customers()
     .post({
@@ -38,13 +36,10 @@ export const createCustomer = async (
     .execute();
 };
 
-// const getCustomer = () => {
-//   return apiRoot.customers().get().execute();
-// };
 getProject()
   .then(({ body }) => {
     console.log(JSON.stringify(body));
   })
   .catch(console.error);
 
-export { getProject };
+export { getProject, createCustomer };
