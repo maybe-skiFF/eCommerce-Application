@@ -18,6 +18,7 @@ export function Page404() {
         <Link to="/">
           <Button variant="contained">Back To MainPage</Button>
         </Link>
-      </div></>
+      </div>
+    </>
   );
 }

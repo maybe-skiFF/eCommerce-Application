@@ -9,39 +9,57 @@ import { Box, Link, Typography, List, ListItem } from '@mui/material';
 
 export default function Footer() {
   return (
-    <Box component='footer' className="footer container">
+    <Box component="footer" className="footer container">
       <Box className="info">
         <List className="contact__list">
           <ListItem className="contact__item">
-            <Link href="tel:+375291234567"><PhoneIcon />phone number: +375 29 123-45-67</Link>
+            <Link href="tel:+375291234567">
+              <PhoneIcon />
+              phone number: +375 29 123-45-67
+            </Link>
           </ListItem>
           <ListItem className="contact__item">
-            <Link href="mailto:example@gmail.com"><EmailIcon />email: example@gmail.com</Link>
+            <Link href="mailto:example@gmail.com">
+              <EmailIcon />
+              email: example@gmail.com
+            </Link>
           </ListItem>
           <ListItem className="contact__item">
-            <Link href=""><BusinessIcon />address: Minsk, Station Square, 3</Link>
+            <Link href="">
+              <BusinessIcon />
+              address: Minsk, Station Square, 3
+            </Link>
           </ListItem>
         </List>
         <List className="social__list">
           <ListItem className="social__item">
-            <Link target='blank' href="https://www.facebook.com/"><FacebookIcon />facebook</Link>
+            <Link target="blank" href="https://www.facebook.com/">
+              <FacebookIcon />
+              facebook
+            </Link>
           </ListItem>
           <ListItem className="social__item">
-            <Link target='blank' href="https://www.instagram.com/"><InstagramIcon />instagram</Link>
+            <Link target="blank" href="https://www.instagram.com/">
+              <InstagramIcon />
+              instagram
+            </Link>
           </ListItem>
           <ListItem className="social__item">
-            <Link target='blank' href="https://www.youtube.com/"><YouTubeIcon />youtube</Link>
+            <Link target="blank" href="https://www.youtube.com/">
+              <YouTubeIcon />
+              youtube
+            </Link>
           </ListItem>
         </List>
-      </Box >
-      <Box className="copyright">
-        <Typography
-          variant="body1">
-          <Link target='blank' href="https://rs.school/">RSSchool</Link>
-        </Typography>
-        <Typography
-          variant="body1">2024</Typography>
       </Box>
-    </Box >
+      <Box className="copyright">
+        <Typography variant="body1">
+          <Link target="blank" href="https://rs.school/">
+            RSSchool
+          </Link>
+        </Typography>
+        <Typography variant="body1">2024</Typography>
+      </Box>
+    </Box>
   );
-};
+}
