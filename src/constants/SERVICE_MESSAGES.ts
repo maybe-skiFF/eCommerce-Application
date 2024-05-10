@@ -4,6 +4,7 @@ export const SERVICE_MESSAGES = {
   isNoValid: 'Email address must be  formatted (e.g., user@example.com).',
   useLowerCase: 'You must use at least one lowercase letter',
   useUpperCase: 'You must use at least one uppercase letter ',
+  useLatin: 'You must use only latin letters',
   useNumber: 'Password must have at least one digit',
   useMore: 'Password must have at least 8 symbols ',
   useDogSign: 'The valid email must contain a symbol @',
