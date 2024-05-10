@@ -1,6 +1,10 @@
 import React from 'react';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import FormControl from '@mui/material/FormControl';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
 import './Main.scss';
 import {
   Box,
@@ -28,8 +32,35 @@ export default function Main() {
         handleChange={handleChange}
       />
       <ShowMainImage selectedGender={selectedGender} />
+      <SortItem />
       <ShowShopCard />
     </main>
+  );
+}
+
+function SortItem() {
+  const [value, setValue] = React.useState('');
+
+  const handleChange = (event: SelectChangeEvent) => {
+    setValue(event.target.value);
+  };
+
+  return (
+    <Box className="sort" sx={{ minWidth: 120 }}>
+      <FormControl fullWidth>
+        <InputLabel id="demo-simple-select-label">sort items</InputLabel>
+        <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value={value}
+          label="sort items"
+          onChange={handleChange}
+        >
+          <MenuItem value={'name'}>name</MenuItem>
+          <MenuItem value={'cost'}>cost</MenuItem>
+        </Select>
+      </FormControl>
+    </Box>
   );
 }
 

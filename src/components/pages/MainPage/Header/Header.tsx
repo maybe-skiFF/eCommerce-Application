@@ -92,7 +92,7 @@ export default function Header() {
                 </Typography>
               </Link>
             </Box>
-            <Box className='search'>
+            <Box className="search">
               <Search>
                 <SearchIconWrapper>
                   <SearchIcon />
