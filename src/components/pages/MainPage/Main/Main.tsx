@@ -2,16 +2,16 @@ import React from 'react';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import './Main.scss';
-import { Button } from '@mui/material';
+import { Box, Button, Typography, Card, CardContent, CardMedia } from '@mui/material';
 
 export default function Main() {
-  const [selectedGender, setAlignment] = React.useState('for women');
+  const [selectedGender, setGender] = React.useState('for women');
 
   const handleChange = (
     event: React.MouseEvent<HTMLElement>,
-    newAlignment: string,
+    newGender: string,
   ) => {
-    setAlignment(newAlignment);
+    setGender(newGender);
   };
 
   return (
@@ -44,10 +44,10 @@ function ChoiceGender({ selectedGender, handleChange }: {
 
 function ShowMainImage({ selectedGender }: { selectedGender: string }) {
   return (
-    <div className="navigation__image">
-      {selectedGender === 'for men' && <h2 className='navigation__title'>FOR MEN</h2>}
-      {selectedGender === 'for women' && <h2 className='navigation__title'>FOR WOMEN</h2>}
-    </div>
+    <Box className="navigation__image">
+      {selectedGender === 'for men' && <Typography variant="body1" className='navigation__title'>FOR MEN</Typography>}
+      {selectedGender === 'for women' && <Typography variant="body1" className='navigation__title'>FOR WOMEN</Typography>}
+    </Box>
   );
 }
 
@@ -98,16 +98,26 @@ const items = [{
 
 function ShowShopCard() {
   return (
-    <div className="shop__list">
+    <Box className="shop__list">
       {items.map((item) => (
-        <section className="shop__item" key={item.id}>
-          <div className="item__image">{item.image}</div>
-          <h3 className="item__title">{item.title}</h3>
-          <p className="item__text">{item.text}</p>
-          <p className="item__price">{item.price}</p>
-          <Button className="item__button" variant="outlined">add to cart</Button>
-        </section>
+        <Card className="shop__item" key={item.id}>
+          <CardMedia component="div" className="item__image" image={item.image} />
+          <CardContent>
+            <Typography variant="h6" component="h3" className="item__title">
+              {item.title}
+            </Typography>
+            <Typography variant="body1" className="item__text">
+              {item.text}
+            </Typography>
+            <Typography variant="h6" className="item__price">
+              {item.price}
+            </Typography>
+            <Button variant="outlined" className="item__button">
+              add to cart
+            </Button>
+          </CardContent>
+        </Card>
       ))}
-    </div>
+    </Box>
   );
 }

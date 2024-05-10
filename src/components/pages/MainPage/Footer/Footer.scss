@@ -1,10 +1,10 @@
 .container {
   width: 100%;
   max-width: 1280px;
+  box-sizing: border-box;
 }
 
 .footer {
-  box-sizing: border-box;
   margin: 0 auto;
   padding: 0 10px;
 }
@@ -14,17 +14,8 @@
   justify-content: space-between;
 }
 
-.contact__list,
-.social__list {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-
-}
-
 .contact__item,
 .social__item {
-  margin-top: 10px;
 
   & a {
     text-decoration: none;
@@ -32,8 +23,8 @@
     display: flex;
     align-items: center;
 
-    & span {
-      margin-left: 5px;
+    & svg {
+      margin-right: 5px;
     }
   }
 }
@@ -43,13 +34,20 @@
   justify-content: space-between;
   height: 80px;
   align-items: center;
+  padding: 8px 16px;
 
-  &__text {
-    font-size: 24px;
+  & a {
+    text-decoration: none;
+    color: black;
 
-    & a {
-      text-decoration: none;
-      color: black;
+    & svg {
+      margin-right: 5px;
     }
+  }
+}
+
+@media (max-width: 767px) {
+  .info {
+    flex-direction: column;
   }
 }
