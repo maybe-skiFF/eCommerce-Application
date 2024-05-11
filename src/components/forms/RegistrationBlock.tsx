@@ -7,6 +7,8 @@ import {
   Checkbox,
   Button,
 } from '@mui/material';
+
+import { AgeBlock } from './AgeBlock';
 import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
 export const RegistrationBlock = () => {
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -62,6 +64,7 @@ export const RegistrationBlock = () => {
             autoComplete="new-password"
           />
         </Grid>
+        <AgeBlock />
         <Grid item xs={12}>
           <FormControlLabel
             control={<Checkbox value="allowExtraEmails" color="primary" />}
