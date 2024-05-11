@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { Button } from '@mui/material';
 import styles from './404Page.module.scss';
 import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
-import Header from '../MainPage/Header/Header';
+import { Header } from '../MainPage/Header/Header';
 
 export function Page404() {
   return (

@@ -1,11 +1,4 @@
-import React from 'react';
-import ToggleButton from '@mui/material/ToggleButton';
-import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
-import FormControl from '@mui/material/FormControl';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import './Main.scss';
+import { useState, MouseEvent } from 'react';
 import {
   Box,
   Button,
@@ -13,25 +6,34 @@ import {
   Card,
   CardContent,
   CardMedia,
+  ToggleButton,
+  ToggleButtonGroup,
+  FormControl,
+  Select,
+  SelectChangeEvent,
+  InputLabel,
+  MenuItem,
 } from '@mui/material';
+import { items } from 'src/server-data/shop-data';
+import './Main.scss';
 
-export default function Main() {
-  const [selectedGender, setGender] = React.useState('for women');
+export function Main() {
+  const [selectedCategory, setCategory] = useState('for women');
 
   const handleChange = (
-    event: React.MouseEvent<HTMLElement>,
-    newGender: string,
+    event: MouseEvent<HTMLElement>,
+    newCategory: string,
   ) => {
-    setGender(newGender);
+    setCategory(newCategory);
   };
 
   return (
     <main className="main container">
-      <ChoiceGender
-        selectedGender={selectedGender}
+      <ChoiceCategory
+        selectedCategory={selectedCategory}
         handleChange={handleChange}
       />
-      <ShowMainImage selectedGender={selectedGender} />
+      <ShowMainImage selectedCategory={selectedCategory} />
       <SortItem />
       <ShowShopCard />
     </main>
@@ -39,7 +41,7 @@ export default function Main() {
 }
 
 function SortItem() {
-  const [value, setValue] = React.useState('');
+  const [value, setValue] = useState('');
 
   const handleChange = (event: SelectChangeEvent) => {
     setValue(event.target.value);
@@ -64,21 +66,17 @@ function SortItem() {
   );
 }
 
-function ChoiceGender({
-  selectedGender,
+function ChoiceCategory({
+  selectedCategory,
   handleChange,
 }: {
-  selectedGender: string;
-  handleChange: (
-    event: React.MouseEvent<HTMLElement>,
-    newAlignment: string,
-  ) => void;
+  selectedCategory: string;
+  handleChange: (event: MouseEvent<HTMLElement>, newAlignment: string) => void;
 }) {
   return (
     <ToggleButtonGroup
       className="navigation"
-      color="primary"
-      value={selectedGender}
+      value={selectedCategory}
       exclusive
       onChange={handleChange}
       aria-label="Platform"
@@ -93,15 +91,15 @@ function ChoiceGender({
   );
 }
 
-function ShowMainImage({ selectedGender }: { selectedGender: string }) {
+function ShowMainImage({ selectedCategory }: { selectedCategory: string }) {
   return (
     <Box className="navigation__image">
-      {selectedGender === 'for men' && (
+      {selectedCategory === 'for men' && (
         <Typography variant="body1" className="navigation__title">
           FOR MEN
         </Typography>
       )}
-      {selectedGender === 'for women' && (
+      {selectedCategory === 'for women' && (
         <Typography variant="body1" className="navigation__title">
           FOR WOMEN
         </Typography>
@@ -109,51 +107,6 @@ function ShowMainImage({ selectedGender }: { selectedGender: string }) {
     </Box>
   );
 }
-
-const items = [
-  {
-    id: '1',
-    image: 'image-1',
-    title: 'name-1',
-    text: 'text-1',
-    price: '1',
-  },
-  {
-    id: '2',
-    image: 'image-2',
-    title: 'name-2',
-    text: 'text-2',
-    price: '2',
-  },
-  {
-    id: '3',
-    image: 'image-3',
-    title: 'name-3',
-    text: 'text-3',
-    price: '3',
-  },
-  {
-    id: '4',
-    image: 'image-4',
-    title: 'name-4',
-    text: 'text-4',
-    price: '4',
-  },
-  {
-    id: '5',
-    image: 'image-5',
-    title: 'name-5',
-    text: 'text-5',
-    price: '5',
-  },
-  {
-    id: '6',
-    image: 'image-6',
-    title: 'name-6',
-    text: 'text-6',
-    price: '6',
-  },
-];
 
 function ShowShopCard() {
   return (
