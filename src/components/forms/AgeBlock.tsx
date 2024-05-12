@@ -1,4 +1,4 @@
-import { FormEvent, useState } from 'react';
+import { useState } from 'react';
 import {
   Box,
   Grid,
@@ -7,6 +7,7 @@ import {
   SelectChangeEvent,
   MenuItem,
   Select,
+  Divider,
 } from '@mui/material';
 import { SERVICE_MESSAGES, months } from 'src/constants/SERVICE_MESSAGES';
 
@@ -20,17 +21,10 @@ for (let i = 2024; i > 1924; i--) {
 }
 
 export const AgeBlock = () => {
-  const [day, setDay] = useState('');
-  const [month, setMonth] = useState('');
-  const [year, setYear] = useState('');
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
-  };
+  const [day, setDay] = useState<string>('');
+  const [month, setMonth] = useState<string>('');
+  const [year, setYear] = useState<string>('');
+
   const handleDayChange = (event: SelectChangeEvent) => {
     setDay(event.target.value);
   };
@@ -63,7 +57,8 @@ export const AgeBlock = () => {
     );
   });
   return (
-    <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+    <Box sx={{ mt: 3, mb: 3, mr: 'auto', ml: 'auto', minWidth: 120 }}>
+      <Divider sx={{ mb: 1.5 }}>Data of your birth</Divider>
       <Grid container spacing={2}>
         <FormControl sx={{ m: 1, minWidth: 50 }} size="small">
           <InputLabel id="day" sx={{ fontSize: '50%' }}>
@@ -77,9 +72,6 @@ export const AgeBlock = () => {
             sx={{ fontSize: '50%' }}
             onChange={handleDayChange}
           >
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
             {getDaysItems}
           </Select>
         </FormControl>
@@ -95,9 +87,6 @@ export const AgeBlock = () => {
             sx={{ fontSize: '50%' }}
             onChange={handleMonthChange}
           >
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
             {getMonthsItems}
           </Select>
         </FormControl>
@@ -113,9 +102,6 @@ export const AgeBlock = () => {
             sx={{ fontSize: '50%' }}
             onChange={handleYearChange}
           >
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
             {getYearsItems}
           </Select>
         </FormControl>

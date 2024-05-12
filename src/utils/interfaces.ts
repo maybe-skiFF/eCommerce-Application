@@ -6,3 +6,15 @@ export interface customerData {
   key: string;
   countryCode: string;
 }
+
+export interface AddressInterface {
+  Russia: CountryInterface;
+  Belarus: CountryInterface;
+  Bulgaria: CountryInterface;
+  USA: CountryInterface;
+}
+export interface CountryInterface {
+  city: string[];
+  postCode: string[];
+  street: string[];
+}

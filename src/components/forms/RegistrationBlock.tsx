@@ -9,6 +9,7 @@ import {
 } from '@mui/material';
 
 import { AgeBlock } from './AgeBlock';
+import { AddressBlock } from './AddressBlock';
 import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
 export const RegistrationBlock = () => {
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -43,7 +44,7 @@ export const RegistrationBlock = () => {
             autoComplete="family-name"
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={12} sm={6}>
           <TextField
             required
             fullWidth
@@ -53,7 +54,7 @@ export const RegistrationBlock = () => {
             autoComplete="email"
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={12} sm={6}>
           <TextField
             required
             fullWidth
@@ -64,7 +65,10 @@ export const RegistrationBlock = () => {
             autoComplete="new-password"
           />
         </Grid>
+
         <AgeBlock />
+        <AddressBlock />
+
         <Grid item xs={12}>
           <FormControlLabel
             control={<Checkbox value="allowExtraEmails" color="primary" />}
