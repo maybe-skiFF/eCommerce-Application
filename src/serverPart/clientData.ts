@@ -6,5 +6,11 @@ export const testCustomer: customerData = {
   email: 'vo@gmail.com',
   password: 'bfrU74147',
   key: 'te74189',
-  countryCode: 'US',
+  dataOfBirdth: '01/01/2001',
+  address: {
+    country: 'USA',
+    city: 'New York',
+    postCode: '111000',
+    street: 'BraitenBaech',
+  },
 };

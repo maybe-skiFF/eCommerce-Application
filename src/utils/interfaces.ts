@@ -4,17 +4,18 @@ export interface customerData {
   email: string;
   password: string;
   key: string;
-  countryCode: string;
+  dataOfBirdth: string;
+  address: CustomerAddress;
 }
-
-export interface AddressInterface {
-  Russia: CountryInterface;
-  Belarus: CountryInterface;
-  Bulgaria: CountryInterface;
-  USA: CountryInterface;
-}
-export interface CountryInterface {
+export interface Address {
+  country: string;
   city: string[];
   postCode: string[];
   street: string[];
+}
+export interface CustomerAddress {
+  country: string;
+  city: string;
+  postCode: string;
+  street: string;
 }

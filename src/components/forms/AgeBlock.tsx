@@ -11,10 +11,10 @@ import {
 } from '@mui/material';
 import { SERVICE_MESSAGES, months } from 'src/constants/SERVICE_MESSAGES';
 
-const days: number[] = [];
+const days: string[] = [];
 const years: number[] = [];
 for (let i = 1; i < 32; i++) {
-  days.push(i);
+  days.push(i.toString());
 }
 for (let i = 2024; i > 1924; i--) {
   years.push(i);
@@ -36,31 +36,46 @@ export const AgeBlock = () => {
   };
   const getDaysItems = days.map(day => {
     return (
-      <MenuItem value={day} key={`day${day}`}>
-        {day}
+      <MenuItem
+        divider={true}
+        value={day}
+        key={`day${day}`}
+        sx={{ width: 1, fontSize: '45%' }}
+      >
+        {day.length === 1 ? '0' + day : day}
       </MenuItem>
     );
   });
 
   const getMonthsItems = months.map((month, index) => {
     return (
-      <MenuItem value={index} key={month}>
+      <MenuItem
+        divider={true}
+        value={index}
+        key={month}
+        sx={{ width: 1, fontSize: '45%' }}
+      >
         {month}
       </MenuItem>
     );
   });
   const getYearsItems = years.map((year, index) => {
     return (
-      <MenuItem value={index} key={`year${year}`}>
+      <MenuItem
+        divider={true}
+        value={index}
+        key={`year${year}`}
+        sx={{ width: 1, fontSize: '45%' }}
+      >
         {year}
       </MenuItem>
     );
   });
   return (
     <Box sx={{ mt: 3, mb: 3, mr: 'auto', ml: 'auto', minWidth: 120 }}>
-      <Divider sx={{ mb: 1.5 }}>Data of your birth</Divider>
+      <Divider sx={{ mb: 2 }}>Data of your birth</Divider>
       <Grid container spacing={2}>
-        <FormControl sx={{ m: 1, minWidth: 50 }} size="small">
+        <FormControl sx={{ m: 1, minWidth: 90 }} size="small">
           <InputLabel id="day" sx={{ fontSize: '50%' }}>
             {SERVICE_MESSAGES.day}
           </InputLabel>
@@ -75,7 +90,7 @@ export const AgeBlock = () => {
             {getDaysItems}
           </Select>
         </FormControl>
-        <FormControl sx={{ m: 1, minWidth: 50 }} size="small">
+        <FormControl sx={{ m: 1, minWidth: 90 }} size="small">
           <InputLabel id="month" sx={{ fontSize: '50%' }}>
             {SERVICE_MESSAGES.month}
           </InputLabel>
@@ -90,7 +105,7 @@ export const AgeBlock = () => {
             {getMonthsItems}
           </Select>
         </FormControl>
-        <FormControl sx={{ m: 1, minWidth: 50 }} size="small">
+        <FormControl sx={{ m: 1, minWidth: 90 }} size="small">
           <InputLabel id="year" sx={{ fontSize: '50%' }}>
             {SERVICE_MESSAGES.year}
           </InputLabel>

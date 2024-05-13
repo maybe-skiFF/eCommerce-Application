@@ -1,4 +1,4 @@
-import { AddressInterface } from 'src/utils/interfaces';
+import { Address } from 'src/utils/interfaces';
 export const SERVICE_MESSAGES = {
   signIn: 'Sign in ',
   startCheck: 'start',
@@ -42,25 +42,29 @@ export const months: string[] = [
   'November',
   'December',
 ];
-export const addresses: AddressInterface = {
-  Russia: {
+export const addresses: Address[] = [
+  {
+    country: 'Russia',
     city: ['Saint Peterburg'],
     postCode: ['187015'],
     street: ['Gorokhovaya', 'Naberezhnaya Kutuzova'],
   },
-  Belarus: {
+  {
+    country: 'Belarus',
     city: ['Minsk'],
     postCode: ['220004'],
     street: ['Aleksandrovskaya', 'Bolotnaya', 'Denisovskiy'],
   },
-  Bulgaria: {
+  {
+    country: 'Bulgaria',
     city: ['Sofia'],
     postCode: ['1000'],
     street: ['Alexander Weiner', 'Berezina'],
   },
-  USA: {
+  {
+    country: 'USA',
     city: ['New York'],
     postCode: ['10001'],
     street: ['Columbus Circle', 'Wooster Street'],
   },
-};
+];
