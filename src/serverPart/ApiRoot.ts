@@ -43,11 +43,20 @@ const createCustomer = async (customerData: customerData): Promise<void> => {
     })
     .execute();
 };
-
+const checkCustomer = async (email: string): Promise<void> => {
+  await apiRoot
+    .customers()
+    .get({
+      queryArgs: {
+        where: `email="${email}"`,
+      },
+    })
+    .execute();
+};
 getProject()
   .then(({ body }) => {
     console.log(JSON.stringify(body));
   })
   .catch(console.error);
 
-export { getProject, createCustomer };
+export { getProject, createCustomer, checkCustomer };

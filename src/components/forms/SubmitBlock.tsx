@@ -11,6 +11,8 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import TextField from '@mui/material/TextField';
 
+import { checkCustomer } from 'src/serverPart/ApiRoot';
+
 import { STYLE_FOR_HELPER } from 'src/constants/STYLE_FOR_HELPER';
 import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
 import {
@@ -42,7 +44,9 @@ export const SubmitBlock = (): ReactNode => {
     event.preventDefault();
   };
 
-  const HandleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const HandleSubmit = async (
+    event: FormEvent<HTMLFormElement>,
+  ): Promise<void> => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     if (data.get('email') === '') {
@@ -51,14 +55,20 @@ export const SubmitBlock = (): ReactNode => {
     if (data.get('password') === '') {
       setCurrentStatusPassword(SERVICE_MESSAGES.notEmpty);
     }
-    console.log({
-      name: data.get('email'),
-      password: data.get('password'),
-    });
+    await checkCustomer(currentStatusEmail)
+      .then(data => {
+        console.log(data);
+      })
+      .catch(error => console.log(error));
   };
 
   return (
-    <Box component="form" noValidate onSubmit={HandleSubmit} sx={{ mt: 1 }}>
+    <Box
+      component="form"
+      noValidate
+      sx={{ mt: 1 }}
+      onSubmit={event => void HandleSubmit(event)}
+    >
       <TextField
         margin="normal"
         required

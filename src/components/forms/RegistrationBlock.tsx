@@ -20,8 +20,7 @@ import {
   addresses,
   months,
 } from 'src/constants/SERVICE_MESSAGES';
-// import { AgeBlock } from './AgeBlock';
-// import { AddressBlock } from './AddressBlock';
+
 import { createCustomer } from 'src/serverPart/ApiRoot';
 
 const days: string[] = [];
