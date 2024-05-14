@@ -19,7 +19,9 @@ export function SortItem() {
   return (
     <Box className="sort" sx={{ minWidth: 120 }}>
       <FormControl fullWidth>
-        <InputLabel id="demo-simple-select-label">{SERVICE_MESSAGES.sort}</InputLabel>
+        <InputLabel id="demo-simple-select-label">
+          {SERVICE_MESSAGES.sort}
+        </InputLabel>
         <Select
           labelId="demo-simple-select-label"
           id="demo-simple-select"

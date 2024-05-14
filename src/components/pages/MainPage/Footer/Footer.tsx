@@ -1,5 +1,5 @@
 import './Footer.scss';
-import { Box, Link, Typography, List, ListItem } from '@mui/material';
+import { Box, Link, Typography } from '@mui/material';
 import { ContactList } from 'src/components/contactList/ContactList';
 import { SocialMediaList } from 'src/components/socialMediaList/SocialMediaList';
 
