@@ -1,60 +1,10 @@
-import {
-  Box,
-  AppBar,
-  Toolbar,
-  Link,
-  Typography,
-  styled,
-  alpha,
-} from '@mui/material';
-import InputBase from '@mui/material/InputBase';
-import SearchIcon from '@mui/icons-material/Search';
+import './Header.scss';
+import { Box, AppBar, Toolbar, Link, Typography } from '@mui/material';
 import CheckroomIcon from '@mui/icons-material/Checkroom';
 import PersonIcon from '@mui/icons-material/Person';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
-import './Header.scss';
-
-const Search = styled('div')(({ theme }) => ({
-  position: 'relative',
-  borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(theme.palette.common.white, 0.15),
-  '&:hover': {
-    backgroundColor: alpha(theme.palette.common.white, 0.25),
-  },
-  marginLeft: 0,
-  width: '100%',
-  [theme.breakpoints.up('sm')]: {
-    marginLeft: theme.spacing(1),
-    width: 'auto',
-  },
-}));
-
-const SearchIconWrapper = styled('div')(({ theme }) => ({
-  padding: theme.spacing(0, 2),
-  height: '100%',
-  position: 'absolute',
-  pointerEvents: 'none',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-}));
-
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: 'inherit',
-  width: '100%',
-  '& .MuiInputBase-input': {
-    padding: theme.spacing(1, 1, 1, 0),
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create('width'),
-    [theme.breakpoints.up('sm')]: {
-      width: '12ch',
-      '&:focus': {
-        width: '14ch',
-      },
-    },
-  },
-}));
+import { Search } from 'src/components/search/Search';
 
 export function Header() {
   return (
@@ -63,7 +13,7 @@ export function Header() {
         className="header container"
         position="static"
         elevation={0}
-        style={{ backgroundColor: '#ffffff' }}
+        sx={{ backgroundColor: '#ffffff' }}
       >
         <Toolbar className="toolbar">
           <Box className="logo" sx={{ flexGrow: 1 }}>
@@ -86,15 +36,7 @@ export function Header() {
             </Link>
           </Box>
           <Box className="search">
-            <Search>
-              <SearchIconWrapper>
-                <SearchIcon />
-              </SearchIconWrapper>
-              <StyledInputBase
-                placeholder="Search…"
-                inputProps={{ 'aria-label': 'search' }}
-              />
-            </Search>
+            <Search />
           </Box>
           <Box className="login">
             <Link
@@ -104,7 +46,7 @@ export function Header() {
               href="/login"
             >
               <PersonIcon />
-              Login
+              {SERVICE_MESSAGES.login}
             </Link>
             <Link
               className="login__link"
@@ -113,7 +55,7 @@ export function Header() {
               href="/cart"
             >
               <ShoppingCartIcon />
-              Cart
+              {SERVICE_MESSAGES.cart}
             </Link>
           </Box>
         </Toolbar>

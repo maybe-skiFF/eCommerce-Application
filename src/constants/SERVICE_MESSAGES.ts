@@ -15,4 +15,9 @@ export const SERVICE_MESSAGES = {
   page404Text:
     'The page you are looking for might be removed or is temporarily unavailable',
   headerTitle: 'simple clothes',
+  login: 'login',
+  cart: 'cart',
+  sort: 'sort items',
+  sortCategory_1: 'name',
+  sortCategory_2: 'cost',
 };
