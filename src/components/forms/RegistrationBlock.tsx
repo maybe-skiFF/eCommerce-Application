@@ -1,4 +1,5 @@
 import { FormEvent, useState, ChangeEvent } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Box,
   Grid,
@@ -6,12 +7,12 @@ import {
   FormControlLabel,
   Checkbox,
   Button,
-  FormControl,
-  InputLabel,
   SelectChangeEvent,
   MenuItem,
-  Select,
   Divider,
+  FormControl,
+  InputLabel,
+  Select,
 } from '@mui/material';
 
 import {
@@ -19,9 +20,10 @@ import {
   addresses,
   months,
 } from 'src/constants/SERVICE_MESSAGES';
-import { customerData } from 'src/utils/interfaces';
-import { Address } from 'src/utils/interfaces';
+// import { AgeBlock } from './AgeBlock';
+// import { AddressBlock } from './AddressBlock';
 import { createCustomer } from 'src/serverPart/ApiRoot';
+
 const days: string[] = [];
 const years: number[] = [];
 for (let i = 1; i < 32; i++) {
@@ -31,67 +33,62 @@ for (let i = 2024; i > 1924; i--) {
   years.push(i);
 }
 
+import { Address, customerData } from 'src/utils/interfaces';
+
 export const RegistrationBlock = () => {
-  const [name, setName] = useState<string>('');
+  const [firstName, setFirstName] = useState<string>('');
   const [lastName, setLastName] = useState<string>('');
-  const [email, setEmail] = useState<string>('');
+  const [email, setEmailName] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const customer: customerData = {
-    firstName: name,
-    lastName: lastName,
-    email: email,
-    password: password,
-    key: email,
-    dataOfBirdth: ``,
-    address: {
-      country: 'Russia',
-      city: '',
-      street: '',
-      postCode: '',
-    },
-  };
+  // const [key, setKey] = useState<string>('');
+  const [day, setDay] = useState<string>('');
+  const [month, setMonth] = useState<string>('');
+  const [year, setYear] = useState<string>('');
+  const [dataOfBirth, setDataOfBirth] = useState<string>('');
+  const [country, setCountry] = useState<string>('');
+  const [city, setCity] = useState<string>('');
+  const [street, setStreet] = useState<string>('');
+  const [postCode, setPostCode] = useState<string>('');
+  const navigate = useNavigate();
+
   const HandleOnInputName = (event: ChangeEvent<HTMLInputElement>): void => {
-    setName(event.target.value);
-    customer.firstName = event.target.value;
+    setFirstName(event.target.value);
+    console.log(event.target.value);
   };
   const HandleOnInputLastName = (
     event: ChangeEvent<HTMLInputElement>,
   ): void => {
     setLastName(event.target.value);
-    customer.lastName = event.target.value;
   };
   const HandleOnInputEmail = (event: ChangeEvent<HTMLInputElement>): void => {
-    setEmail(event.target.value);
-    customer.email = event.target.value;
-    customer.key = event.target.value;
+    setEmailName(event.target.value);
+    // setKey(event.target.value);
   };
   const HandleOnInputPassword = (
     event: ChangeEvent<HTMLInputElement>,
   ): void => {
     setPassword(event.target.value);
-    customer.password = event.target.value;
+  };
+  const getCurrentData = () => {
+    if (day.length && month.length && Number(year) > 12) {
+      return `${month} ${day}, ${year}`;
+    } else {
+      console.log(day, month, year, 'fail');
+      return 'No current data';
+    }
   };
   const AddressBlock = () => {
-    const [country, setCountry] = useState<string>('');
-    const [postCode, setPostCode] = useState<string>('');
-    const [city, setCity] = useState<string>('');
-    const [street, setStreet] = useState<string>('');
-
     const handleCountryChange = (event: SelectChangeEvent) => {
       setCountry(event.target.value);
-      customer.address.country = event.target.value;
     };
     const handlePostCodeChange = (event: SelectChangeEvent) => {
       setPostCode(event.target.value);
-      customer.address.postCode = event.target.value;
     };
     const handleCityChange = (event: SelectChangeEvent) => {
       setCity(event.target.value);
-      customer.address.city = event.target.value;
     };
     const handleStreetChange = (event: SelectChangeEvent) => {
       setStreet(event.target.value);
-      customer.address.street = event.target.value;
     };
     const getCountryItems = addresses.map(country => {
       return (
@@ -230,22 +227,16 @@ export const RegistrationBlock = () => {
     );
   };
   const AgeBlock = () => {
-    const [day, setDay] = useState<string>('');
-    const [month, setMonth] = useState<string>('');
-    const [year, setYear] = useState<string>('');
-
     const handleDayChange = (event: SelectChangeEvent) => {
       setDay(event.target.value);
-      customer.dataOfBirdth = event.target.value;
     };
     const handleMonthChange = (event: SelectChangeEvent) => {
       setMonth(event.target.value);
-      customer.dataOfBirdth += event.target.value;
     };
     const handleYearChange = (event: SelectChangeEvent) => {
       setYear(event.target.value);
-      customer.dataOfBirdth += event.target.value;
     };
+
     const getDaysItems = days.map(day => {
       return (
         <MenuItem
@@ -259,11 +250,11 @@ export const RegistrationBlock = () => {
       );
     });
 
-    const getMonthsItems = months.map((month, index) => {
+    const getMonthsItems = months.map(month => {
       return (
         <MenuItem
           divider={true}
-          value={index}
+          value={month}
           key={month}
           sx={{ width: 1, fontSize: '45%' }}
         >
@@ -340,38 +331,33 @@ export const RegistrationBlock = () => {
     event: FormEvent<HTMLFormElement>,
   ): Promise<void> => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      name: data.get('firstName'),
-      lastName: data.get('lastName'),
-      email: data.get('email'),
-      password: data.get('password'),
-      day: data.get('day'),
-      month: data.get('month'),
-      year: data.get('year'),
-      country: data.get('country'),
-      city: data.get('city'),
-      street: data.get('street'),
-      postCode: data.get('postCode'),
-    });
-    if (data.get) {
-      customer.firstName = data.get('firstName');
-      customer.lastName = data.get('lastName');
-      customer.email = data.get('email');
-      customer.key = data.get('email')!.slice(0, 2);
-      customer.password = data.get('password');
-      customer.dataOfBirdth = `${data.get('day')}/${data.get('month')}/${data.get('year')}`;
-      customer.address.country = data.get('country');
-      customer.address.city = data.get('city');
-      customer.address.street = data.get('street');
-      customer.address.postCode = data.get('postCode');
-    }
-
-    console.log(customer);
-    await createCustomer(customer);
+    const myCustomer: customerData = {
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+      password: password,
+      // key: key,
+      dataOfBirdth: dataOfBirth,
+      country: country,
+      city: city,
+      postCode: postCode,
+      street: street,
+    };
+    console.log(myCustomer);
+    setDataOfBirth(getCurrentData());
+    await createCustomer(myCustomer)
+      .then(() => {
+        navigate('/');
+      })
+      .catch(error => console.log(error));
   };
   return (
-    <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+    <Box
+      component="form"
+      noValidate
+      onSubmit={event => void handleSubmit(event)}
+      sx={{ mt: 3 }}
+    >
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <TextField
@@ -382,7 +368,7 @@ export const RegistrationBlock = () => {
             id="firstName"
             label="First Name"
             autoFocus
-            onSubmit={HandleOnInputName}
+            onChange={HandleOnInputName}
           />
         </Grid>
         <Grid item xs={12}>
@@ -393,7 +379,7 @@ export const RegistrationBlock = () => {
             label="Last Name"
             name="lastName"
             autoComplete="family-name"
-            onSubmit={HandleOnInputLastName}
+            onChange={HandleOnInputLastName}
           />
         </Grid>
         <Grid item xs={12}>
@@ -404,7 +390,7 @@ export const RegistrationBlock = () => {
             label="Email Address"
             name="email"
             autoComplete="email"
-            onSubmit={HandleOnInputEmail}
+            onChange={HandleOnInputEmail}
           />
         </Grid>
         <Grid item xs={12}>
@@ -416,13 +402,11 @@ export const RegistrationBlock = () => {
             type="password"
             id="password"
             autoComplete="new-password"
-            onSubmit={HandleOnInputPassword}
+            onChange={HandleOnInputPassword}
           />
         </Grid>
-
         <AgeBlock />
         <AddressBlock />
-
         <Grid item xs={12}>
           <FormControlLabel
             control={<Checkbox value="allowExtraEmails" color="primary" />}

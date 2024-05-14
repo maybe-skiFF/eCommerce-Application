@@ -12,14 +12,27 @@ const getProject = () => {
   return apiRoot.get().execute();
 };
 const createCustomerDraft = (customerData: customerData) => {
-  const { firstName, lastName, email, password, key, address } = customerData;
+  const {
+    firstName,
+    lastName,
+    email,
+    password,
+    // key,
+    country,
+    city,
+    street,
+    postCode,
+  } = customerData;
   return {
     firstName,
     lastName,
     email,
     password,
-    key,
-    address,
+    // key,
+    country,
+    city,
+    street,
+    postCode,
   };
 };
 const createCustomer = async (customerData: customerData): Promise<void> => {

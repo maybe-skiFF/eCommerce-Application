@@ -18,9 +18,6 @@ import {
   checkValidationFieldPassword,
 } from 'src/utils/checkValidationField';
 
-// import { getProject, createCustomer } from 'src/serverPart/ApiRoot';
-// import { testCustomer } from 'src/serverPart/clientData';
-
 export const SubmitBlock = (): ReactNode => {
   const [currentStatusEmail, setCurrentStatusEmail] = useState<string>(
     SERVICE_MESSAGES.startCheck,
@@ -59,12 +56,7 @@ export const SubmitBlock = (): ReactNode => {
       password: data.get('password'),
     });
   };
-  // createCustomer(testCustomer).then(console.log).catch(console.error);
-  // getProject()
-  //   .then(data => {
-  //     console.log(data.body.key);
-  //   })
-  //   .catch(console.error);
+
   return (
     <Box component="form" noValidate onSubmit={HandleSubmit} sx={{ mt: 1 }}>
       <TextField

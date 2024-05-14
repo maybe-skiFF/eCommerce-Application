@@ -3,19 +3,16 @@ export interface customerData {
   lastName: string;
   email: string;
   password: string;
-  key: string;
+  // key: string;
   dataOfBirdth: string;
-  address: CustomerAddress;
+  country: string;
+  city: string;
+  postCode: string;
+  street: string;
 }
 export interface Address {
   country: string;
   city: string[];
   postCode: string[];
   street: string[];
-}
-export interface CustomerAddress {
-  country: string;
-  city: string;
-  postCode: string;
-  street: string;
 }
