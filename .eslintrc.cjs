@@ -34,5 +34,7 @@ module.exports = {
       { allowConstantExport: true },
     ],
     'import/prefer-default-export': ['off'],
+    'no-empty-function': 'off',
+    '@typescript-eslint/no-empty-function': 'off',
   },
 };

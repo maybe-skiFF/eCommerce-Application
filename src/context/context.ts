@@ -1,2 +1,4 @@
-// import { createContext } from 'react';
-// import { customerData } from 'src/utils/interfaces';
+import { useContext } from 'react';
+import { CustomerContext } from './CustomerProvider';
+
+export const useCustomer = () => useContext(CustomerContext);
