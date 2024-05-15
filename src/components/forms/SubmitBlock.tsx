@@ -13,7 +13,7 @@ import TextField from '@mui/material/TextField';
 
 import { checkCustomer } from 'src/serverPart/ApiRoot';
 
-import { STYLE_FOR_HELPER } from 'src/constants/STYLE_FOR_HELPER';
+import { STYLE_FOR_HELPER } from 'src/constants/STYLES';
 import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
 import {
   checkValidationFieldEmail,

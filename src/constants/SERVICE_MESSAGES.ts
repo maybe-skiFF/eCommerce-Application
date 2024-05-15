@@ -1,4 +1,3 @@
-import { Address } from 'src/utils/interfaces';
 export const SERVICE_MESSAGES = {
   signIn: 'Sign in ',
   startCheck: 'start',
@@ -19,52 +18,4 @@ export const SERVICE_MESSAGES = {
   noAccount: `Don't have an account?`,
   haveAccount: 'Already have an account?',
   defaultAddress: 'Set as default address',
-  day: 'DAY',
-  month: 'MONTH',
-  year: 'YEAR',
-  country: 'COUNTRY',
-  postCode: 'POSTCODE',
-  city: 'CITY',
-  street: 'STREET',
 };
-
-export const months: string[] = [
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December',
-];
-export const addresses: Address[] = [
-  {
-    country: 'Russia',
-    city: ['Saint Peterburg'],
-    postCode: ['187015'],
-    street: ['Gorokhovaya', 'Naberezhnaya Kutuzova'],
-  },
-  {
-    country: 'Belarus',
-    city: ['Minsk'],
-    postCode: ['220004'],
-    street: ['Aleksandrovskaya', 'Bolotnaya', 'Denisovskiy'],
-  },
-  {
-    country: 'Bulgaria',
-    city: ['Sofia'],
-    postCode: ['1000'],
-    street: ['Alexander Weiner', 'Berezina'],
-  },
-  {
-    country: 'USA',
-    city: ['New York'],
-    postCode: ['10001'],
-    street: ['Columbus Circle', 'Wooster Street'],
-  },
-];

@@ -1,4 +1,10 @@
-import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
+import {
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+} from '@mui/material';
 
 const getListItems = (arr: string[]): JSX.Element[] => {
   return arr.map((item, index) => {
@@ -14,12 +20,16 @@ const getListItems = (arr: string[]): JSX.Element[] => {
     );
   });
 };
-export const getFormControl = (purpose: string, arr: string[]): JSX.Element => {
+export const getFormControl = (
+  purpose: string,
+  arr: string[],
+  styles: object,
+): JSX.Element => {
   return (
     <div>
-      <FormControl sx={{ m: 1, minWidth: 90 }} size="small">
+      <FormControl sx={styles} size="small">
         <InputLabel id={purpose} sx={{ fontSize: '50%' }}>
-          {`SERVICE_MESSAGES.${purpose}`}
+          {purpose.toUpperCase()}
         </InputLabel>
         <Select
           name={purpose}
@@ -34,4 +44,8 @@ export const getFormControl = (purpose: string, arr: string[]): JSX.Element => {
       </FormControl>
     </div>
   );
+};
+
+export const getCurrItem = (event: SelectChangeEvent) => {
+  return event.target.value;
 };

@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent } from 'react';
+import { FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Box,
@@ -12,7 +12,6 @@ import {
 import { AgeBlock } from './AgeBlock';
 import { AddressBlock } from './AddressBlock';
 import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
-// import { useCustomer } from 'src/context/context';
 import { createCustomer } from 'src/serverPart/ApiRoot';
 import { CustomerData } from 'src/utils/interfaces';
 
@@ -50,7 +49,7 @@ export const RegistrationBlock = () => {
             id="firstName"
             label="First Name"
             autoFocus
-            onChange={}
+            // onChange={}
           />
         </Grid>
         <Grid item xs={12}>
