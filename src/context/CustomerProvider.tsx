@@ -23,7 +23,7 @@ const intialDataCustomer: CustomerData = {
   password: '',
   key: '',
   dateOfBirth: '',
-  address: {
+  shippingAddressIds: {
     country: '',
     city: '',
     street: '',

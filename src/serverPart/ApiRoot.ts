@@ -1,7 +1,7 @@
 import { ctpClient } from './BuildClient';
 import { createApiBuilderFromCtpClient } from '@commercetools/platform-sdk';
 
-import { customerData } from 'src/utils/interfaces';
+import { CustomerData } from 'src/utils/interfaces';
 import { PROJECT_DATA } from './PROJECT_DATA';
 
 const apiRoot = createApiBuilderFromCtpClient(ctpClient).withProjectKey({
@@ -11,31 +11,19 @@ const apiRoot = createApiBuilderFromCtpClient(ctpClient).withProjectKey({
 const getProject = () => {
   return apiRoot.get().execute();
 };
-const createCustomerDraft = (customerData: customerData) => {
-  const {
-    firstName,
-    lastName,
-    email,
-    password,
-    // key,
-    country,
-    city,
-    street,
-    postCode,
-  } = customerData;
+const createCustomerDraft = (customerData: CustomerData) => {
+  const { firstName, lastName, email, password, key, shippingAddressIds } =
+    customerData;
   return {
     firstName,
     lastName,
     email,
     password,
-    // key,
-    country,
-    city,
-    street,
-    postCode,
+    key,
+    shippingAddressIds,
   };
 };
-const createCustomer = async (customerData: customerData): Promise<void> => {
+const createCustomer = async (customerData: CustomerData): Promise<void> => {
   await apiRoot
     .customers()
     .post({
