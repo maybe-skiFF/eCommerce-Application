@@ -56,7 +56,7 @@ export const SubmitBlock = (): ReactNode => {
       sx={{ mt: 1 }}
       onSubmit={event => void handleSubmit(event)}
     >
-      {getTextForm('email', currentStatusEmail, handleOnInputEmail)}
+      {getTextForm('email', currentStatusEmail, handleOnInputEmail, true)}
       {getTextForm(
         'password',
         currentStatusPassword,

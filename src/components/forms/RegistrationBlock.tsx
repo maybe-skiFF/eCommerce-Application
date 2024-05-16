@@ -87,13 +87,13 @@ export const RegistrationBlock = () => {
     >
       <Grid container spacing={2}>
         <Grid item xs={12}>
-          {getTextForm('firstName', statusName, handleName)}
+          {getTextForm('firstName', statusName, handleName, true)}
         </Grid>
         <Grid item xs={12}>
-          {getTextForm('lastName', statusLastName, handleLastName)}
+          {getTextForm('lastName', statusLastName, handleLastName, true)}
         </Grid>
         <Grid item xs={12}>
-          {getTextForm('email', currentStatusEmail, handleOnInputEmail)}
+          {getTextForm('email', currentStatusEmail, handleOnInputEmail, true)}
         </Grid>
         <Grid item xs={12}>
           {getTextForm(
