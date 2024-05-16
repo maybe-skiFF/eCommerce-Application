@@ -11,7 +11,7 @@ export function Page404() {
       <div className={styles.page404Wrapper}>
         <img
           className={styles.Page404Img}
-          src="../src/assets/image/404-image.jpeg"
+          src="../src/assets/image/not-found-image.jpeg"
           alt="404-image"
         />
         <p className={styles.Page404Text}>{SERVICE_MESSAGES.page404Text}</p>
