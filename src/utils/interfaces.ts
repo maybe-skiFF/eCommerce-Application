@@ -12,7 +12,7 @@ export interface CustomerData {
   password: string;
   key: string;
   dateOfBirth: string;
-  address: CustomerAddress;
+  shippingAddressIds: CustomerAddress;
 }
 export interface CustomerAddress {
   country: string;
