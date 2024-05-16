@@ -1,7 +1,13 @@
+import { Footer } from './Footer/Footer';
+import { Header } from './Header/Header';
+import { Main } from './Main/Main';
+
 export function MainPage() {
   return (
-    <div>
-      <h1>MainPage</h1>
-    </div>
+    <>
+      <Header />
+      <Main />
+      <Footer />
+    </>
   );
 }
