@@ -1,10 +1,18 @@
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import {
   FormControl,
+  IconButton,
+  InputAdornment,
   InputLabel,
   MenuItem,
   Select,
   SelectChangeEvent,
+  TextField,
 } from '@mui/material';
+import { ChangeEvent } from 'react';
+import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
+import { STYLE_FOR_HELPER } from 'src/constants/STYLES';
 
 const createListItem = (item: string) => {
   return (
@@ -55,6 +63,53 @@ export const getFormControl = (
   );
 };
 
+export const getInputProps = (
+  showCallback: () => void,
+  showPassword: boolean,
+) => {
+  return {
+    endAdornment: (
+      <InputAdornment position="end">
+        <IconButton onClick={showCallback}>
+          {showPassword ? <VisibilityOff /> : <Visibility />}
+        </IconButton>
+      </InputAdornment>
+    ),
+  };
+};
+
+export const getTextForm = (
+  purpose: string,
+  state: string,
+  callback: (event: ChangeEvent<HTMLInputElement>) => void,
+  showPassword?: boolean,
+  inputProps?: object,
+) => {
+  return (
+    <TextField
+      margin="normal"
+      required
+      fullWidth
+      name={purpose}
+      label={purpose}
+      type={showPassword ? 'text' : 'password'}
+      id={purpose}
+      autoComplete={`current-${purpose}`}
+      error={
+        state === SERVICE_MESSAGES.checkDone ||
+        state === SERVICE_MESSAGES.startCheck
+          ? false
+          : true
+      }
+      helperText={state}
+      FormHelperTextProps={{
+        sx: STYLE_FOR_HELPER,
+      }}
+      onInput={callback}
+      InputProps={inputProps}
+    />
+  );
+};
 export const getCurrItem = (event: SelectChangeEvent) => {
   return event.target.value;
 };

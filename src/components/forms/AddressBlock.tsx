@@ -22,15 +22,15 @@ export const AddressBlock = () => {
   };
   const handleCity = (event: SelectChangeEvent) => {
     setCity(event.target.value);
-    console.log(country, 'city');
+    console.log(city, 'city');
   };
   const handleStreet = (event: SelectChangeEvent) => {
     setStreet(event.target.value);
-    console.log(country, 'street');
+    console.log(street, 'street');
   };
   const handlePostCode = (event: SelectChangeEvent) => {
     setPostCode(event.target.value);
-    console.log(country, 'post');
+    console.log(postCode, 'post');
   };
 
   return (

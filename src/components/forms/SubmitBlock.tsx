@@ -1,19 +1,9 @@
-import { ReactNode, ChangeEvent, FormEvent, MouseEvent, useState } from 'react';
-import {
-  Box,
-  Button,
-  Checkbox,
-  FormControlLabel,
-  IconButton,
-  InputAdornment,
-} from '@mui/material';
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import TextField from '@mui/material/TextField';
+import { ReactNode, ChangeEvent, FormEvent, useState } from 'react';
+import { Box, Button } from '@mui/material';
 
 import { checkCustomer } from 'src/serverPart/ApiRoot';
-
-import { STYLE_FOR_HELPER } from 'src/constants/STYLES';
+import { getTextForm, getInputProps } from 'src/utils/createFormControl';
+// import { STYLE_FOR_HELPER } from 'src/constants/STYLES';
 import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
 import {
   checkValidationFieldEmail,
@@ -29,22 +19,19 @@ export const SubmitBlock = (): ReactNode => {
   );
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
-  const HandleOnInputEmail = (event: ChangeEvent<HTMLInputElement>): void => {
+  const handleOnInputEmail = (event: ChangeEvent<HTMLInputElement>): void => {
     setCurrentStatusEmail(checkValidationFieldEmail(event.target.value));
   };
 
-  const HandleOnInputPassword = (
+  const handleOnInputPassword = (
     event: ChangeEvent<HTMLInputElement>,
   ): void => {
     setCurrentStatusPassword(checkValidationFieldPassword(event.target.value));
   };
 
   const handleClickShowPassword = () => setShowPassword(show => !show);
-  const handleMouseDownPassword = (event: MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
-  };
 
-  const HandleSubmit = async (
+  const handleSubmit = async (
     event: FormEvent<HTMLFormElement>,
   ): Promise<void> => {
     event.preventDefault();
@@ -67,66 +54,16 @@ export const SubmitBlock = (): ReactNode => {
       component="form"
       noValidate
       sx={{ mt: 1 }}
-      onSubmit={event => void HandleSubmit(event)}
+      onSubmit={event => void handleSubmit(event)}
     >
-      <TextField
-        margin="normal"
-        required
-        fullWidth
-        id="email"
-        label="Email"
-        name="email"
-        autoComplete="email"
-        autoFocus
-        error={
-          currentStatusEmail === SERVICE_MESSAGES.checkDone ||
-          currentStatusEmail === SERVICE_MESSAGES.startCheck
-            ? false
-            : true
-        }
-        helperText={currentStatusEmail}
-        FormHelperTextProps={{
-          sx: STYLE_FOR_HELPER,
-        }}
-        onInput={HandleOnInputEmail}
-      />
-      <TextField
-        margin="normal"
-        required
-        fullWidth
-        name="password"
-        label="Password"
-        type={showPassword ? 'text' : 'password'}
-        id="password"
-        autoComplete="current-password"
-        error={
-          currentStatusPassword === SERVICE_MESSAGES.checkDone ||
-          currentStatusPassword === SERVICE_MESSAGES.startCheck
-            ? false
-            : true
-        }
-        helperText={currentStatusPassword}
-        FormHelperTextProps={{
-          sx: STYLE_FOR_HELPER,
-        }}
-        onInput={HandleOnInputPassword}
-        InputProps={{
-          endAdornment: (
-            <InputAdornment position="end">
-              <IconButton
-                onClick={handleClickShowPassword}
-                onMouseDown={handleMouseDownPassword}
-              >
-                {showPassword ? <VisibilityOff /> : <Visibility />}
-              </IconButton>
-            </InputAdornment>
-          ),
-        }}
-      />
-      <FormControlLabel
-        control={<Checkbox value="remember" color="primary" />}
-        label={SERVICE_MESSAGES.rememberMe}
-      />
+      {getTextForm('email', currentStatusEmail, handleOnInputEmail)}
+      {getTextForm(
+        'password',
+        currentStatusPassword,
+        handleOnInputPassword,
+        showPassword,
+        getInputProps(handleClickShowPassword, showPassword),
+      )}
       <Button
         type="submit"
         fullWidth

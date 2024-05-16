@@ -22,6 +22,7 @@ export const SERVICE_MESSAGES = {
   useLatin: 'You must use only latin letters',
   useLowerCase: 'You must use at least one lowercase letter',
   useMore: 'Password must have at least 8 symbols ',
+  useMore2: 'Password must have at least 2 symbols ',
   useNumber: 'Password must have at least one digit',
   useUpperCase: 'You must use at least one uppercase letter ',
 };

@@ -45,4 +45,28 @@ const checkValidationFieldPassword = (value: string): string => {
   }
   return SERVICE_MESSAGES.checkDone;
 };
-export { checkValidationFieldEmail, checkValidationFieldPassword };
+
+const checkValidationTextField = (value: string): string => {
+  if (value.match(/\s/)) {
+    return SERVICE_MESSAGES.dontUseSpase;
+  }
+  if (!value.match(reLatin)) {
+    return SERVICE_MESSAGES.useLatin;
+  }
+  if (!value.match(reLowerCase)) {
+    return SERVICE_MESSAGES.useLowerCase;
+  }
+  if (!value.match(reUpperCase)) {
+    return SERVICE_MESSAGES.useUpperCase;
+  }
+  if (value.length < 2) {
+    return SERVICE_MESSAGES.useMore2;
+  }
+  return SERVICE_MESSAGES.checkDone;
+};
+
+export {
+  checkValidationFieldEmail,
+  checkValidationFieldPassword,
+  checkValidationTextField,
+};

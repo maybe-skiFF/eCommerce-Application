@@ -21,15 +21,15 @@ export const AgeBlock = () => {
   const [year, setYear] = useState<string>('');
   const handleDay = (event: SelectChangeEvent) => {
     setDay(event.target.value);
-    console.log(day, 'city');
+    console.log(day, 'day');
   };
   const handleMonth = (event: SelectChangeEvent) => {
     setMonth(event.target.value);
-    console.log(day, 'city');
+    console.log(month, 'month');
   };
   const handleYear = (event: SelectChangeEvent) => {
     setYear(event.target.value);
-    console.log(day, 'city');
+    console.log(year, 'year');
   };
   return (
     <Box sx={{ mt: 3, mb: 3, mr: 'auto', ml: 'auto', minWidth: 120 }}>

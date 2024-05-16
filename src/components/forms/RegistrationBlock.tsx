@@ -1,23 +1,50 @@
-import { FormEvent } from 'react';
+import { ChangeEvent, FormEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {
-  Box,
-  Grid,
-  TextField,
-  FormControlLabel,
-  Checkbox,
-  Button,
-} from '@mui/material';
+import { Box, Grid, FormControlLabel, Checkbox, Button } from '@mui/material';
 
+import { getTextForm, getInputProps } from 'src/utils/createFormControl';
 import { AgeBlock } from './AgeBlock';
 import { AddressBlock } from './AddressBlock';
 import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
 import { createCustomer } from 'src/serverPart/ApiRoot';
+import {
+  checkValidationFieldPassword,
+  checkValidationFieldEmail,
+  checkValidationTextField,
+} from 'src/utils/checkValidationField';
 // import { CustomerData } from 'src/utils/interfaces';
 
 export const RegistrationBlock = () => {
+  const [statusName, setStatusName] = useState<string>(
+    SERVICE_MESSAGES.startCheck,
+  );
+  const [statusLastName, setStatusLastName] = useState<string>(
+    SERVICE_MESSAGES.startCheck,
+  );
+  const [currentStatusEmail, setCurrentStatusEmail] = useState<string>(
+    SERVICE_MESSAGES.startCheck,
+  );
+  const [currentStatusPassword, setCurrentStatusPassword] = useState<string>(
+    SERVICE_MESSAGES.startCheck,
+  );
+  const [showPassword, setShowPassword] = useState<boolean>(false);
   const navigate = useNavigate();
 
+  const handleName = (event: ChangeEvent<HTMLInputElement>): void => {
+    setStatusName(checkValidationTextField(event.target.value));
+  };
+  const handleLastName = (event: ChangeEvent<HTMLInputElement>): void => {
+    setStatusLastName(checkValidationTextField(event.target.value));
+  };
+  const handleOnInputEmail = (event: ChangeEvent<HTMLInputElement>): void => {
+    setCurrentStatusEmail(checkValidationFieldEmail(event.target.value));
+  };
+  const handleOnInputPassword = (
+    event: ChangeEvent<HTMLInputElement>,
+  ): void => {
+    setCurrentStatusPassword(checkValidationFieldPassword(event.target.value));
+  };
+  const handleClickShowPassword = () => setShowPassword(show => !show);
   const handleSubmit = async (
     event: FormEvent<HTMLFormElement>,
   ): Promise<void> => {
@@ -41,7 +68,8 @@ export const RegistrationBlock = () => {
     >
       <Grid container spacing={2}>
         <Grid item xs={12}>
-          <TextField
+          {getTextForm('firstName', statusName, handleName)}
+          {/* <TextField
             autoComplete="given-name"
             name="firstName"
             required
@@ -50,10 +78,11 @@ export const RegistrationBlock = () => {
             label="First Name"
             autoFocus
             // onChange={}
-          />
+          /> */}
         </Grid>
         <Grid item xs={12}>
-          <TextField
+          {getTextForm('lastName', statusLastName, handleLastName)}
+          {/* <TextField
             required
             fullWidth
             id="lastName"
@@ -61,10 +90,11 @@ export const RegistrationBlock = () => {
             name="lastName"
             autoComplete="family-name"
             // onChange={HandleOnInputLastName}
-          />
+          /> */}
         </Grid>
         <Grid item xs={12}>
-          <TextField
+          {getTextForm('email', currentStatusEmail, handleOnInputEmail)}
+          {/* <TextField
             required
             fullWidth
             id="email"
@@ -72,10 +102,17 @@ export const RegistrationBlock = () => {
             name="email"
             autoComplete="email"
             // onChange={HandleOnInputEmail}
-          />
+          /> */}
         </Grid>
         <Grid item xs={12}>
-          <TextField
+          {getTextForm(
+            'password',
+            currentStatusPassword,
+            handleOnInputPassword,
+            showPassword,
+            getInputProps(handleClickShowPassword, showPassword),
+          )}
+          {/* <TextField
             required
             fullWidth
             name="password"
@@ -84,7 +121,7 @@ export const RegistrationBlock = () => {
             id="password"
             autoComplete="new-password"
             // onChange={HandleOnInputPassword}
-          />
+          /> */}
         </Grid>
         <AgeBlock />
         <AddressBlock />
