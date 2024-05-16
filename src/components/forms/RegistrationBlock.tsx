@@ -13,7 +13,7 @@ import { AgeBlock } from './AgeBlock';
 import { AddressBlock } from './AddressBlock';
 import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
 import { createCustomer } from 'src/serverPart/ApiRoot';
-import { CustomerData } from 'src/utils/interfaces';
+// import { CustomerData } from 'src/utils/interfaces';
 
 export const RegistrationBlock = () => {
   const navigate = useNavigate();
@@ -23,7 +23,7 @@ export const RegistrationBlock = () => {
   ): Promise<void> => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    const customer: CustomerData = {};
+    const customer = {};
     console.log(data.get('day'), 'day');
     console.log(customer, 'customer');
     await createCustomer(customer)

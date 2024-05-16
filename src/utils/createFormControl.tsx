@@ -6,24 +6,31 @@ import {
   SelectChangeEvent,
 } from '@mui/material';
 
-const getListItems = (arr: string[]): JSX.Element[] => {
-  return arr.map((item, index) => {
-    return (
-      <MenuItem
-        divider={true}
-        value={index}
-        key={`${item}`}
-        sx={{ width: 1, fontSize: '45%' }}
-      >
-        {item.length === 1 ? '0' + item : item}
-      </MenuItem>
-    );
-  });
+const createListItem = (item: string) => {
+  return (
+    <MenuItem
+      divider={true}
+      value={item}
+      key={item}
+      sx={{ width: 1, fontSize: '45%' }}
+    >
+      {item.length === 1 ? '0' + item : item}
+    </MenuItem>
+  );
+};
+const getListItems = (
+  items: string[] | string,
+): JSX.Element[] | JSX.Element => {
+  return Array.isArray(items)
+    ? items.map(item => createListItem(item))
+    : createListItem(items);
 };
 export const getFormControl = (
   purpose: string,
-  arr: string[],
+  selectValue: string,
+  items: string[] | string,
   styles: object,
+  callback?: (event: SelectChangeEvent) => void,
 ): JSX.Element => {
   return (
     <div>
@@ -35,11 +42,13 @@ export const getFormControl = (
           name={purpose}
           labelId={purpose}
           id={purpose}
-          value={purpose}
-          label={purpose}
+          value={selectValue}
+          label={purpose.toUpperCase()}
           sx={{ fontSize: '50%' }}
+          key={`${purpose}`}
+          onChange={callback}
         >
-          {getListItems(arr)}
+          {getListItems(items)}
         </Select>
       </FormControl>
     </div>

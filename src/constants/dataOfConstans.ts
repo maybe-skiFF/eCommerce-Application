@@ -17,27 +17,33 @@ export const months: string[] = [
 
 export const addresses: Address[] = [
   {
-    country: ['Russia'],
-    city: ['Saint Peterburg'],
-    postCode: ['187015'],
+    country: '',
+    city: '',
+    postCode: '',
+    street: [''],
+  },
+  {
+    country: 'Russia',
+    city: 'Saint Peterburg',
+    postCode: '187015',
     street: ['Gorokhovaya', 'Naberezhnaya Kutuzova'],
   },
   {
-    country: ['Belarus'],
-    city: ['Minsk'],
-    postCode: ['220004'],
+    country: 'Belarus',
+    city: 'Minsk',
+    postCode: '220004',
     street: ['Aleksandrovskaya', 'Bolotnaya', 'Denisovskiy'],
   },
   {
-    country: ['Bulgaria'],
-    city: ['Sofia'],
-    postCode: ['1000'],
+    country: 'Bulgaria',
+    city: 'Sofia',
+    postCode: '1000',
     street: ['Alexander Weiner', 'Berezina'],
   },
   {
-    country: ['USA'],
-    city: ['New York'],
-    postCode: ['10001'],
+    country: 'USA',
+    city: 'New York',
+    postCode: '10001',
     street: ['Columbus Circle', 'Wooster Street'],
   },
 ];
