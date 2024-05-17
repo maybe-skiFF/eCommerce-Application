@@ -1,6 +1,6 @@
 import { ChangeEvent, FormEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Box, Grid, FormControlLabel, Checkbox, Button } from '@mui/material';
+import { Box, Grid, FormControlLabel, Checkbox } from '@mui/material';
 
 import { getTextForm, getInputProps } from 'src/utils/createFormControl';
 import { AgeBlock } from './AgeBlock';
@@ -13,6 +13,7 @@ import {
   checkValidationTextField,
 } from 'src/utils/checkValidationField';
 import { CustomerData } from 'src/utils/interfaces';
+import { SubmitButton } from './SubmitButton';
 
 export const RegistrationBlock = () => {
   const [statusName, setStatusName] = useState<string>(
@@ -113,9 +114,10 @@ export const RegistrationBlock = () => {
           />
         </Grid>
       </Grid>
-      <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
-        {SERVICE_MESSAGES.signIn}
-      </Button>
+      {SubmitButton(
+        [statusName, statusLastName, currentStatusEmail, currentStatusPassword],
+        SERVICE_MESSAGES.signIn,
+      )}
     </Box>
   );
 };

@@ -1,9 +1,9 @@
 import { ReactNode, ChangeEvent, FormEvent, useState } from 'react';
-import { Box, Button } from '@mui/material';
+import { Box } from '@mui/material';
 
 import { checkCustomer } from 'src/serverPart/ApiRoot';
 import { getTextForm, getInputProps } from 'src/utils/createFormControl';
-// import { STYLE_FOR_HELPER } from 'src/constants/STYLES';
+import { SubmitButton } from './SubmitButton';
 import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
 import {
   checkValidationFieldEmail,
@@ -64,18 +64,10 @@ export const SubmitBlock = (): ReactNode => {
         showPassword,
         getInputProps(handleClickShowPassword, showPassword),
       )}
-      <Button
-        type="submit"
-        fullWidth
-        variant="contained"
-        disabled={
-          currentStatusEmail !== SERVICE_MESSAGES.checkDone ||
-          currentStatusPassword !== SERVICE_MESSAGES.checkDone
-        }
-        sx={{ mt: 3, mb: 2 }}
-      >
-        {SERVICE_MESSAGES.signIn}
-      </Button>
+      {SubmitButton(
+        [currentStatusEmail, currentStatusPassword],
+        SERVICE_MESSAGES.signIn,
+      )}
     </Box>
   );
 };
