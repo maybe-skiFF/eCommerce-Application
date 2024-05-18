@@ -31,6 +31,9 @@ export const RegistrationBlock = () => {
   const [isCurrentAge, setCurrentAge] = useState<string>(
     SERVICE_MESSAGES.startCheck,
   );
+  const [isCurrentAddress, setCurrentAddress] = useState<string>(
+    SERVICE_MESSAGES.startCheck,
+  );
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const navigate = useNavigate();
 
@@ -51,6 +54,11 @@ export const RegistrationBlock = () => {
   const handleStatusAge = () => {
     setCurrentAge(
       localStorage.getItem('isAgeEnough') ?? SERVICE_MESSAGES.startCheck,
+    );
+  };
+  const handleStatusAddress = () => {
+    setCurrentAddress(
+      localStorage.getItem('isAddressCorrect') ?? SERVICE_MESSAGES.startCheck,
     );
   };
   const handleClickShowPassword = () => setShowPassword(show => !show);
@@ -116,7 +124,7 @@ export const RegistrationBlock = () => {
         <Grid item xs={6} onMouseLeave={handleStatusAge}>
           <AgeBlock />
         </Grid>
-        <Grid item xs={6} onMouseLeave={handleStatusAge}>
+        <Grid item xs={6} onMouseLeave={handleStatusAddress}>
           <AddressBlock />
         </Grid>
         <Grid item xs={4}>
@@ -140,6 +148,7 @@ export const RegistrationBlock = () => {
           currentStatusEmail,
           currentStatusPassword,
           isCurrentAge,
+          isCurrentAddress,
         ],
         SERVICE_MESSAGES.signIn,
       )}

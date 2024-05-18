@@ -11,6 +11,7 @@ import Container from '@mui/material/Container';
 import { RegistrationBlock } from 'src/components/forms/RegistrationBlock';
 import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
 export function RegistrationPage(): ReactNode {
+  localStorage.clear();
   return (
     <Container component="main" maxWidth="lg">
       <CssBaseline />

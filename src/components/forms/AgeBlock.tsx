@@ -24,7 +24,6 @@ export const AgeBlock = () => {
   const [ageEnough, setAgeEnough] = useState<string>(
     SERVICE_MESSAGES.startCheck,
   );
-  localStorage.clear();
   localStorage.setItem('isAgeEnough', ageEnough);
   const handleDay = (event: SelectChangeEvent): void => {
     setDay(event.target.value);
