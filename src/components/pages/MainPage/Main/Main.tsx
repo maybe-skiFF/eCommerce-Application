@@ -8,7 +8,6 @@ export function Main() {
   return (
     <main className="main container">
       <CategoryChoice />
-      <CategoryImage selectedCategory={''} />
       <SortItem />
       <ShopCard />
     </main>

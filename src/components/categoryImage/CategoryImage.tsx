@@ -5,18 +5,27 @@ interface CategoryImageProps {
 }
 
 export function CategoryImage({ selectedCategory }: CategoryImageProps) {
+  const backgroundImageSrc =
+    selectedCategory === 'for men'
+      ? 'url("src/assets/image/for-men.jpg")'
+      : 'url("src/assets/image/for-women.jpg")';
+
   return (
-    <Box className="navigation__image">
-      {selectedCategory === 'for men' && (
-        <Typography variant="body1" className="navigation__title">
-          FOR MEN
-        </Typography>
-      )}
-      {selectedCategory === 'for women' && (
-        <Typography variant="body1" className="navigation__title">
-          FOR WOMEN
-        </Typography>
-      )}
+    <Box
+      sx={{
+        backgroundImage: backgroundImageSrc,
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat',
+        backgroundPosition: 'center',
+      }}
+      className="navigation__image"
+    >
+      <Typography
+        sx={{ fontSize: '36px', color: 'white', fontWeight: 'bold' }}
+        variant="body1" className="navigation__title">
+        {selectedCategory === 'for men' && 'FOR MEN'}
+        {selectedCategory === 'for women' && 'FOR WOMEN'}
+      </Typography>
     </Box>
   );
 }

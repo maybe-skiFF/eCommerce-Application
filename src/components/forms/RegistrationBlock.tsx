@@ -91,7 +91,7 @@ export const RegistrationBlock = () => {
     console.log(customer, 'customer');
     await createCustomer(customer)
       .then(() => {
-        navigate('/');
+        navigate('/', { state: { customer } });
       })
       .catch(error => console.log(error));
   };
