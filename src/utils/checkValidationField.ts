@@ -7,6 +7,7 @@ const reLatin = new RegExp(/[a-z+]/gi);
 const reUpperCase = new RegExp(/(?=.*[A-Z])./g);
 const reLowerCase = new RegExp(/(?=.*[a-z])./g);
 const reDigits = new RegExp(/(?=.*\d)./g);
+const reSymbols = new RegExp(/[!@#$%^&*()_]/g);
 
 const checkValidationFieldEmail = (value: string): string => {
   if (!reDomain.test(value)) {
@@ -53,8 +54,14 @@ const checkValidationTextField = (value: string): string => {
   if (!value.match(reLatin)) {
     return SERVICE_MESSAGES.useLatin;
   }
+  if (value.match(reSymbols)) {
+    return SERVICE_MESSAGES.dontUseSymbols;
+  }
   if (!value.match(reLowerCase)) {
     return SERVICE_MESSAGES.useLowerCase;
+  }
+  if (value.match(reDigits)) {
+    return SERVICE_MESSAGES.dontUseNumbers;
   }
   if (!value.match(reUpperCase)) {
     return SERVICE_MESSAGES.useUpperCase;

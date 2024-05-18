@@ -12,7 +12,7 @@ import { RegistrationBlock } from 'src/components/forms/RegistrationBlock';
 import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
 export function RegistrationPage(): ReactNode {
   return (
-    <Container component="main" maxWidth="xs">
+    <Container component="main" maxWidth="lg">
       <CssBaseline />
       <Box
         sx={{

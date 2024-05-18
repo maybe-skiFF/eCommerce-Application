@@ -1,8 +1,8 @@
 export interface Address {
   country: string;
   city: string;
-  postCode: string;
-  street: string[];
+  postalCode: string;
+  streetName: string[];
 }
 
 export interface CustomerData {
@@ -11,14 +11,13 @@ export interface CustomerData {
   email: string;
   password: string;
   key: string;
-  dateOfBirth: string;
-  shippingAddressIds: CustomerAddress;
+  addresses: CustomerAddress[];
 }
 export interface CustomerAddress {
   country: string;
   city: string;
-  postCode: string;
-  street: string;
+  postalCode: string;
+  streetName: string;
 }
 export interface DataTime {
   day: string[];

@@ -15,14 +15,15 @@ import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
 import { STYLE_FOR_HELPER } from 'src/constants/STYLES';
 
 const createListItem = (item: string) => {
+  const sameValue = item.split(' ');
   return (
     <MenuItem
       divider={true}
-      value={item}
+      value={sameValue.length === 1 ? sameValue[0] : sameValue[1]}
       key={item}
       sx={{ width: 1, fontSize: '45%' }}
     >
-      {item.length === 1 ? '0' + item : item}
+      {sameValue[0].length === 1 ? '0' + sameValue[0] : sameValue[0]}
     </MenuItem>
   );
 };
@@ -84,7 +85,7 @@ export const getTextForm = (
   callback: (event: ChangeEvent<HTMLInputElement>) => void,
   showPassword?: boolean,
   inputProps?: object,
-) => {
+): JSX.Element => {
   return (
     <TextField
       margin="normal"
@@ -110,6 +111,6 @@ export const getTextForm = (
     />
   );
 };
-export const getCurrItem = (event: SelectChangeEvent) => {
-  return event.target.value;
-};
+// export const getCurrItem = (event: SelectChangeEvent) => {
+//   return event.target.value;
+// };

@@ -12,7 +12,7 @@ import {
   checkValidationFieldEmail,
   checkValidationTextField,
 } from 'src/utils/checkValidationField';
-import { CustomerData } from 'src/utils/interfaces';
+import { CustomerAddress, CustomerData } from 'src/utils/interfaces';
 import { SubmitButton } from './SubmitButton';
 
 export const RegistrationBlock = () => {
@@ -52,24 +52,32 @@ export const RegistrationBlock = () => {
     event.preventDefault();
 
     const data = new FormData(event.currentTarget);
+    const addressesFormData: CustomerAddress = {
+      country: data.get('country') as string,
+      city: data.get('city') as string,
+      streetName: data.get('street') as string,
+      postalCode: data.get('postCode') as string,
+    };
     const customer: CustomerData = {
       firstName: data.get('firstName') as string,
       lastName: data.get('lastName') as string,
       email: data.get('email') as string,
       password: data.get('password') as string,
       key: data.get('firstName') as string,
-      dateOfBirth:
-        (data.get('day') as string) +
-        '/' +
-        (data.get('month') as string) +
-        '/' +
-        (data.get('year') as string),
-      shippingAddressIds: {
-        country: data.get('country') as string,
-        city: data.get('city') as string,
-        street: data.get('street') as string,
-        postCode: data.get('postCode') as string,
-      },
+      addresses: [addressesFormData],
+      // dateOfBirth:
+      //   (data.get('day') as string) +
+      //   +(data.get('month') as string) +
+      //   +(data.get('year') as string),
+      // addresses: [
+      //   {
+      //     id: String(new Date()),
+      //     country: data.get('country') as string,
+      //     city: data.get('city') as string,
+      //     street: data.get('street') as string,
+      //     postCode: data.get('postCode') as string,
+      //   },
+      // ],
     };
     console.log(data.get('day'), 'day');
     console.log(customer, 'customer');
@@ -107,10 +115,22 @@ export const RegistrationBlock = () => {
         </Grid>
         <AgeBlock />
         <AddressBlock />
-        <Grid item xs={12}>
+        <Grid item xs={4}>
           <FormControlLabel
             control={<Checkbox value="allowExtraEmails" color="primary" />}
             label={SERVICE_MESSAGES.defaultAddress}
+          />
+        </Grid>
+        <Grid item xs={4}>
+          <FormControlLabel
+            control={<Checkbox value="allowExtraEmails" color="primary" />}
+            label={SERVICE_MESSAGES.billingAddress}
+          />
+        </Grid>
+        <Grid item xs={4}>
+          <FormControlLabel
+            control={<Checkbox value="allowExtraEmails" color="primary" />}
+            label={SERVICE_MESSAGES.shipingAddress}
           />
         </Grid>
       </Grid>

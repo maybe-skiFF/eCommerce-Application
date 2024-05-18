@@ -14,11 +14,13 @@ export const AddressBlock = () => {
   const [street, setStreet] = useState<string>('');
   const [postCode, setPostCode] = useState<string>('');
   const getCountries: string[] = addresses.map(address => address.country);
-  const getAddresItems = (country: string): Address =>
-    addresses.filter(address => address.country === `${country}`)[0];
+  const getAddressItems = (country: string): Address =>
+    addresses.filter(address => address.country.slice(-2) === `${country}`)[0];
   const handleCountry = (event: SelectChangeEvent) => {
     setCountry(event.target.value);
-    console.log(country, 'country');
+    console.log(addresses[1].country.slice(-3));
+    console.log(getAddressItems(event.target.value));
+    console.log(event.target.value, 'country');
   };
   const handleCity = (event: SelectChangeEvent) => {
     setCity(event.target.value);
@@ -57,21 +59,21 @@ export const AddressBlock = () => {
         {getFormControl(
           'city',
           city,
-          getAddresItems(country).city ?? '',
+          getAddressItems(country).city ?? '',
           STYLE_FOR_ADDRESS,
           handleCity,
         )}
         {getFormControl(
           'street',
           street,
-          getAddresItems(country).street ?? [''],
+          getAddressItems(country).streetName ?? [''],
           STYLE_FOR_ADDRESS,
           handleStreet,
         )}
         {getFormControl(
           'postCode',
           postCode,
-          getAddresItems(country).postCode ?? '',
+          getAddressItems(country).postalCode ?? '',
           STYLE_FOR_ADDRESS,
           handlePostCode,
         )}
