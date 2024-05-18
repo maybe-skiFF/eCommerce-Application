@@ -28,6 +28,9 @@ export const RegistrationBlock = () => {
   const [currentStatusPassword, setCurrentStatusPassword] = useState<string>(
     SERVICE_MESSAGES.startCheck,
   );
+  const [isCurrentAge, setCurrentAge] = useState<string>(
+    SERVICE_MESSAGES.startCheck,
+  );
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const navigate = useNavigate();
 
@@ -45,12 +48,16 @@ export const RegistrationBlock = () => {
   ): void => {
     setCurrentStatusPassword(checkValidationFieldPassword(event.target.value));
   };
+  const handleStatusAge = () => {
+    setCurrentAge(
+      localStorage.getItem('isAgeEnough') ?? SERVICE_MESSAGES.startCheck,
+    );
+  };
   const handleClickShowPassword = () => setShowPassword(show => !show);
   const handleSubmit = async (
     event: FormEvent<HTMLFormElement>,
   ): Promise<void> => {
     event.preventDefault();
-
     const data = new FormData(event.currentTarget);
     const addressesFormData: CustomerAddress = {
       country: data.get('country') as string,
@@ -64,20 +71,13 @@ export const RegistrationBlock = () => {
       email: data.get('email') as string,
       password: data.get('password') as string,
       key: data.get('firstName') as string,
+      dateOfBirth:
+        (data.get('year') as string) +
+        '-' +
+        (data.get('month') as string) +
+        '-' +
+        (data.get('day') as string),
       addresses: [addressesFormData],
-      // dateOfBirth:
-      //   (data.get('day') as string) +
-      //   +(data.get('month') as string) +
-      //   +(data.get('year') as string),
-      // addresses: [
-      //   {
-      //     id: String(new Date()),
-      //     country: data.get('country') as string,
-      //     city: data.get('city') as string,
-      //     street: data.get('street') as string,
-      //     postCode: data.get('postCode') as string,
-      //   },
-      // ],
     };
     console.log(data.get('day'), 'day');
     console.log(customer, 'customer');
@@ -113,8 +113,12 @@ export const RegistrationBlock = () => {
             getInputProps(handleClickShowPassword, showPassword),
           )}
         </Grid>
-        <AgeBlock />
-        <AddressBlock />
+        <Grid item xs={6} onMouseLeave={handleStatusAge}>
+          <AgeBlock />
+        </Grid>
+        <Grid item xs={6} onMouseLeave={handleStatusAge}>
+          <AddressBlock />
+        </Grid>
         <Grid item xs={4}>
           <FormControlLabel
             control={<Checkbox value="allowExtraEmails" color="primary" />}
@@ -127,15 +131,16 @@ export const RegistrationBlock = () => {
             label={SERVICE_MESSAGES.billingAddress}
           />
         </Grid>
-        <Grid item xs={4}>
-          <FormControlLabel
-            control={<Checkbox value="allowExtraEmails" color="primary" />}
-            label={SERVICE_MESSAGES.shipingAddress}
-          />
-        </Grid>
       </Grid>
+
       {SubmitButton(
-        [statusName, statusLastName, currentStatusEmail, currentStatusPassword],
+        [
+          statusName,
+          statusLastName,
+          currentStatusEmail,
+          currentStatusPassword,
+          isCurrentAge,
+        ],
         SERVICE_MESSAGES.signIn,
       )}
     </Box>

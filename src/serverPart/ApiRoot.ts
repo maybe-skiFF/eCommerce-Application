@@ -3,7 +3,6 @@ import { createApiBuilderFromCtpClient } from '@commercetools/platform-sdk';
 
 import { CustomerData } from 'src/utils/interfaces';
 import { PROJECT_DATA } from './PROJECT_DATA';
-// import { addresses } from 'src/utils/interfaces';
 
 const apiRoot = createApiBuilderFromCtpClient(ctpClient).withProjectKey({
   projectKey: PROJECT_DATA.CTP_PROJECT_KEY,
@@ -13,23 +12,15 @@ const getProject = () => {
   return apiRoot.get().execute();
 };
 const createCustomerDraft = (customerData: CustomerData) => {
-  const {
-    firstName,
-    lastName,
-    email,
-    password,
-    key,
-
-    addresses,
-  } = customerData;
-  // console.log(...customerData.addresses);
+  const { firstName, lastName, email, password, key, dateOfBirth, addresses } =
+    customerData;
   return {
     firstName,
     lastName,
     email,
     password,
     key,
-
+    dateOfBirth,
     addresses,
   };
 };

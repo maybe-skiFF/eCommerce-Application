@@ -3,7 +3,9 @@ import { Box, Divider, Grid, SelectChangeEvent } from '@mui/material';
 import { useState } from 'react';
 import { months } from 'src/constants/dataOfConstans';
 import { getFormControl } from 'src/utils/createFormControl';
+import { checkAge } from 'src/utils/checkAge';
 import { STYLE_FOR_DATATIME } from 'src/constants/STYLES';
+import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
 const days: string[] = [];
 const years: string[] = [];
 
@@ -19,20 +21,30 @@ export const AgeBlock = () => {
   const [day, setDay] = useState<string>('');
   const [month, setMonth] = useState<string>('');
   const [year, setYear] = useState<string>('');
-  const handleDay = (event: SelectChangeEvent) => {
+  const [ageEnough, setAgeEnough] = useState<string>(
+    SERVICE_MESSAGES.startCheck,
+  );
+  localStorage.clear();
+  localStorage.setItem('isAgeEnough', ageEnough);
+  const handleDay = (event: SelectChangeEvent): void => {
     setDay(event.target.value);
-    console.log(day, 'day');
   };
-  const handleMonth = (event: SelectChangeEvent) => {
+  const handleMonth = (event: SelectChangeEvent): void => {
     setMonth(event.target.value);
-    console.log(month, 'month');
   };
-  const handleYear = (event: SelectChangeEvent) => {
+  const handleYear = (event: SelectChangeEvent): void => {
     setYear(event.target.value);
-    console.log(year, 'year');
+  };
+  const handleMouseOut = () => {
+    checkAge(day, month, year) > 12
+      ? setAgeEnough(SERVICE_MESSAGES.checkDone)
+      : setAgeEnough(SERVICE_MESSAGES.startCheck);
   };
   return (
-    <Box sx={{ mt: 3, mb: 3, mr: 'auto', ml: 'auto', minWidth: 120 }}>
+    <Box
+      sx={{ mt: 3, mb: 3, mr: 'auto', ml: 'auto', minWidth: 120 }}
+      onMouseOver={handleMouseOut}
+    >
       <Divider sx={{ mb: 2 }}>Data of your birth</Divider>
       <Grid container spacing={2}>
         {getFormControl('day', day, days, STYLE_FOR_DATATIME, handleDay)}

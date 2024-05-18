@@ -11,6 +11,7 @@ export interface CustomerData {
   email: string;
   password: string;
   key: string;
+  dateOfBirth: string;
   addresses: CustomerAddress[];
 }
 export interface CustomerAddress {
