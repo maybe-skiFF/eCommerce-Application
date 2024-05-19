@@ -22,7 +22,9 @@ export function CategoryImage({ selectedCategory }: CategoryImageProps) {
     >
       <Typography
         sx={{ fontSize: '36px', color: 'white', fontWeight: 'bold' }}
-        variant="body1" className="navigation__title">
+        variant="body1"
+        className="navigation__title"
+      >
         {selectedCategory === 'for men' && 'FOR MEN'}
         {selectedCategory === 'for women' && 'FOR WOMEN'}
       </Typography>

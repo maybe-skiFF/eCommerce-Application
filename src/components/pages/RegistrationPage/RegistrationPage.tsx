@@ -17,7 +17,7 @@ export function RegistrationPage(): ReactNode {
   return (
     <>
       <Header></Header>
-      <Container className='container' component="main" maxWidth="lg">
+      <Container className="container" component="main" maxWidth="lg">
         <CssBaseline />
         <Box
           sx={{
@@ -38,10 +38,10 @@ export function RegistrationPage(): ReactNode {
             <Grid item>
               <Link
                 sx={{ fontSize: `16px`, whiteSpace: 'pre-line' }}
-                href="/login" variant="body2">
-                {SERVICE_MESSAGES.haveAccount}
-                {' '}
-                {SERVICE_MESSAGES.signIn}
+                href="/login"
+                variant="body2"
+              >
+                {SERVICE_MESSAGES.haveAccount} {SERVICE_MESSAGES.signIn}
               </Link>
             </Grid>
           </Grid>
