@@ -39,6 +39,7 @@ export const getFormControl = (
   selectValue: string,
   items: string[] | string,
   styles: object,
+  kind: string,
   callback?: (event: SelectChangeEvent) => void,
 ): JSX.Element => {
   return (
@@ -51,7 +52,7 @@ export const getFormControl = (
           name={purpose}
           labelId={purpose}
           id={purpose}
-          value={selectValue}
+          value={`${kind}-${selectValue}`}
           label={purpose.toUpperCase()}
           sx={{ fontSize: '50%' }}
           key={`${purpose}`}

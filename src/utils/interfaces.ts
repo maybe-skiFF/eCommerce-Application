@@ -28,4 +28,5 @@ export interface DataTime {
 export interface MyProps {
   text?: string;
   count?: number;
+  value?: string;
 }
