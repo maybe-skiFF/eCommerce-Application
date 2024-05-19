@@ -1,5 +1,7 @@
 export const SERVICE_MESSAGES = {
   address: 'Check your address',
+  addressShipping: 'Check your shipping address',
+  addressBilling: 'Check your billing address',
   billingAddress: 'Use a different address for billing delivery',
   shipingAddress: 'My shiping address is different',
   cart: 'cart',

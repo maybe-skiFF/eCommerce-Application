@@ -143,7 +143,7 @@ export const RegistrationBlock = () => {
           <AgeBlock />
         </Grid>
         <Grid item xs={6} onMouseLeave={handleStatusAddress}>
-          <AddressBlock />
+          <AddressBlock text={SERVICE_MESSAGES.address} />
         </Grid>
         <Grid item xs={4} ml={'8%'} mr={'8%'} mt={1}>
           <FormControlLabel
@@ -165,7 +165,7 @@ export const RegistrationBlock = () => {
         </Grid>
         <Grid item xs={6} onMouseLeave={handleStatusAge}>
           <Collapse in={openDefaultAddress} timeout="auto" unmountOnExit>
-            <AddressBlock />
+            <AddressBlock text={SERVICE_MESSAGES.addressShipping} />
           </Collapse>
         </Grid>
         <Grid item xs={4} ml={'8%'} mr={'8%'} mt={0}>
@@ -187,7 +187,7 @@ export const RegistrationBlock = () => {
         </Grid>
         <Grid item xs={6} onMouseLeave={handleStatusAge}>
           <Collapse in={openDefaultBillingAddress} timeout="auto" unmountOnExit>
-            <AddressBlock />
+            <AddressBlock text={SERVICE_MESSAGES.addressBilling} />
           </Collapse>
         </Grid>
       </Grid>

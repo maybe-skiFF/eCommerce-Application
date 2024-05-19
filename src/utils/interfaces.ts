@@ -26,6 +26,6 @@ export interface DataTime {
   year: string[];
 }
 export interface MyProps {
-  text: string;
-  count: number;
+  text?: string;
+  count?: number;
 }
