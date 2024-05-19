@@ -83,24 +83,40 @@ export const RegistrationBlock = () => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const addressesFormData: CustomerAddress = {
-      country: data.get('country') as string,
-      city: data.get('city') as string,
-      streetName: data.get('street') as string,
-      postalCode: data.get('postCode') as string,
+      country: data.get('country default') as string,
+      city: data.get('city default') as string,
+      streetName: data.get('street default') as string,
+      postalCode: data.get('postCode default') as string,
+    };
+    const addressesShippingFormData: CustomerAddress = {
+      country: data.get('country shipping') as string,
+      city: data.get('city shipping') as string,
+      streetName: data.get('street shipping') as string,
+      postalCode: data.get('postCode shipping') as string,
+    };
+    const addressesBillingFormData: CustomerAddress = {
+      country: data.get('country billing') as string,
+      city: data.get('city billing') as string,
+      streetName: data.get('street billing') as string,
+      postalCode: data.get('postCode billing') as string,
     };
     const customer: CustomerData = {
       firstName: data.get('firstName') as string,
       lastName: data.get('lastName') as string,
       email: data.get('email') as string,
       password: data.get('password') as string,
-      key: data.get('firstName') as string,
+      key: new Date().valueOf() + '',
       dateOfBirth:
-        (data.get('year') as string) +
+        (data.get('year ') as string) +
         '-' +
-        (data.get('month') as string) +
+        (data.get('month ') as string) +
         '-' +
-        (data.get('day') as string),
-      addresses: [addressesFormData],
+        (data.get('day ') as string),
+      addresses: [
+        addressesFormData,
+        addressesShippingFormData,
+        addressesBillingFormData,
+      ],
     };
     await createCustomer(customer)
       .then(() => {

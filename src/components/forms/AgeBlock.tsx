@@ -46,20 +46,13 @@ export const AgeBlock = () => {
     >
       <Divider sx={{ mb: 2 }}>Data of your birth</Divider>
       <Grid container spacing={2} sx={{ justifyContent: 'center' }}>
-        {getFormControl(
-          'day',
-          day,
-          days,
-          STYLE_FOR_DATATIME,
-
-          handleDay,
-        )}
+        {getFormControl('day', day, days, STYLE_FOR_DATATIME, '', handleDay)}
         {getFormControl(
           'month',
           month,
           months,
           STYLE_FOR_DATATIME,
-
+          '',
           handleMonth,
         )}
         {getFormControl(
@@ -67,7 +60,7 @@ export const AgeBlock = () => {
           year,
           years,
           STYLE_FOR_DATATIME,
-
+          '',
           handleYear,
         )}
       </Grid>
