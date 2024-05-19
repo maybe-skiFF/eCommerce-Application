@@ -79,7 +79,7 @@ export const AddressBlock = (props: MyProps) => {
           handleStreet,
         )}
         {getFormControl(
-          'postCode',
+          'postalCode',
           postalCode,
           getAddressItems(country).postalCode ?? '',
           STYLE_FOR_ADDRESS,

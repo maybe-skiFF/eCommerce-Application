@@ -14,12 +14,13 @@ import { AgeBlock } from './AgeBlock';
 import { AddressBlock } from './AddressBlock';
 import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
 import { createCustomer } from 'src/serverPart/ApiRoot';
+import { getAddressesArray } from 'src/utils/getAddressesArray';
 import {
   checkValidationFieldPassword,
   checkValidationFieldEmail,
   checkValidationTextField,
 } from 'src/utils/checkValidationField';
-import { CustomerAddress, CustomerData } from 'src/utils/interfaces';
+import { CustomerData } from 'src/utils/interfaces';
 import { SubmitButton } from './SubmitButton';
 
 export const RegistrationBlock = () => {
@@ -82,24 +83,8 @@ export const RegistrationBlock = () => {
   ): Promise<void> => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    const addressesFormData: CustomerAddress = {
-      country: data.get('country default') as string,
-      city: data.get('city default') as string,
-      streetName: data.get('street default') as string,
-      postalCode: data.get('postCode default') as string,
-    };
-    const addressesShippingFormData: CustomerAddress = {
-      country: data.get('country shipping') as string,
-      city: data.get('city shipping') as string,
-      streetName: data.get('street shipping') as string,
-      postalCode: data.get('postCode shipping') as string,
-    };
-    const addressesBillingFormData: CustomerAddress = {
-      country: data.get('country billing') as string,
-      city: data.get('city billing') as string,
-      streetName: data.get('street billing') as string,
-      postalCode: data.get('postCode billing') as string,
-    };
+    const kindOfAddresses = ['default', 'shipping', 'billing'];
+
     const customer: CustomerData = {
       firstName: data.get('firstName') as string,
       lastName: data.get('lastName') as string,
@@ -112,12 +97,9 @@ export const RegistrationBlock = () => {
         (data.get('month ') as string) +
         '-' +
         (data.get('day ') as string),
-      addresses: [
-        addressesFormData,
-        addressesShippingFormData,
-        addressesBillingFormData,
-      ],
+      addresses: [],
     };
+    getAddressesArray(kindOfAddresses, customer.addresses, data);
     await createCustomer(customer)
       .then(() => {
         navigate('/');
