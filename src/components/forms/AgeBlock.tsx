@@ -45,7 +45,7 @@ export const AgeBlock = () => {
       onMouseOver={handleMouseOut}
     >
       <Divider sx={{ mb: 2 }}>Data of your birth</Divider>
-      <Grid container spacing={2}>
+      <Grid container spacing={2} sx={{ justifyContent: 'center' }}>
         {getFormControl('day', day, days, STYLE_FOR_DATATIME, handleDay)}
         {getFormControl(
           'month',

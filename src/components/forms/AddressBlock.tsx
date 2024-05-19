@@ -8,6 +8,7 @@ import { STYLE_FOR_ADDRESS } from 'src/constants/STYLES';
 import { getFormControl } from 'src/utils/createFormControl';
 import { checkAddress } from 'src/utils/checkAddress';
 import { Address } from 'src/utils/interfaces';
+import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
 
 export const AddressBlock = () => {
   const [country, setCountry] = useState<string>('');
@@ -47,7 +48,7 @@ export const AddressBlock = () => {
         flexDirection: 'column',
       }}
     >
-      <Divider sx={{ ml: 'auto', mr: 'auto', mb: 2 }}>Address</Divider>
+      <Divider sx={{ mb: 2 }}>{SERVICE_MESSAGES.address}</Divider>
       <Grid
         container
         spacing={2}

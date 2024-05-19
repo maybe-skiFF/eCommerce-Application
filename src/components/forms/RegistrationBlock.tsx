@@ -1,6 +1,13 @@
 import { ChangeEvent, FormEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Box, Grid, FormControlLabel, Checkbox } from '@mui/material';
+import {
+  Box,
+  Grid,
+  FormControlLabel,
+  Checkbox,
+  Typography,
+  Collapse,
+} from '@mui/material';
 
 import { getTextForm, getInputProps } from 'src/utils/createFormControl';
 import { AgeBlock } from './AgeBlock';
@@ -34,9 +41,17 @@ export const RegistrationBlock = () => {
   const [isCurrentAddress, setCurrentAddress] = useState<string>(
     SERVICE_MESSAGES.startCheck,
   );
+  const [openDefaultAddress, setOpenDefaultAddress] = useState<boolean>(false);
+  const [openDefaultBillingAddress, setOpenDefaultBillingAddress] =
+    useState<boolean>(false);
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const navigate = useNavigate();
-
+  const handleCheckedDefaultAddress = () => {
+    setOpenDefaultAddress(!openDefaultAddress);
+  };
+  const handleCheckedDefaultBillingAddress = () => {
+    setOpenDefaultBillingAddress(!openDefaultBillingAddress);
+  };
   const handleName = (event: ChangeEvent<HTMLInputElement>): void => {
     setStatusName(checkValidationTextField(event.target.value));
   };
@@ -87,8 +102,6 @@ export const RegistrationBlock = () => {
         (data.get('day') as string),
       addresses: [addressesFormData],
     };
-    console.log(data.get('day'), 'day');
-    console.log(customer, 'customer');
     await createCustomer(customer)
       .then(() => {
         navigate('/');
@@ -100,19 +113,24 @@ export const RegistrationBlock = () => {
       component="form"
       noValidate
       onSubmit={event => void handleSubmit(event)}
-      sx={{ mt: 3 }}
+      sx={{
+        mt: 3,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+      }}
     >
       <Grid container spacing={2}>
-        <Grid item xs={12}>
+        <Grid item xs={3}>
           {getTextForm('firstName', statusName, handleName, true)}
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={3}>
           {getTextForm('lastName', statusLastName, handleLastName, true)}
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={3}>
           {getTextForm('email', currentStatusEmail, handleOnInputEmail, true)}
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={3}>
           {getTextForm(
             'password',
             currentStatusPassword,
@@ -127,17 +145,50 @@ export const RegistrationBlock = () => {
         <Grid item xs={6} onMouseLeave={handleStatusAddress}>
           <AddressBlock />
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={4} ml={'8%'} mr={'8%'} mt={1}>
           <FormControlLabel
-            control={<Checkbox value="allowExtraEmails" color="primary" />}
-            label={SERVICE_MESSAGES.defaultAddress}
+            control={
+              <Checkbox
+                value="allowExtraEmails"
+                color="primary"
+                size="small"
+                defaultChecked
+                onChange={handleCheckedDefaultAddress}
+              />
+            }
+            label={
+              <Typography fontSize={'75%'}>
+                {SERVICE_MESSAGES.defaultAddress}
+              </Typography>
+            }
           />
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={6} onMouseLeave={handleStatusAge}>
+          <Collapse in={openDefaultAddress} timeout="auto" unmountOnExit>
+            <AddressBlock />
+          </Collapse>
+        </Grid>
+        <Grid item xs={4} ml={'8%'} mr={'8%'} mt={0}>
           <FormControlLabel
-            control={<Checkbox value="allowExtraEmails" color="primary" />}
-            label={SERVICE_MESSAGES.billingAddress}
+            control={
+              <Checkbox
+                value="allowExtraEmails"
+                color="primary"
+                size="small"
+                onChange={handleCheckedDefaultBillingAddress}
+              />
+            }
+            label={
+              <Typography fontSize={'75%'}>
+                {SERVICE_MESSAGES.billingAddress}
+              </Typography>
+            }
           />
+        </Grid>
+        <Grid item xs={6} onMouseLeave={handleStatusAge}>
+          <Collapse in={openDefaultBillingAddress} timeout="auto" unmountOnExit>
+            <AddressBlock />
+          </Collapse>
         </Grid>
       </Grid>
 

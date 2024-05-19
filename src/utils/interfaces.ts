@@ -25,3 +25,7 @@ export interface DataTime {
   month: string[];
   year: string[];
 }
+export interface MyProps {
+  text: string;
+  count: number;
+}

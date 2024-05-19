@@ -1,9 +1,11 @@
 export const SERVICE_MESSAGES = {
-  billingAddress: 'My billing address is different',
+  address: 'Check your address',
+  billingAddress: 'Use a different address for billing delivery',
   shipingAddress: 'My shiping address is different',
   cart: 'cart',
   checkDone: 'Done',
-  defaultAddress: 'My shiping address is same',
+  defaultAddress:
+    'Use this default address for delivery of orders and payments',
   dontUseSpase: 'Field must not contain whitespace.',
   dontUseSymbols: `You don't have use !@#$%^&*()_`,
   dontUseNumbers: `You don't have use digits`,

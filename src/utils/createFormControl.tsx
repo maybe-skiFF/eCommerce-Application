@@ -111,6 +111,3 @@ export const getTextForm = (
     />
   );
 };
-// export const getCurrItem = (event: SelectChangeEvent) => {
-//   return event.target.value;
-// };

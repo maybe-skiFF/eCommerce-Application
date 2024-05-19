@@ -9,7 +9,7 @@ export const SubmitButton = (
   return (
     <Button
       type="submit"
-      fullWidth
+      size="large"
       variant="contained"
       disabled={statuses.some(status => status !== SERVICE_MESSAGES.checkDone)}
       sx={{ mt: 3, mb: 2 }}
