@@ -13,7 +13,12 @@ export function LoginPage(): ReactNode {
   return (
     <>
       <Header></Header>
-      <Grid className='container' container component="main" sx={{ height: '96vh' }}>
+      <Grid
+        className="container"
+        container
+        component="main"
+        sx={{ height: '96vh' }}
+      >
         <CssBaseline />
         <Grid
           item
@@ -36,11 +41,12 @@ export function LoginPage(): ReactNode {
         </Grid>
         <Grid container justifyContent="flex-end">
           <Grid item>
-            <Link sx={{ fontSize: `16px`, whiteSpace: 'pre-line' }}
-              href="/registration" variant="body2">
-              {SERVICE_MESSAGES.noAccount}
-              {' '}
-              {SERVICE_MESSAGES.signIn}
+            <Link
+              sx={{ fontSize: `16px`, whiteSpace: 'pre-line' }}
+              href="/registration"
+              variant="body2"
+            >
+              {SERVICE_MESSAGES.noAccount} {SERVICE_MESSAGES.signIn}
             </Link>
           </Grid>
         </Grid>
