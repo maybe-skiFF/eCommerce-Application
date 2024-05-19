@@ -83,8 +83,13 @@ export const RegistrationBlock = () => {
   ): Promise<void> => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    const kindOfAddresses = ['default', 'shipping', 'billing'];
-
+    const kindOfAddresses = ['default'];
+    if (openDefaultAddress) {
+      kindOfAddresses.push('shipping');
+    }
+    if (openDefaultBillingAddress) {
+      kindOfAddresses.push('billing');
+    }
     const customer: CustomerData = {
       firstName: data.get('firstName') as string,
       lastName: data.get('lastName') as string,
