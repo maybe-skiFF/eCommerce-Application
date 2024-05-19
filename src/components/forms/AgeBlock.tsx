@@ -51,7 +51,7 @@ export const AgeBlock = () => {
           day,
           days,
           STYLE_FOR_DATATIME,
-          'day ',
+
           handleDay,
         )}
         {getFormControl(
@@ -59,7 +59,7 @@ export const AgeBlock = () => {
           month,
           months,
           STYLE_FOR_DATATIME,
-          'month ',
+
           handleMonth,
         )}
         {getFormControl(
@@ -67,7 +67,7 @@ export const AgeBlock = () => {
           year,
           years,
           STYLE_FOR_DATATIME,
-          'year ',
+
           handleYear,
         )}
       </Grid>
