@@ -12,7 +12,7 @@ export const SERVICE_MESSAGES = {
   dontUseSymbols: `You don't have use !@#$%^&*()_`,
   dontUseNumbers: `You don't have use digits`,
   haveAccount: 'Already have an account?',
-  headerTitle: 'simple clothes',
+  headerTitle: 'The Best Store',
   isNoValid: 'Email address must be  formatted (e.g., user@example.com).',
   login: 'login',
   logout: 'logout',
