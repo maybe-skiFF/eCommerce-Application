@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, useState } from 'react';
+import { ChangeEvent, FormEvent, SyntheticEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Box,
@@ -22,6 +22,8 @@ import {
 } from 'src/utils/checkValidationField';
 import { CustomerData } from 'src/utils/interfaces';
 import { SubmitButton } from './SubmitButton';
+import { SimpleSnackbar } from './Snackbar';
+import { ErrorObject } from '@commercetools/platform-sdk';
 
 export const RegistrationBlock = () => {
   const [statusName, setStatusName] = useState<string>(
@@ -47,6 +49,14 @@ export const RegistrationBlock = () => {
     useState<boolean>(false);
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const navigate = useNavigate();
+  const [open, setOpen] = useState<boolean>(false);
+  const [serverMessage, setServerMessage] = useState<string>('');
+  const handleClose = (event: SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return event;
+    }
+    setOpen(false);
+  };
   const handleCheckedDefaultAddress = () => {
     setOpenDefaultAddress(!openDefaultAddress);
   };
@@ -78,6 +88,7 @@ export const RegistrationBlock = () => {
     );
   };
   const handleClickShowPassword = () => setShowPassword(show => !show);
+
   const handleSubmit = async (
     event: FormEvent<HTMLFormElement>,
   ): Promise<void> => {
@@ -106,12 +117,15 @@ export const RegistrationBlock = () => {
     };
     getAddressesArray(kindOfAddresses, customer.addresses, data);
     await createCustomer(customer)
-      .then(({ body }) => {
+      .then(() => {
         navigate('/');
-        console.log(body);
         localStorage.setItem('isAuth', 'true');
       })
-      .catch(error => console.log(error));
+      .catch((error: ErrorObject) => {
+        console.log(error.message);
+        setServerMessage(error.message);
+        setOpen(true);
+      });
   };
   return (
     <Box
@@ -125,6 +139,7 @@ export const RegistrationBlock = () => {
         alignItems: 'center',
       }}
     >
+      {SimpleSnackbar(serverMessage, open, handleClose)}
       <Grid container spacing={2}>
         <Grid item xs={3}>
           {getTextForm('firstName', statusName, handleName, true)}

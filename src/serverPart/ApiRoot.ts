@@ -5,6 +5,7 @@ import {
   createApiBuilderFromCtpClient,
   CustomerPagedQueryResponse,
   Project,
+  ErrorObject,
   // CustomerToken,
 } from '@commercetools/platform-sdk';
 
@@ -39,7 +40,7 @@ const createCustomerDraft = (customerData: CustomerData) => {
 
 const createCustomer = async (
   customerData: CustomerData,
-): Promise<ClientResponse<CustomerSignInResult>> => {
+): Promise<ErrorObject | ClientResponse<CustomerSignInResult>> => {
   return await apiRoot
     .customers()
     .post({

@@ -3,6 +3,8 @@ export const SERVICE_MESSAGES = {
   addressShipping: 'Choice your shipping address',
   addressBilling: 'Choice your billing address',
   billingAddress: 'Use a different address for billing delivery',
+  errorMail:
+    'The account is not registered. Check the spelling of the mail field',
   shipingAddress: 'My shiping address is different',
   cart: 'cart',
   checkDone: 'Done',
