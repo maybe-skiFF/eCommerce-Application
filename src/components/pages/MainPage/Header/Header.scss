@@ -43,6 +43,15 @@
   }
 }
 
+.logout__btn {
+  display: none;
+}
+
+.logout__btn-active {
+  display: flex;
+  align-items: center;
+}
+
 .search {
   margin-right: 20px;
 }

@@ -7,6 +7,7 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
 import { Search } from 'src/components/search/Search';
 import { Link as RouterLink } from 'react-router-dom';
+import { logoutUserHandler } from 'src/utils/logoutUserHandler';
 
 export function Header() {
   return (
@@ -44,7 +45,7 @@ export function Header() {
           <Box className="login">
             <Link
               component={RouterLink}
-              className="login__link"
+              className="login__link login"
               color="textPrimary"
               underline="none"
               to="/login"
@@ -65,9 +66,10 @@ export function Header() {
             <Link
               component={RouterLink}
               to="/"
-              className="login__link"
+              className={`login__link logout ${localStorage.getItem('isAuth') === 'true' ? 'logout__btn-active' : 'logout__btn'}`}
               color="textPrimary"
               underline="none"
+              onClick={logoutUserHandler}
             >
               <LogoutIcon />
               {SERVICE_MESSAGES.logout}
