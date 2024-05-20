@@ -4,7 +4,7 @@ export const SERVICE_MESSAGES = {
   addressBilling: 'Choice your billing address',
   billingAddress: 'Use a different address for billing delivery',
   shipingAddress: 'My shiping address is different',
-  cart: 'cart',
+  cart: 'Cart',
   checkDone: 'Done',
   defaultAddress:
     'Use this default address for delivery of orders and payments',
@@ -14,8 +14,8 @@ export const SERVICE_MESSAGES = {
   haveAccount: 'Already have an account?',
   headerTitle: 'The Best Store',
   isNoValid: 'Email address must be  formatted (e.g., user@example.com).',
-  login: 'login',
-  logout: 'logout',
+  login: 'Login',
+  logout: 'Logout',
   noAccount: `Don't have an account?`,
   notEmpty: 'The field cannot be empty',
   page404Text:

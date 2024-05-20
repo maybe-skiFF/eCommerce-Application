@@ -2,6 +2,7 @@ import './Header.scss';
 import { Box, AppBar, Toolbar, Link, Typography } from '@mui/material';
 import CheckroomIcon from '@mui/icons-material/Checkroom';
 import PersonIcon from '@mui/icons-material/Person';
+import LogoutIcon from '@mui/icons-material/Logout';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
 import { Search } from 'src/components/search/Search';
@@ -60,6 +61,16 @@ export function Header() {
             >
               <ShoppingCartIcon />
               {SERVICE_MESSAGES.cart}
+            </Link>
+            <Link
+              component={RouterLink}
+              to="/"
+              className="login__link"
+              color="textPrimary"
+              underline="none"
+            >
+              <LogoutIcon />
+              {SERVICE_MESSAGES.logout}
             </Link>
           </Box>
         </Toolbar>
