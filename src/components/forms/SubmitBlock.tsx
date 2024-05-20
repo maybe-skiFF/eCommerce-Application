@@ -4,7 +4,7 @@ import { Box } from '@mui/material';
 import {
   getProject,
   // getToken,
-  // checkCustomer,
+  checkCustomer,
   // getPasswordFlow,
 } from 'src/serverPart/ApiRoot';
 import { getTextForm, getInputProps } from 'src/utils/createFormControl';
@@ -53,13 +53,18 @@ export const SubmitBlock = (): ReactNode => {
     if (data.get('password') === '') {
       setCurrentStatusPassword(SERVICE_MESSAGES.notEmpty);
     }
-    await getProject()
-      .then(result => {
-        console.log(result);
-        navigate('/');
-      })
-
-      .catch(error => console.log(error));
+    await getProject().then(() => {
+      checkCustomer(data.get('email') as string)
+        .then(({ body }) => {
+          if (body.results.length === 0) {
+            console.log('No acc');
+          } else {
+            navigate('/');
+            console.log(body.results[0]);
+          }
+        })
+        .catch(error => console.log(error));
+    });
   };
 
   return (

@@ -13,7 +13,7 @@ import { getTextForm, getInputProps } from 'src/utils/createFormControl';
 import { AgeBlock } from './AgeBlock';
 import { AddressBlock } from './AddressBlock';
 import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
-import { createMyCustomer, getToken } from 'src/serverPart/ApiRoot';
+import { createCustomer } from 'src/serverPart/ApiRoot';
 import { getAddressesArray } from 'src/utils/getAddressesArray';
 import {
   checkValidationFieldPassword,
@@ -105,13 +105,12 @@ export const RegistrationBlock = () => {
       addresses: [],
     };
     getAddressesArray(kindOfAddresses, customer.addresses, data);
-    await createMyCustomer(customer.email, customer.password)
-      .then(() => {
+    await createCustomer(customer)
+      .then(({ body }) => {
         navigate('/');
+        console.log(body);
       })
       .catch(error => console.log(error));
-
-    await getToken().then(result => console.log(result));
   };
   return (
     <Box
