@@ -1,4 +1,6 @@
 import { Box, Typography } from '@mui/material';
+import categoryForMenImg from '../../assets/image/for-men.jpg';
+import categoryForWomenImg from '../../assets/image/for-women.jpg';
 
 interface CategoryImageProps {
   selectedCategory: string;
@@ -7,8 +9,8 @@ interface CategoryImageProps {
 export function CategoryImage({ selectedCategory }: CategoryImageProps) {
   const backgroundImageSrc =
     selectedCategory === 'for men'
-      ? 'url("src/assets/image/for-men.jpg")'
-      : 'url("src/assets/image/for-women.jpg")';
+      ? `url(${categoryForMenImg})`
+      : `url(${categoryForWomenImg})`;
 
   return (
     <Box
