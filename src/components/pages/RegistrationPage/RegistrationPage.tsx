@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import CssBaseline from '@mui/material/CssBaseline';
 import Link from '@mui/material/Link';
@@ -37,8 +38,9 @@ export function RegistrationPage(): ReactNode {
           <Grid container justifyContent="flex-end">
             <Grid item>
               <Link
+                component={RouterLink}
                 sx={{ fontSize: `16px`, whiteSpace: 'pre-line' }}
-                href="/login"
+                to="/login"
                 variant="body2"
               >
                 {SERVICE_MESSAGES.haveAccount} {SERVICE_MESSAGES.signIn}

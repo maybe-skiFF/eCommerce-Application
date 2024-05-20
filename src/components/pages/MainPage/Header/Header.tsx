@@ -5,6 +5,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
 import { Search } from 'src/components/search/Search';
+import { Link as RouterLink } from 'react-router-dom';
 
 export function Header() {
   return (
@@ -18,10 +19,11 @@ export function Header() {
         <Toolbar className="toolbar">
           <Box className="logo" sx={{ flexGrow: 1 }}>
             <Link
+              component={RouterLink}
               className="toolbar__link"
               color="textPrimary"
               underline="none"
-              href="/"
+              to="/"
             >
               <CheckroomIcon fontSize="large"></CheckroomIcon>
               <Typography
@@ -40,19 +42,21 @@ export function Header() {
           </Box>
           <Box className="login">
             <Link
+              component={RouterLink}
               className="login__link"
               color="textPrimary"
               underline="none"
-              href="/login"
+              to="/login"
             >
               <PersonIcon />
               {SERVICE_MESSAGES.login}
             </Link>
             <Link
+              component={RouterLink}
+              to="/"
               className="login__link"
               color="textPrimary"
               underline="none"
-              href="/cart"
             >
               <ShoppingCartIcon />
               {SERVICE_MESSAGES.cart}
