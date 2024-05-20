@@ -1,7 +1,12 @@
 import { ReactNode, ChangeEvent, FormEvent, useState } from 'react';
 import { Box } from '@mui/material';
 
-import { checkCustomer } from 'src/serverPart/ApiRoot';
+import {
+  getProject,
+  // getToken,
+  // checkCustomer,
+  // getPasswordFlow,
+} from 'src/serverPart/ApiRoot';
 import { getTextForm, getInputProps } from 'src/utils/createFormControl';
 import { SubmitButton } from './SubmitButton';
 import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
@@ -9,6 +14,11 @@ import {
   checkValidationFieldEmail,
   checkValidationFieldPassword,
 } from 'src/utils/checkValidationField';
+import { useNavigate } from 'react-router-dom';
+// import {
+// CustomerServerData,
+// CustomerPagedQueryResponse,
+// } from 'src/utils/interfaces';
 
 export const SubmitBlock = (): ReactNode => {
   const [currentStatusEmail, setCurrentStatusEmail] = useState<string>(
@@ -23,6 +33,7 @@ export const SubmitBlock = (): ReactNode => {
     setCurrentStatusEmail(checkValidationFieldEmail(event.target.value));
   };
 
+  const navigate = useNavigate();
   const handleOnInputPassword = (
     event: ChangeEvent<HTMLInputElement>,
   ): void => {
@@ -42,10 +53,12 @@ export const SubmitBlock = (): ReactNode => {
     if (data.get('password') === '') {
       setCurrentStatusPassword(SERVICE_MESSAGES.notEmpty);
     }
-    await checkCustomer(currentStatusEmail)
-      .then(data => {
-        console.log(data);
+    await getProject()
+      .then(result => {
+        console.log(result);
+        navigate('/');
       })
+
       .catch(error => console.log(error));
   };
 

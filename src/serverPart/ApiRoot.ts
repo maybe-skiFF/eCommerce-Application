@@ -1,5 +1,12 @@
-import { ctpClient } from './BuildClient';
-import { createApiBuilderFromCtpClient } from '@commercetools/platform-sdk';
+import { ctpClient, myClient } from './BuildClient';
+import {
+  ClientResponse,
+  CustomerSignInResult,
+  createApiBuilderFromCtpClient,
+  CustomerPagedQueryResponse,
+  Project,
+  // CustomerToken,
+} from '@commercetools/platform-sdk';
 
 import { CustomerData } from 'src/utils/interfaces';
 import { PROJECT_DATA } from './PROJECT_DATA';
@@ -7,9 +14,14 @@ import { PROJECT_DATA } from './PROJECT_DATA';
 const apiRoot = createApiBuilderFromCtpClient(ctpClient).withProjectKey({
   projectKey: PROJECT_DATA.CTP_PROJECT_KEY,
 });
-
-const getProject = () => {
+const myApiRoot = createApiBuilderFromCtpClient(myClient).withProjectKey({
+  projectKey: PROJECT_DATA.CTP_PROJECT_KEY,
+});
+const getProject = (): Promise<ClientResponse<Project>> => {
   return apiRoot.get().execute();
+};
+const getToken = (): Promise<ClientResponse<CustomerPagedQueryResponse>> => {
+  return myApiRoot.customers().get().execute();
 };
 const createCustomerDraft = (customerData: CustomerData) => {
   const { firstName, lastName, email, password, key, dateOfBirth, addresses } =
@@ -24,16 +36,49 @@ const createCustomerDraft = (customerData: CustomerData) => {
     addresses,
   };
 };
-const createCustomer = async (customerData: CustomerData): Promise<void> => {
-  await apiRoot
+
+const createCustomer = async (
+  customerData: CustomerData,
+): Promise<ClientResponse<CustomerSignInResult>> => {
+  return await apiRoot
     .customers()
     .post({
       body: createCustomerDraft(customerData),
     })
     .execute();
 };
-const checkCustomer = async (email: string): Promise<void> => {
+const createMyCustomer = async (
+  name: string,
+  password: string,
+): Promise<ClientResponse> => {
+  return await myApiRoot
+    .customers()
+    .post({
+      body: {
+        email: name,
+        password: password,
+      },
+    })
+    .execute();
+};
+const getPasswordFlow = async (
+  // BEARER_TOKEN: string,
+  email: string,
+  password: string,
+) => {
   await apiRoot
+    .customers()
+    .get({
+      queryArgs: {
+        where: [`email="${email}"`, `password="${password}"`],
+      },
+    })
+    .execute();
+};
+const checkCustomer = async (
+  email: string,
+): Promise<ClientResponse<CustomerPagedQueryResponse>> => {
+  return await apiRoot
     .customers()
     .get({
       queryArgs: {
@@ -42,10 +87,17 @@ const checkCustomer = async (email: string): Promise<void> => {
     })
     .execute();
 };
-getProject()
-  .then(({ body }) => {
-    console.log(JSON.stringify(body));
-  })
-  .catch(console.error);
+// getProject()
+//   .then(({ body }) => {
+//     console.log(JSON.stringify(body));
+//   })
+//   .catch(console.error);
 
-export { getProject, createCustomer, checkCustomer };
+export {
+  getProject,
+  createCustomer,
+  checkCustomer,
+  getToken,
+  getPasswordFlow,
+  createMyCustomer,
+};

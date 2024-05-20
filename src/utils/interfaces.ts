@@ -30,3 +30,28 @@ export interface MyProps {
   count?: number;
   value?: string;
 }
+export interface CustomerServerData {
+  addresses: CustomerAddress[];
+  email: string;
+  firstName: string;
+  id: string;
+  isEmailVerified: boolean;
+  lastName: string;
+  password: string;
+  version: number;
+  createdAt: string;
+  lastModifiedAt: string;
+  authenticationMode: string;
+  stores?: [];
+}
+export interface CustomerPagedQueryResponse {
+  limit: number;
+  offset: number;
+  count: number;
+  total: number;
+  results: CustomerServerData[];
+}
+export interface CreatedBy {
+  clientId: string;
+  isPlatformClient: boolean;
+}
