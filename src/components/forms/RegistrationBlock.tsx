@@ -109,6 +109,7 @@ export const RegistrationBlock = () => {
       .then(({ body }) => {
         navigate('/');
         console.log(body);
+        localStorage.setItem('isAuth', 'true');
       })
       .catch(error => console.log(error));
   };

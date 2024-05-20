@@ -60,6 +60,7 @@ export const SubmitBlock = (): ReactNode => {
             console.log('No acc');
           } else {
             navigate('/');
+            localStorage.setItem('isAuth', 'true');
             console.log(body.results[0]);
           }
         })
