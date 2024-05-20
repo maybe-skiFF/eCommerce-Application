@@ -3,6 +3,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 import { Link } from '@mui/material';
+import { Link as RouterLink } from 'react-router-dom';
 
 import { LoginForm } from './../../forms/LoginForm';
 import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
@@ -42,8 +43,9 @@ export function LoginPage(): ReactNode {
         <Grid container justifyContent="flex-end">
           <Grid item>
             <Link
+              component={RouterLink}
               sx={{ fontSize: `16px`, whiteSpace: 'pre-line' }}
-              href="/registration"
+              to="/registration"
               variant="body2"
             >
               {SERVICE_MESSAGES.noAccount} {SERVICE_MESSAGES.signIn}

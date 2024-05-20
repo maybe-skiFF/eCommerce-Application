@@ -30,9 +30,9 @@
 }
 
 .login {
-  width: 180px;
   display: flex;
   justify-content: space-between;
+  column-gap: 20px;
   font-size: 18px;
 
   &__link {
@@ -41,6 +41,15 @@
       vertical-align: text-bottom;
     }
   }
+}
+
+.logout__btn {
+  display: none;
+}
+
+.logout__btn-active {
+  display: flex;
+  align-items: center;
 }
 
 .search {
