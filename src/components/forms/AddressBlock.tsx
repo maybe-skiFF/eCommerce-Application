@@ -52,7 +52,7 @@ export const AddressBlock = (props: MyProps) => {
         container
         spacing={2}
         sx={{ justifyContent: 'center' }}
-        onMouseOver={handleCheckAdress}
+        onMouseLeave={handleCheckAdress}
       >
         {getFormControl(
           'country',

@@ -36,4 +36,6 @@ export const SERVICE_MESSAGES = {
   useMore2: 'Field must have at least 2 symbols ',
   useNumber: 'Field must have at least one digit',
   useUpperCase: 'You must use at least one uppercase letter ',
+  tooYoung: 'The user cannot be under 13 years of age',
+  allFields: 'All fieids have to be choice',
 };

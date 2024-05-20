@@ -44,7 +44,7 @@ export const getFormControl = (
 ): JSX.Element => {
   return (
     <div>
-      <FormControl sx={styles} size="small">
+      <FormControl sx={styles} size="small" error={selectValue === ''}>
         <InputLabel id={purpose} sx={{ fontSize: '50%' }}>
           {purpose.toUpperCase()}
         </InputLabel>
