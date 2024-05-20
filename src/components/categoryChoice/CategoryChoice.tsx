@@ -8,9 +8,11 @@ export function CategoryChoice() {
 
   const handleChange = (
     _event: MouseEvent<HTMLElement>,
-    newCategory: string,
+    newCategory: string | null,
   ) => {
-    setCategory(newCategory);
+    if (newCategory !== null) {
+      setCategory(newCategory);
+    }
   };
 
   return (
@@ -29,7 +31,7 @@ export function CategoryChoice() {
           FOR MEN
         </ToggleButton>
       </ToggleButtonGroup>
-      <CategoryImage selectedCategory={selectedCategory} />
+      <CategoryImage selectedCategory={selectedCategory || ''} />
     </>
   );
 }

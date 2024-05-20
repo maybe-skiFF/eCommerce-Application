@@ -1,34 +1,52 @@
 import { ReactNode } from 'react';
+import Avatar from '@mui/material/Avatar';
 import CssBaseline from '@mui/material/CssBaseline';
-import Paper from '@mui/material/Paper';
+import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
 
-import { LoginForm } from './../../forms/LoginForm';
-import { PATHS } from 'src/constants/PATHS';
+import { RegistrationBlock } from 'src/components/forms/RegistrationBlock';
+import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
+import { Header } from '../MainPage/Header/Header';
 
 export function RegistrationPage(): ReactNode {
+  localStorage.clear();
   return (
-    <Grid container component="main" sx={{ height: '100vh' }}>
-      <CssBaseline />
-      <Grid
-        item
-        xs={false}
-        sm={4}
-        md={7}
-        sx={{
-          backgroundImage: `url(${PATHS.backgroundForLoginPage})`,
-          backgroundRepeat: 'no-repeat',
-          backgroundColor: t =>
-            t.palette.mode === 'light'
-              ? t.palette.grey[50]
-              : t.palette.grey[900],
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-        }}
-      />
-      <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
-        <LoginForm />
-      </Grid>
-    </Grid>
+    <>
+      <Header></Header>
+      <Container className="container" component="main" maxWidth="lg">
+        <CssBaseline />
+        <Box
+          sx={{
+            marginTop: 8,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        >
+          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+            <LockOutlinedIcon />
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            {SERVICE_MESSAGES.signIn}
+          </Typography>
+          <RegistrationBlock />
+          <Grid container justifyContent="flex-end">
+            <Grid item>
+              <Link
+                sx={{ fontSize: `16px`, whiteSpace: 'pre-line' }}
+                href="/login"
+                variant="body2"
+              >
+                {SERVICE_MESSAGES.haveAccount} {SERVICE_MESSAGES.signIn}
+              </Link>
+            </Grid>
+          </Grid>
+        </Box>
+      </Container>
+    </>
   );
 }
