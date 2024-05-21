@@ -42,7 +42,7 @@ export const addresses: Address[] = [
   },
   {
     country: 'USA US',
-    city: 'New York',
+    city: 'NYork',
     postalCode: '10001',
     streetName: ['Columbus Circle', 'Wooster Street'],
   },

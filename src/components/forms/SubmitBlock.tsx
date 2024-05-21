@@ -1,12 +1,13 @@
-import { ReactNode, ChangeEvent, FormEvent, useState } from 'react';
+import {
+  ReactNode,
+  ChangeEvent,
+  FormEvent,
+  useState,
+  SyntheticEvent,
+} from 'react';
 import { Box } from '@mui/material';
 
-import {
-  getProject,
-  // getToken,
-  checkCustomer,
-  // getPasswordFlow,
-} from 'src/serverPart/ApiRoot';
+import { getProject, checkCustomer } from 'src/serverPart/ApiRoot';
 import { getTextForm, getInputProps } from 'src/utils/createFormControl';
 import { SubmitButton } from './SubmitButton';
 import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
@@ -15,10 +16,9 @@ import {
   checkValidationFieldPassword,
 } from 'src/utils/checkValidationField';
 import { useNavigate } from 'react-router-dom';
-// import {
-// CustomerServerData,
-// CustomerPagedQueryResponse,
-// } from 'src/utils/interfaces';
+import { SimpleSnackbar } from './Snackbar';
+import { useIsAuth } from 'src/context/context';
+import { ErrorObject } from '@commercetools/platform-sdk';
 
 export const SubmitBlock = (): ReactNode => {
   const [currentStatusEmail, setCurrentStatusEmail] = useState<string>(
@@ -27,12 +27,20 @@ export const SubmitBlock = (): ReactNode => {
   const [currentStatusPassword, setCurrentStatusPassword] = useState<string>(
     SERVICE_MESSAGES.startCheck,
   );
+  const [serverMessage, setServerMessage] = useState<string>('');
   const [showPassword, setShowPassword] = useState<boolean>(false);
-
+  const [open, setOpen] = useState<boolean>(false);
+  const handleClose = (event: SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return event;
+    }
+    setOpen(false);
+  };
   const handleOnInputEmail = (event: ChangeEvent<HTMLInputElement>): void => {
     setCurrentStatusEmail(checkValidationFieldEmail(event.target.value));
   };
 
+  const { setIsAuth } = useIsAuth();
   const navigate = useNavigate();
   const handleOnInputPassword = (
     event: ChangeEvent<HTMLInputElement>,
@@ -41,7 +49,6 @@ export const SubmitBlock = (): ReactNode => {
   };
 
   const handleClickShowPassword = () => setShowPassword(show => !show);
-
   const handleSubmit = async (
     event: FormEvent<HTMLFormElement>,
   ): Promise<void> => {
@@ -57,14 +64,17 @@ export const SubmitBlock = (): ReactNode => {
       checkCustomer(data.get('email') as string)
         .then(({ body }) => {
           if (body.results.length === 0) {
-            console.log('No acc');
+            setOpen(true);
+            setServerMessage(SERVICE_MESSAGES.errorMail);
           } else {
             navigate('/');
-            localStorage.setItem('isAuth', 'true');
-            console.log(body.results[0]);
+            setIsAuth(true);
           }
         })
-        .catch(error => console.log(error));
+        .catch((error: ErrorObject) => {
+          setServerMessage(error.message);
+          setOpen(true);
+        });
     });
   };
 
@@ -75,6 +85,7 @@ export const SubmitBlock = (): ReactNode => {
       sx={{ mt: 1 }}
       onSubmit={event => void handleSubmit(event)}
     >
+      {SimpleSnackbar(serverMessage, open, handleClose)}
       {getTextForm('email', currentStatusEmail, handleOnInputEmail, true)}
       {getTextForm(
         'password',

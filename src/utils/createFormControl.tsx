@@ -10,6 +10,7 @@ import {
   SelectChangeEvent,
   TextField,
 } from '@mui/material';
+
 import { ChangeEvent } from 'react';
 import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
 import { STYLE_FOR_HELPER } from 'src/constants/STYLES';
@@ -21,7 +22,13 @@ const createListItem = (item: string) => {
       divider={true}
       value={sameValue.length === 1 ? sameValue[0] : sameValue[1]}
       key={item}
-      sx={{ width: 1, fontSize: '45%' }}
+      sx={{
+        width: 1,
+        fontSize: '45%',
+        '@media screen and (max-width:520px)': {
+          width: '100%',
+        },
+      }}
     >
       {sameValue[0].length === 1 ? '0' + sameValue[0] : sameValue[0]}
     </MenuItem>
@@ -41,11 +48,24 @@ export const getFormControl = (
   styles: object,
   kind: string,
   callback?: (event: SelectChangeEvent) => void,
+  callback2?: () => void,
 ): JSX.Element => {
   return (
-    <div>
-      <FormControl sx={styles} size="small">
-        <InputLabel id={purpose} sx={{ fontSize: '50%' }}>
+    <div style={{ maxWidth: '600px', minWidth: '100px', marginLeft: '1%' }}>
+      <FormControl
+        fullWidth
+        sx={{
+          styles,
+        }}
+        size="small"
+        error={selectValue === ''}
+      >
+        <InputLabel
+          id={purpose}
+          sx={{
+            fontSize: '50%',
+          }}
+        >
           {purpose.toUpperCase()}
         </InputLabel>
         <Select
@@ -54,9 +74,17 @@ export const getFormControl = (
           id={purpose}
           value={selectValue}
           label={purpose.toUpperCase()}
-          sx={{ fontSize: '50%' }}
+          sx={{
+            fontSize: '50%',
+            marginTop: '3%',
+            '@media screen and (max-width:520px)': {
+              width: '100%',
+              padding: '0',
+            },
+          }}
           key={`${purpose}`}
           onChange={callback}
+          onMouseLeave={callback2}
         >
           {getListItems(items)}
         </Select>
@@ -104,6 +132,7 @@ export const getTextForm = (
           : true
       }
       helperText={state}
+      sx={{ width: 'calc(90% - 15px)' }}
       FormHelperTextProps={{
         sx: STYLE_FOR_HELPER,
       }}

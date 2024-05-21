@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, useState } from 'react';
+import { ChangeEvent, FormEvent, SyntheticEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Box,
@@ -22,6 +22,9 @@ import {
 } from 'src/utils/checkValidationField';
 import { CustomerData } from 'src/utils/interfaces';
 import { SubmitButton } from './SubmitButton';
+import { SimpleSnackbar } from './Snackbar';
+import { ErrorObject } from '@commercetools/platform-sdk';
+import { useIsAuth } from 'src/context/context';
 
 export const RegistrationBlock = () => {
   const [statusName, setStatusName] = useState<string>(
@@ -43,29 +46,44 @@ export const RegistrationBlock = () => {
     SERVICE_MESSAGES.startCheck,
   );
   const [openDefaultAddress, setOpenDefaultAddress] = useState<boolean>(false);
-  const [openDefaultBillingAddress, setOpenDefaultBillingAddress] =
-    useState<boolean>(false);
+  // const [openDefaultBillingAddress, setOpenDefaultBillingAddress] =
+  //   useState<boolean>(false);
   const [showPassword, setShowPassword] = useState<boolean>(false);
+
+  const [open, setOpen] = useState<boolean>(false);
+  const [serverMessage, setServerMessage] = useState<string>('');
+
   const navigate = useNavigate();
+  const { setIsAuth } = useIsAuth();
+  const handleClose = (event: SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return event;
+    }
+    setOpen(false);
+  };
   const handleCheckedDefaultAddress = () => {
     setOpenDefaultAddress(!openDefaultAddress);
   };
-  const handleCheckedDefaultBillingAddress = () => {
-    setOpenDefaultBillingAddress(!openDefaultBillingAddress);
-  };
+  // const handleCheckedDefaultBillingAddress = () => {
+  //   setOpenDefaultBillingAddress(!openDefaultBillingAddress);
+  // };
   const handleName = (event: ChangeEvent<HTMLInputElement>): void => {
     setStatusName(checkValidationTextField(event.target.value));
+    console.log(checkValidationTextField(event.target.value));
   };
   const handleLastName = (event: ChangeEvent<HTMLInputElement>): void => {
     setStatusLastName(checkValidationTextField(event.target.value));
+    console.log(checkValidationTextField(event.target.value));
   };
   const handleOnInputEmail = (event: ChangeEvent<HTMLInputElement>): void => {
     setCurrentStatusEmail(checkValidationFieldEmail(event.target.value));
+    console.log(checkValidationFieldEmail(event.target.value));
   };
   const handleOnInputPassword = (
     event: ChangeEvent<HTMLInputElement>,
   ): void => {
     setCurrentStatusPassword(checkValidationFieldPassword(event.target.value));
+    console.log(checkValidationFieldPassword(event.target.value));
   };
   const handleStatusAge = () => {
     setCurrentAge(
@@ -78,6 +96,7 @@ export const RegistrationBlock = () => {
     );
   };
   const handleClickShowPassword = () => setShowPassword(show => !show);
+
   const handleSubmit = async (
     event: FormEvent<HTMLFormElement>,
   ): Promise<void> => {
@@ -87,9 +106,9 @@ export const RegistrationBlock = () => {
     if (openDefaultAddress) {
       kindOfAddresses.push('shipping');
     }
-    if (openDefaultBillingAddress) {
-      kindOfAddresses.push('billing');
-    }
+    // if (openDefaultBillingAddress) {
+    //   kindOfAddresses.push('billing');
+    // }
     const customer: CustomerData = {
       firstName: data.get('firstName') as string,
       lastName: data.get('lastName') as string,
@@ -106,12 +125,14 @@ export const RegistrationBlock = () => {
     };
     getAddressesArray(kindOfAddresses, customer.addresses, data);
     await createCustomer(customer)
-      .then(({ body }) => {
+      .then(() => {
         navigate('/');
-        console.log(body);
-        localStorage.setItem('isAuth', 'true');
+        setIsAuth(true);
       })
-      .catch(error => console.log(error));
+      .catch((error: ErrorObject) => {
+        setServerMessage(error.message);
+        setOpen(true);
+      });
   };
   return (
     <Box
@@ -119,23 +140,32 @@ export const RegistrationBlock = () => {
       noValidate
       onSubmit={event => void handleSubmit(event)}
       sx={{
+        paddingLeft: '0',
+        paddingRight: '0',
+        maxWidth: '1100px',
+        width: '90%',
         mt: 3,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
       }}
     >
-      <Grid container spacing={2}>
-        <Grid item xs={3}>
+      {SimpleSnackbar(serverMessage, open, handleClose)}
+      <Grid
+        container
+        spacing={2}
+        sx={{ margin: '0 auto', justifyContent: 'space-between' }}
+      >
+        <Grid item xs={15} md={5} sm={6} lg={6}>
           {getTextForm('firstName', statusName, handleName, true)}
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={15} md={5} sm={6} lg={6}>
           {getTextForm('lastName', statusLastName, handleLastName, true)}
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={15} md={5} sm={6} lg={6}>
           {getTextForm('email', currentStatusEmail, handleOnInputEmail, true)}
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={15} md={5} sm={6} lg={6}>
           {getTextForm(
             'password',
             currentStatusPassword,
@@ -144,13 +174,13 @@ export const RegistrationBlock = () => {
             getInputProps(handleClickShowPassword, showPassword),
           )}
         </Grid>
-        <Grid item xs={6} onMouseLeave={handleStatusAge}>
+        <Grid item xs={12} md={5.5} sm={12} onMouseLeave={handleStatusAge}>
           <AgeBlock />
         </Grid>
-        <Grid item xs={6} onMouseLeave={handleStatusAddress}>
+        <Grid item xs={12} md={5.5} sm={12} onMouseLeave={handleStatusAddress}>
           <AddressBlock text={SERVICE_MESSAGES.address} value={'default'} />
         </Grid>
-        <Grid item xs={4} ml={'8%'} mr={'8%'} mt={1}>
+        <Grid item xs={9} md={5.5} sm={12} ml={'8%'} mr={'8%'} mt={1}>
           <FormControlLabel
             control={
               <Checkbox
@@ -168,7 +198,7 @@ export const RegistrationBlock = () => {
             }
           />
         </Grid>
-        <Grid item xs={6} onMouseLeave={handleStatusAge}>
+        <Grid item xs={12} md={5.5} sm={12} onMouseLeave={handleStatusAge}>
           <Collapse in={openDefaultAddress} timeout="auto" unmountOnExit>
             <AddressBlock
               text={SERVICE_MESSAGES.addressShipping}
@@ -176,7 +206,7 @@ export const RegistrationBlock = () => {
             />
           </Collapse>
         </Grid>
-        <Grid item xs={4} ml={'8%'} mr={'8%'} mt={0}>
+        {/* <Grid item xs={4} ml={'8%'} mr={'8%'} mt={0}>
           <FormControlLabel
             control={
               <Checkbox
@@ -200,7 +230,7 @@ export const RegistrationBlock = () => {
               value={'billing'}
             />
           </Collapse>
-        </Grid>
+        </Grid> */}
       </Grid>
 
       {SubmitButton(
@@ -212,7 +242,7 @@ export const RegistrationBlock = () => {
           isCurrentAge,
           isCurrentAddress,
         ],
-        SERVICE_MESSAGES.signIn,
+        SERVICE_MESSAGES.authorization,
       )}
     </Box>
   );

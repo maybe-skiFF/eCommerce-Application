@@ -1,10 +1,13 @@
 export const SERVICE_MESSAGES = {
+  authorization: 'Authorization',
   address: 'Choice your address',
   addressShipping: 'Choice your shipping address',
   addressBilling: 'Choice your billing address',
   billingAddress: 'Use a different address for billing delivery',
+  errorMail:
+    'The account is not registered. Check the spelling of the mail field',
   shipingAddress: 'My shiping address is different',
-  cart: 'Cart',
+  cart: 'My Cart',
   checkDone: 'Done',
   defaultAddress:
     'Use this default address for delivery of orders and payments',
@@ -34,4 +37,6 @@ export const SERVICE_MESSAGES = {
   useMore2: 'Field must have at least 2 symbols ',
   useNumber: 'Field must have at least one digit',
   useUpperCase: 'You must use at least one uppercase letter ',
+  tooYoung: 'The user cannot be under 13 years of age',
+  allFields: 'All fieids have to be choice',
 };

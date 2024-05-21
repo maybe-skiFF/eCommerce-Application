@@ -1,3 +1,7 @@
+import { CustomerSignInResult, ErrorObject } from '@commercetools/platform-sdk';
+import { ClientResponse } from '@commercetools/sdk-client-v2';
+import { ErrorResponse } from 'react-router-dom';
+
 export interface Address {
   country: string;
   city: string;
@@ -54,4 +58,9 @@ export interface CustomerPagedQueryResponse {
 export interface CreatedBy {
   clientId: string;
   isPlatformClient: boolean;
+}
+export interface Response {
+  body: ClientResponse<CustomerSignInResult>;
+  error: ErrorObject | ErrorResponse;
+  statusCode: number;
 }

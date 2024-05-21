@@ -47,12 +47,12 @@ export const AddressBlock = (props: MyProps) => {
         flexDirection: 'column',
       }}
     >
-      <Divider sx={{ mb: 2 }}>{props.text}</Divider>
+      <Divider sx={{ mb: 4 }}>{props.text}</Divider>
       <Grid
         container
         spacing={2}
         sx={{ justifyContent: 'center' }}
-        onMouseOver={handleCheckAdress}
+        onMouseLeave={handleCheckAdress}
       >
         {getFormControl(
           'country',
@@ -61,6 +61,7 @@ export const AddressBlock = (props: MyProps) => {
           STYLE_FOR_ADDRESS,
           props.value ?? '',
           handleCountry,
+          handleCheckAdress,
         )}
         {getFormControl(
           'city',
@@ -69,6 +70,7 @@ export const AddressBlock = (props: MyProps) => {
           STYLE_FOR_ADDRESS,
           props.value ?? '',
           handleCity,
+          handleCheckAdress,
         )}
         {getFormControl(
           'street',
@@ -77,6 +79,7 @@ export const AddressBlock = (props: MyProps) => {
           STYLE_FOR_ADDRESS,
           props.value ?? '',
           handleStreet,
+          handleCheckAdress,
         )}
         {getFormControl(
           'postalCode',
@@ -85,6 +88,7 @@ export const AddressBlock = (props: MyProps) => {
           STYLE_FOR_ADDRESS,
           props.value ?? '',
           handlePostalCode,
+          handleCheckAdress,
         )}
       </Grid>
     </Box>

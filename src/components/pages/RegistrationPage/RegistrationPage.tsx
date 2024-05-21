@@ -32,7 +32,7 @@ export function RegistrationPage(): ReactNode {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            {SERVICE_MESSAGES.signIn}
+            {SERVICE_MESSAGES.authorization}
           </Typography>
           <RegistrationBlock />
           <Grid container justifyContent="flex-end">
