@@ -1,4 +1,4 @@
-import { Navigate, createBrowserRouter } from 'react-router-dom';
+import { createBrowserRouter } from 'react-router-dom';
 import { MainPage } from '../pages/MainPage/MainPage';
 import { LoginPage } from '../pages/LoginPage/LoginPage';
 import { RegistrationPage } from '../pages/RegistrationPage/RegistrationPage';
@@ -14,11 +14,11 @@ export const CreateRouter = () => {
     },
     {
       path: '/login',
-      element: isAuth ? <Navigate to={'/'} /> : <LoginPage />,
+      element: isAuth ? <MainPage /> : <LoginPage />,
     },
     {
       path: '/registration',
-      element: <RegistrationPage />,
+      element: isAuth === true ? <MainPage /> : <RegistrationPage />,
     },
     {
       path: '*',

@@ -174,10 +174,10 @@ export const RegistrationBlock = () => {
             getInputProps(handleClickShowPassword, showPassword),
           )}
         </Grid>
-        <Grid item xs={12} md={5.5} sm={12} onChange={handleStatusAge}>
+        <Grid item xs={12} md={5.5} sm={12} onMouseLeave={handleStatusAge}>
           <AgeBlock />
         </Grid>
-        <Grid item xs={12} md={5.5} sm={12} onChange={handleStatusAddress}>
+        <Grid item xs={12} md={5.5} sm={12} onMouseLeave={handleStatusAddress}>
           <AddressBlock text={SERVICE_MESSAGES.address} value={'default'} />
         </Grid>
         <Grid item xs={9} md={5.5} sm={12} ml={'8%'} mr={'8%'} mt={1}>
@@ -222,8 +222,8 @@ export const RegistrationBlock = () => {
               </Typography>
             }
           />
-        </Grid> */}
-        {/* <Grid item xs={6} onMouseLeave={handleStatusAge}>
+        </Grid>
+        <Grid item xs={6} onMouseLeave={handleStatusAge}>
           <Collapse in={openDefaultBillingAddress} timeout="auto" unmountOnExit>
             <AddressBlock
               text={SERVICE_MESSAGES.addressBilling}
@@ -243,7 +243,6 @@ export const RegistrationBlock = () => {
           isCurrentAddress,
         ],
         SERVICE_MESSAGES.authorization,
-        handleStatusAddress,
       )}
     </Box>
   );

@@ -7,7 +7,7 @@ export const SERVICE_MESSAGES = {
   errorMail:
     'The account is not registered. Check the spelling of the mail field',
   shipingAddress: 'My shiping address is different',
-  cart: 'Cart',
+  cart: 'My Cart',
   checkDone: 'Done',
   defaultAddress:
     'Use this default address for delivery of orders and payments',

@@ -47,7 +47,7 @@ export const AddressBlock = (props: MyProps) => {
         flexDirection: 'column',
       }}
     >
-      <Divider sx={{ mb: 2 }}>{props.text}</Divider>
+      <Divider sx={{ mb: 4 }}>{props.text}</Divider>
       <Grid
         container
         spacing={2}
