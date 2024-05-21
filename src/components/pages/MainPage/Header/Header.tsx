@@ -6,10 +6,40 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
 import { Search } from 'src/components/search/Search';
-import { Link as RouterLink } from 'react-router-dom';
-import { logoutUserHandler } from 'src/utils/logoutUserHandler';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { useCustomer, useIsAuth } from 'src/context/context';
+import { deleteContact } from 'src/serverPart/ApiRoot';
+import { ErrorObject } from '@commercetools/platform-sdk';
+import { SimpleSnackbar } from 'src/components/forms/Snackbar';
+import { SyntheticEvent, useState } from 'react';
 
 export function Header() {
+  const [serverMessage, setServerMessage] = useState<string>('');
+  const [open, setOpen] = useState<boolean>(false);
+  const { customer } = useCustomer();
+  const { isAuth, setIsAuth } = useIsAuth();
+  const navigate = useNavigate();
+  const handleClose = (event: SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return event;
+    }
+    setOpen(false);
+  };
+  async function logoutUserHandler() {
+    const logoutBtn = document.querySelector('.logout')!;
+    logoutBtn.classList.remove('logout__btn-active');
+    logoutBtn.classList.add('logout__btn');
+    navigate('/login');
+    await deleteContact(customer.email)
+      .then(() => {
+        navigate('/login');
+        setIsAuth(false);
+      })
+      .catch((error: ErrorObject) => {
+        setServerMessage(error.message);
+        setOpen(true);
+      });
+  }
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar
@@ -65,15 +95,16 @@ export function Header() {
             </Link>
             <Link
               component={RouterLink}
-              to="/"
-              className={`login__link logout ${localStorage.getItem('isAuth') === 'true' ? 'logout__btn-active' : 'logout__btn'}`}
+              to="/login"
+              className={`login__link logout ${isAuth ? 'logout__btn-active' : 'logout__btn'}`}
               color="textPrimary"
               underline="none"
-              onClick={logoutUserHandler}
+              onClick={() => void logoutUserHandler()}
             >
               <LogoutIcon />
               {SERVICE_MESSAGES.logout}
             </Link>
+            {SimpleSnackbar(serverMessage, open, handleClose)}
           </Box>
         </Toolbar>
       </AppBar>

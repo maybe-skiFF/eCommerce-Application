@@ -41,6 +41,7 @@ export const getFormControl = (
   styles: object,
   kind: string,
   callback?: (event: SelectChangeEvent) => void,
+  callback2?: () => void,
 ): JSX.Element => {
   return (
     <div>
@@ -57,6 +58,7 @@ export const getFormControl = (
           sx={{ fontSize: '50%' }}
           key={`${purpose}`}
           onChange={callback}
+          onMouseLeave={callback2}
         >
           {getListItems(items)}
         </Select>

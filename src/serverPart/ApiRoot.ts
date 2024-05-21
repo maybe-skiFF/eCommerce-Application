@@ -6,6 +6,7 @@ import {
   CustomerPagedQueryResponse,
   Project,
   ErrorObject,
+  // ApiRoot,
   // CustomerToken,
 } from '@commercetools/platform-sdk';
 
@@ -88,11 +89,17 @@ const checkCustomer = async (
     })
     .execute();
 };
-// getProject()
-//   .then(({ body }) => {
-//     console.log(JSON.stringify(body));
-//   })
-//   .catch(console.error);
+
+const deleteContact = async (id: string) => {
+  return await apiRoot
+    .customers()
+    .get({
+      queryArgs: {
+        where: `email="${id}"`,
+      },
+    })
+    .execute();
+};
 
 export {
   getProject,
@@ -101,4 +108,5 @@ export {
   getToken,
   getPasswordFlow,
   createMyCustomer,
+  deleteContact,
 };

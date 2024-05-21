@@ -38,12 +38,15 @@ export const AgeBlock = () => {
   localStorage.setItem('isAgeEnough', ageEnough);
   const handleDay = (event: SelectChangeEvent): void => {
     setDay(event.target.value);
+    handleMouseOut();
   };
   const handleMonth = (event: SelectChangeEvent): void => {
     setMonth(event.target.value);
+    handleMouseOut();
   };
   const handleYear = (event: SelectChangeEvent): void => {
     setYear(event.target.value);
+    handleMouseOut();
   };
   const handleMouseOut = () => {
     if (checkAge(day, month, year) > 12 && checkAge(day, month, year) < 400) {
@@ -58,11 +61,23 @@ export const AgeBlock = () => {
   return (
     <Box
       sx={{ mt: 3, mb: 3, mr: 'auto', ml: 'auto', minWidth: 120 }}
-      onMouseLeave={handleMouseOut}
+      onMouseOut={handleMouseOut}
     >
       <Divider sx={{ mb: 2 }}>Data of your birth</Divider>
-      <Grid container spacing={2} sx={{ justifyContent: 'center' }}>
-        {getFormControl('day', day, days, STYLE_FOR_DATATIME, '', handleDay)}
+      <Grid
+        container
+        spacing={2}
+        sx={{ justifyContent: 'center', flexWrap: 'wrap' }}
+      >
+        {getFormControl(
+          'day',
+          day,
+          days,
+          STYLE_FOR_DATATIME,
+          '',
+          handleDay,
+          handleMouseOut,
+        )}
         {getFormControl(
           'month',
           month,
@@ -70,6 +85,7 @@ export const AgeBlock = () => {
           STYLE_FOR_DATATIME,
           '',
           handleMonth,
+          handleMouseOut,
         )}
         {getFormControl(
           'year',
@@ -78,8 +94,11 @@ export const AgeBlock = () => {
           STYLE_FOR_DATATIME,
           '',
           handleYear,
+          handleMouseOut,
         )}
-        <FormHelperText color={'red'}>{textError}</FormHelperText>
+        <FormHelperText sx={{ width: '80%', textAlign: 'center' }}>
+          {textError}
+        </FormHelperText>
       </Grid>
     </Box>
   );

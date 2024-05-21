@@ -61,6 +61,7 @@ export const AddressBlock = (props: MyProps) => {
           STYLE_FOR_ADDRESS,
           props.value ?? '',
           handleCountry,
+          handleCheckAdress,
         )}
         {getFormControl(
           'city',
@@ -69,6 +70,7 @@ export const AddressBlock = (props: MyProps) => {
           STYLE_FOR_ADDRESS,
           props.value ?? '',
           handleCity,
+          handleCheckAdress,
         )}
         {getFormControl(
           'street',
@@ -77,6 +79,7 @@ export const AddressBlock = (props: MyProps) => {
           STYLE_FOR_ADDRESS,
           props.value ?? '',
           handleStreet,
+          handleCheckAdress,
         )}
         {getFormControl(
           'postalCode',
@@ -85,6 +88,7 @@ export const AddressBlock = (props: MyProps) => {
           STYLE_FOR_ADDRESS,
           props.value ?? '',
           handlePostalCode,
+          handleCheckAdress,
         )}
       </Grid>
     </Box>

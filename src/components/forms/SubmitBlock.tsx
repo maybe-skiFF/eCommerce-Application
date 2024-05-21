@@ -7,12 +7,7 @@ import {
 } from 'react';
 import { Box } from '@mui/material';
 
-import {
-  getProject,
-  // getToken,
-  checkCustomer,
-  // getPasswordFlow,
-} from 'src/serverPart/ApiRoot';
+import { getProject, checkCustomer } from 'src/serverPart/ApiRoot';
 import { getTextForm, getInputProps } from 'src/utils/createFormControl';
 import { SubmitButton } from './SubmitButton';
 import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
@@ -22,10 +17,8 @@ import {
 } from 'src/utils/checkValidationField';
 import { useNavigate } from 'react-router-dom';
 import { SimpleSnackbar } from './Snackbar';
-// import {
-// CustomerServerData,
-// CustomerPagedQueryResponse,
-// } from 'src/utils/interfaces';
+import { useIsAuth } from 'src/context/context';
+import { ErrorObject } from '@commercetools/platform-sdk';
 
 export const SubmitBlock = (): ReactNode => {
   const [currentStatusEmail, setCurrentStatusEmail] = useState<string>(
@@ -34,6 +27,7 @@ export const SubmitBlock = (): ReactNode => {
   const [currentStatusPassword, setCurrentStatusPassword] = useState<string>(
     SERVICE_MESSAGES.startCheck,
   );
+  const [serverMessage, setServerMessage] = useState<string>('');
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
   const handleClose = (event: SyntheticEvent | Event, reason?: string) => {
@@ -46,6 +40,7 @@ export const SubmitBlock = (): ReactNode => {
     setCurrentStatusEmail(checkValidationFieldEmail(event.target.value));
   };
 
+  const { setIsAuth } = useIsAuth();
   const navigate = useNavigate();
   const handleOnInputPassword = (
     event: ChangeEvent<HTMLInputElement>,
@@ -70,13 +65,16 @@ export const SubmitBlock = (): ReactNode => {
         .then(({ body }) => {
           if (body.results.length === 0) {
             setOpen(true);
+            setServerMessage(SERVICE_MESSAGES.errorMail);
           } else {
             navigate('/');
-            localStorage.setItem('isAuth', 'true');
-            console.log(body.results[0]);
+            setIsAuth(true);
           }
         })
-        .catch(error => console.log(error));
+        .catch((error: ErrorObject) => {
+          setServerMessage(error.message);
+          setOpen(true);
+        });
     });
   };
 
@@ -87,7 +85,7 @@ export const SubmitBlock = (): ReactNode => {
       sx={{ mt: 1 }}
       onSubmit={event => void handleSubmit(event)}
     >
-      {SimpleSnackbar(SERVICE_MESSAGES.errorMail, open, handleClose)}
+      {SimpleSnackbar(serverMessage, open, handleClose)}
       {getTextForm('email', currentStatusEmail, handleOnInputEmail, true)}
       {getTextForm(
         'password',
