@@ -60,14 +60,28 @@ export const AgeBlock = () => {
 
   return (
     <Box
-      sx={{ mt: 3, mb: 3, mr: 'auto', ml: 'auto', minWidth: 120 }}
+      sx={{
+        mt: 3,
+        mb: 3,
+        mr: 'auto',
+        ml: 'auto',
+        minWidth: 120,
+      }}
       onMouseOut={handleMouseOut}
     >
       <Divider sx={{ mb: 2 }}>Data of your birth</Divider>
       <Grid
         container
-        spacing={2}
-        sx={{ justifyContent: 'center', flexWrap: 'wrap' }}
+        spacing={1}
+        sx={{
+          justifyContent: 'center',
+          flexWrap: 'wrap',
+          '@media screen and (max-width:520px)': {
+            width: '100%',
+            flexDirection: 'column',
+            alignItems: 'center',
+          },
+        }}
       >
         {getFormControl(
           'day',

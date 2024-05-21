@@ -69,17 +69,21 @@ export const RegistrationBlock = () => {
   // };
   const handleName = (event: ChangeEvent<HTMLInputElement>): void => {
     setStatusName(checkValidationTextField(event.target.value));
+    console.log(checkValidationTextField(event.target.value));
   };
   const handleLastName = (event: ChangeEvent<HTMLInputElement>): void => {
     setStatusLastName(checkValidationTextField(event.target.value));
+    console.log(checkValidationTextField(event.target.value));
   };
   const handleOnInputEmail = (event: ChangeEvent<HTMLInputElement>): void => {
     setCurrentStatusEmail(checkValidationFieldEmail(event.target.value));
+    console.log(checkValidationFieldEmail(event.target.value));
   };
   const handleOnInputPassword = (
     event: ChangeEvent<HTMLInputElement>,
   ): void => {
     setCurrentStatusPassword(checkValidationFieldPassword(event.target.value));
+    console.log(checkValidationFieldPassword(event.target.value));
   };
   const handleStatusAge = () => {
     setCurrentAge(
@@ -136,6 +140,10 @@ export const RegistrationBlock = () => {
       noValidate
       onSubmit={event => void handleSubmit(event)}
       sx={{
+        paddingLeft: '0',
+        paddingRight: '0',
+        maxWidth: '1100px',
+        width: '90%',
         mt: 3,
         display: 'flex',
         flexDirection: 'column',
@@ -143,17 +151,21 @@ export const RegistrationBlock = () => {
       }}
     >
       {SimpleSnackbar(serverMessage, open, handleClose)}
-      <Grid container spacing={2}>
-        <Grid item xs={3}>
+      <Grid
+        container
+        spacing={2}
+        sx={{ margin: '0 auto', justifyContent: 'space-between' }}
+      >
+        <Grid item xs={15} md={5} sm={6} lg={6}>
           {getTextForm('firstName', statusName, handleName, true)}
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={15} md={5} sm={6} lg={6}>
           {getTextForm('lastName', statusLastName, handleLastName, true)}
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={15} md={5} sm={6} lg={6}>
           {getTextForm('email', currentStatusEmail, handleOnInputEmail, true)}
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={15} md={5} sm={6} lg={6}>
           {getTextForm(
             'password',
             currentStatusPassword,
@@ -162,13 +174,13 @@ export const RegistrationBlock = () => {
             getInputProps(handleClickShowPassword, showPassword),
           )}
         </Grid>
-        <Grid item xs={6} onChange={handleStatusAge}>
+        <Grid item xs={12} md={5.5} sm={12} onChange={handleStatusAge}>
           <AgeBlock />
         </Grid>
-        <Grid item xs={6} onChange={handleStatusAddress}>
+        <Grid item xs={12} md={5.5} sm={12} onChange={handleStatusAddress}>
           <AddressBlock text={SERVICE_MESSAGES.address} value={'default'} />
         </Grid>
-        <Grid item xs={4} ml={'8%'} mr={'8%'} mt={1}>
+        <Grid item xs={9} md={5.5} sm={12} ml={'8%'} mr={'8%'} mt={1}>
           <FormControlLabel
             control={
               <Checkbox
@@ -186,7 +198,7 @@ export const RegistrationBlock = () => {
             }
           />
         </Grid>
-        <Grid item xs={6} onMouseLeave={handleStatusAge}>
+        <Grid item xs={12} md={5.5} sm={12} onMouseLeave={handleStatusAge}>
           <Collapse in={openDefaultAddress} timeout="auto" unmountOnExit>
             <AddressBlock
               text={SERVICE_MESSAGES.addressShipping}
@@ -230,7 +242,8 @@ export const RegistrationBlock = () => {
           isCurrentAge,
           isCurrentAddress,
         ],
-        SERVICE_MESSAGES.signIn,
+        SERVICE_MESSAGES.authorization,
+        handleStatusAddress,
       )}
     </Box>
   );

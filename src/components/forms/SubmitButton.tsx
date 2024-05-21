@@ -13,7 +13,7 @@ export const SubmitButton = (
       variant="contained"
       disabled={statuses.some(status => status !== SERVICE_MESSAGES.checkDone)}
       sx={{ mt: 3, mb: 2 }}
-      onClick={callback}
+      onMouseLeave={callback}
     >
       {text}
     </Button>

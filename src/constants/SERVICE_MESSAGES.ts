@@ -1,4 +1,5 @@
 export const SERVICE_MESSAGES = {
+  authorization: 'Authorization',
   address: 'Choice your address',
   addressShipping: 'Choice your shipping address',
   addressBilling: 'Choice your billing address',
