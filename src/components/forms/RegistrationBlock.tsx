@@ -22,7 +22,7 @@ import {
 } from 'src/utils/checkValidationField';
 import { CustomerData } from 'src/utils/interfaces';
 import { SubmitButton } from './SubmitButton';
-import { SimpleSnackbar } from './Snackbar';
+import { SimpleSnackbar } from '../SimpleSnackbar/SimpleSnackbar';
 import { ErrorObject } from '@commercetools/platform-sdk';
 import { useIsAuth } from 'src/context/context';
 

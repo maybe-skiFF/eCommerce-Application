@@ -16,7 +16,7 @@ import {
   checkValidationFieldPassword,
 } from 'src/utils/checkValidationField';
 import { useNavigate } from 'react-router-dom';
-import { SimpleSnackbar } from './Snackbar';
+import { SimpleSnackbar } from '../SimpleSnackbar/SimpleSnackbar';
 import { useIsAuth } from 'src/context/context';
 import { ErrorObject } from '@commercetools/platform-sdk';
 

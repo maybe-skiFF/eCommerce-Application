@@ -11,7 +11,7 @@ import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useCustomer, useIsAuth } from 'src/context/context';
 import { deleteContact } from 'src/serverPart/ApiRoot';
 import { ErrorObject } from '@commercetools/platform-sdk';
-import { SimpleSnackbar } from 'src/components/forms/Snackbar';
+import { SimpleSnackbar } from 'src/components/SimpleSnackbar/SimpleSnackbar';
 import { SyntheticEvent, useState, useRef } from 'react';
 
 export function Header() {
