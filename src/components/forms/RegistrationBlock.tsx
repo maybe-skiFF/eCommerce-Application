@@ -27,27 +27,21 @@ import { ErrorObject } from '@commercetools/platform-sdk';
 import { useIsAuth } from 'src/context/context';
 
 export const RegistrationBlock = () => {
-  const [statusName, setStatusName] = useState<string>(
+  const [formData, setFormData] = useState({
+    statusName: SERVICE_MESSAGES.startCheck,
+    statusLastName: SERVICE_MESSAGES.startCheck,
+    currentStatusEmail: SERVICE_MESSAGES.startCheck,
+    currentStatusPassword: SERVICE_MESSAGES.startCheck,
+  });
+
+  const [isCurrentAge, setIsCurrentAge] = useState<string>(
     SERVICE_MESSAGES.startCheck,
   );
-  const [statusLastName, setStatusLastName] = useState<string>(
-    SERVICE_MESSAGES.startCheck,
-  );
-  const [currentStatusEmail, setCurrentStatusEmail] = useState<string>(
-    SERVICE_MESSAGES.startCheck,
-  );
-  const [currentStatusPassword, setCurrentStatusPassword] = useState<string>(
-    SERVICE_MESSAGES.startCheck,
-  );
-  const [isCurrentAge, setCurrentAge] = useState<string>(
-    SERVICE_MESSAGES.startCheck,
-  );
-  const [isCurrentAddress, setCurrentAddress] = useState<string>(
+  const [isCurrentAddress, setIsCurrentAddress] = useState<string>(
     SERVICE_MESSAGES.startCheck,
   );
   const [openDefaultAddress, setOpenDefaultAddress] = useState<boolean>(false);
-  // const [openDefaultBillingAddress, setOpenDefaultBillingAddress] =
-  //   useState<boolean>(false);
+
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const [open, setOpen] = useState<boolean>(false);
@@ -64,34 +58,44 @@ export const RegistrationBlock = () => {
   const handleCheckedDefaultAddress = () => {
     setOpenDefaultAddress(!openDefaultAddress);
   };
-  // const handleCheckedDefaultBillingAddress = () => {
-  //   setOpenDefaultBillingAddress(!openDefaultBillingAddress);
-  // };
+
   const handleName = (event: ChangeEvent<HTMLInputElement>): void => {
-    setStatusName(checkValidationTextField(event.target.value));
-    console.log(checkValidationTextField(event.target.value));
+    setFormData({
+      ...formData,
+      statusName: checkValidationTextField(event.target.value),
+    });
   };
+
   const handleLastName = (event: ChangeEvent<HTMLInputElement>): void => {
-    setStatusLastName(checkValidationTextField(event.target.value));
-    console.log(checkValidationTextField(event.target.value));
+    setFormData({
+      ...formData,
+      statusLastName: checkValidationTextField(event.target.value),
+    });
   };
+
   const handleOnInputEmail = (event: ChangeEvent<HTMLInputElement>): void => {
-    setCurrentStatusEmail(checkValidationFieldEmail(event.target.value));
-    console.log(checkValidationFieldEmail(event.target.value));
+    setFormData({
+      ...formData,
+      currentStatusEmail: checkValidationFieldEmail(event.target.value),
+    });
   };
+
   const handleOnInputPassword = (
     event: ChangeEvent<HTMLInputElement>,
   ): void => {
-    setCurrentStatusPassword(checkValidationFieldPassword(event.target.value));
-    console.log(checkValidationFieldPassword(event.target.value));
+    setFormData({
+      ...formData,
+      currentStatusPassword: checkValidationFieldPassword(event.target.value),
+    });
   };
+
   const handleStatusAge = () => {
-    setCurrentAge(
+    setIsCurrentAge(
       localStorage.getItem('isAgeEnough') ?? SERVICE_MESSAGES.startCheck,
     );
   };
   const handleStatusAddress = () => {
-    setCurrentAddress(
+    setIsCurrentAddress(
       localStorage.getItem('isAddressCorrect') ?? SERVICE_MESSAGES.startCheck,
     );
   };
@@ -106,9 +110,6 @@ export const RegistrationBlock = () => {
     if (openDefaultAddress) {
       kindOfAddresses.push('shipping');
     }
-    // if (openDefaultBillingAddress) {
-    //   kindOfAddresses.push('billing');
-    // }
     const customer: CustomerData = {
       firstName: data.get('firstName') as string,
       lastName: data.get('lastName') as string,
@@ -157,18 +158,28 @@ export const RegistrationBlock = () => {
         sx={{ margin: '0 auto', justifyContent: 'space-between' }}
       >
         <Grid item xs={15} md={5} sm={6} lg={6}>
-          {getTextForm('firstName', statusName, handleName, true)}
+          {getTextForm('firstName', formData.statusName, handleName, true)}
         </Grid>
         <Grid item xs={15} md={5} sm={6} lg={6}>
-          {getTextForm('lastName', statusLastName, handleLastName, true)}
+          {getTextForm(
+            'lastName',
+            formData.statusLastName,
+            handleLastName,
+            true,
+          )}
         </Grid>
         <Grid item xs={15} md={5} sm={6} lg={6}>
-          {getTextForm('email', currentStatusEmail, handleOnInputEmail, true)}
+          {getTextForm(
+            'email',
+            formData.currentStatusEmail,
+            handleOnInputEmail,
+            true,
+          )}
         </Grid>
         <Grid item xs={15} md={5} sm={6} lg={6}>
           {getTextForm(
             'password',
-            currentStatusPassword,
+            formData.currentStatusPassword,
             handleOnInputPassword,
             showPassword,
             getInputProps(handleClickShowPassword, showPassword),
@@ -206,39 +217,14 @@ export const RegistrationBlock = () => {
             />
           </Collapse>
         </Grid>
-        {/* <Grid item xs={4} ml={'8%'} mr={'8%'} mt={0}>
-          <FormControlLabel
-            control={
-              <Checkbox
-                value="allowExtraEmails"
-                color="primary"
-                size="small"
-                onChange={handleCheckedDefaultBillingAddress}
-              />
-            }
-            label={
-              <Typography fontSize={'75%'}>
-                {SERVICE_MESSAGES.billingAddress}
-              </Typography>
-            }
-          />
-        </Grid>
-        <Grid item xs={6} onMouseLeave={handleStatusAge}>
-          <Collapse in={openDefaultBillingAddress} timeout="auto" unmountOnExit>
-            <AddressBlock
-              text={SERVICE_MESSAGES.addressBilling}
-              value={'billing'}
-            />
-          </Collapse>
-        </Grid> */}
       </Grid>
 
       {SubmitButton(
         [
-          statusName,
-          statusLastName,
-          currentStatusEmail,
-          currentStatusPassword,
+          formData.statusName,
+          formData.statusLastName,
+          formData.currentStatusEmail,
+          formData.currentStatusPassword,
           isCurrentAge,
           isCurrentAddress,
         ],

@@ -7,7 +7,7 @@ import {
 } from '@mui/material';
 
 import { useState } from 'react';
-import { months } from 'src/constants/dataOfConstans';
+import { months } from 'src/constants/dataOfConstants';
 import { getFormControl } from 'src/utils/createFormControl';
 import { checkAge } from 'src/utils/checkAge';
 import { STYLE_FOR_DATATIME } from 'src/constants/STYLES';
@@ -30,24 +30,30 @@ export const AgeBlock = () => {
   const [ageEnough, setAgeEnough] = useState<string>(
     SERVICE_MESSAGES.startCheck,
   );
+
   const textError: string =
     ageEnough === SERVICE_MESSAGES.checkDone ||
     ageEnough === SERVICE_MESSAGES.startCheck
       ? ''
       : ageEnough;
+
   localStorage.setItem('isAgeEnough', ageEnough);
+
   const handleDay = (event: SelectChangeEvent): void => {
     setDay(event.target.value);
     handleMouseOut();
   };
+
   const handleMonth = (event: SelectChangeEvent): void => {
     setMonth(event.target.value);
     handleMouseOut();
   };
+
   const handleYear = (event: SelectChangeEvent): void => {
     setYear(event.target.value);
     handleMouseOut();
   };
+
   const handleMouseOut = () => {
     if (checkAge(day, month, year) > 12 && checkAge(day, month, year) < 400) {
       setAgeEnough(SERVICE_MESSAGES.checkDone);
@@ -69,7 +75,7 @@ export const AgeBlock = () => {
       }}
       onMouseOut={handleMouseOut}
     >
-      <Divider sx={{ mb: 2 }}>Data of your birth</Divider>
+      <Divider sx={{ mb: 2 }}>{SERVICE_MESSAGES.dataOfBirth}</Divider>
       <Grid
         container
         spacing={1}
