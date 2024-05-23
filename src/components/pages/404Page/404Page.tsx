@@ -3,7 +3,7 @@ import { Box, Button, Typography } from '@mui/material';
 
 import styles from './404Page.module.scss';
 import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
-import { Header } from '../MainPage/Header/Header';
+import { Header } from '../../Header/Header';
 import pageNotFoundImg from '../../../assets/image/404-image.jpeg';
 
 export function Page404() {

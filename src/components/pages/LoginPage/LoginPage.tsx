@@ -8,7 +8,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import { LoginForm } from './../../forms/LoginForm';
 import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
 import { PATHS } from 'src/constants/PATHS';
-import { Header } from '../MainPage/Header/Header';
+import { Header } from '../../Header/Header';
 
 export function LoginPage(): ReactNode {
   return (
