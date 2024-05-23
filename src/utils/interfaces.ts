@@ -29,7 +29,7 @@ export interface DataTime {
   month: string[];
   year: string[];
 }
-export interface MyProps {
+export interface AddressProps {
   text?: string;
   count?: number;
   value?: string;

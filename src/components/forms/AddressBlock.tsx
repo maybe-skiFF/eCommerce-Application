@@ -7,9 +7,9 @@ import { addresses } from 'src/constants/dataOfConstants';
 import { STYLE_FOR_ADDRESS } from 'src/constants/STYLES';
 import { getFormControl } from 'src/utils/createFormControl';
 import { checkAddress } from 'src/utils/checkAddress';
-import { Address, MyProps } from 'src/utils/interfaces';
+import { Address, AddressProps } from 'src/utils/interfaces';
 
-export const AddressBlock = (props: MyProps) => {
+export const AddressBlock = (props: AddressProps) => {
   const [country, setCountry] = useState<string>('');
   const [city, setCity] = useState<string>('');
   const [street, setStreet] = useState<string>('');
