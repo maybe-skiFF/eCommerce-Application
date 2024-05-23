@@ -40,4 +40,5 @@ export const SERVICE_MESSAGES = {
   tooYoung: 'The user cannot be under 13 years of age',
   allFields: 'All fieids have to be choice',
   dataOfBirth: 'Data of your birth',
+  page404BtnText: 'Back To MainPage',
 };
