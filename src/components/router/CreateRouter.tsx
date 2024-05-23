@@ -18,7 +18,7 @@ export const CreateRouter = () => {
     },
     {
       path: '/registration',
-      element: isAuth === true ? <MainPage /> : <RegistrationPage />,
+      element: isAuth ? <MainPage /> : <RegistrationPage />,
     },
     {
       path: '*',

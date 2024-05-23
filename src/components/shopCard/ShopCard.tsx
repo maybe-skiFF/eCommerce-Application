@@ -19,7 +19,7 @@ export function ShopCard() {
             image={item.image}
           />
           <CardContent>
-            <Typography variant="h6" component="h3" className="item__title">
+            <Typography variant="h6" component="h3" p={0}>
               {item.title}
             </Typography>
             <Typography variant="body1" className="item__text">
