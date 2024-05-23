@@ -36,17 +36,22 @@ export const SubmitBlock = (): ReactNode => {
     }
     setOpen(false);
   };
-  const handleOnInputEmail = (event: ChangeEvent<HTMLInputElement>): void => {
-    setCurrentStatusEmail(checkValidationFieldEmail(event.target.value));
+
+  const handleOnInputEmailPassword = (
+    event: ChangeEvent<HTMLInputElement>,
+  ): void => {
+    if (event.target.name === 'email') {
+      setCurrentStatusEmail(checkValidationFieldEmail(event.target.value));
+    }
+    if (event.target.name === 'password') {
+      setCurrentStatusPassword(
+        checkValidationFieldPassword(event.target.value),
+      );
+    }
   };
 
   const { setIsAuth } = useIsAuth();
   const navigate = useNavigate();
-  const handleOnInputPassword = (
-    event: ChangeEvent<HTMLInputElement>,
-  ): void => {
-    setCurrentStatusPassword(checkValidationFieldPassword(event.target.value));
-  };
 
   const handleClickShowPassword = () => setShowPassword(show => !show);
   const handleSubmit = async (
@@ -86,11 +91,16 @@ export const SubmitBlock = (): ReactNode => {
       onSubmit={event => void handleSubmit(event)}
     >
       {SimpleSnackbar(serverMessage, open, handleClose)}
-      {getTextForm('email', currentStatusEmail, handleOnInputEmail, true)}
+      {getTextForm(
+        'email',
+        currentStatusEmail,
+        handleOnInputEmailPassword,
+        true,
+      )}
       {getTextForm(
         'password',
         currentStatusPassword,
-        handleOnInputPassword,
+        handleOnInputEmailPassword,
         showPassword,
         getInputProps(handleClickShowPassword, showPassword),
       )}
