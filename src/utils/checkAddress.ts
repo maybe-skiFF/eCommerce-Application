@@ -6,7 +6,7 @@ export const checkAddress = (
   street: string,
   postalCode: string,
 ): string => {
-  if (country !== '' && city !== '' && street !== '' && postalCode !== '') {
+  if (country && city && street && postalCode) {
     return SERVICE_MESSAGES.checkDone;
   }
   return SERVICE_MESSAGES.startCheck;
