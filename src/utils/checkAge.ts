@@ -1,5 +1,5 @@
 const formatAge = (day: string, month: string, year: string): string => {
-  if (day !== '' && month !== '' && year !== '') {
+  if (day && month && year) {
     return `${year}-${month}-${day}`;
   }
   return ``;
