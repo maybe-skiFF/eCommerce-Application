@@ -1,8 +1,8 @@
 export const SERVICE_MESSAGES = {
-  authorization: 'Authorization',
-  address: 'Choice your address',
-  addressShipping: 'Choice your shipping address',
-  addressBilling: 'Choice your billing address',
+  authorization: 'Registration',
+  address: 'Chooce your address',
+  addressShipping: 'Chooce your shipping address',
+  addressBilling: 'Chooce your billing address',
   billingAddress: 'Use a different address for billing delivery',
   errorMail:
     'The account is not registered. Check the spelling of the mail field',
