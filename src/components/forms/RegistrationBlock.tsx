@@ -21,7 +21,7 @@ import {
   checkValidationTextField,
 } from 'src/utils/checkValidationField';
 import { CustomerData } from 'src/utils/interfaces';
-import { SubmitButton } from './SubmitButton';
+import { SubmitButton } from '../SubmitButton/SubmitButton';
 import { SimpleSnackbar } from '../SimpleSnackbar/SimpleSnackbar';
 import { ErrorObject } from '@commercetools/platform-sdk';
 import { useIsAuth } from 'src/context/context';

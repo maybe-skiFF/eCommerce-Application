@@ -9,7 +9,7 @@ import { Box } from '@mui/material';
 
 import { getProject, checkCustomer } from 'src/serverPart/ApiRoot';
 import { getTextForm, getInputProps } from 'src/utils/createFormControl';
-import { SubmitButton } from './SubmitButton';
+import { SubmitButton } from '../SubmitButton/SubmitButton';
 import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
 import {
   checkValidationFieldEmail,
