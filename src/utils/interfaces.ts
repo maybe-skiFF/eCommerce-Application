@@ -18,22 +18,26 @@ export interface CustomerData {
   dateOfBirth: string;
   addresses: CustomerAddress[];
 }
+
 export interface CustomerAddress {
   country: string;
   city: string;
   postalCode: string;
   streetName: string;
 }
+
 export interface DataTime {
   day: string[];
   month: string[];
   year: string[];
 }
+
 export interface AddressProps {
   text?: string;
   count?: number;
   value?: string;
 }
+
 export interface CustomerServerData {
   addresses: CustomerAddress[];
   email: string;
@@ -48,6 +52,7 @@ export interface CustomerServerData {
   authenticationMode: string;
   stores?: [];
 }
+
 export interface CustomerPagedQueryResponse {
   limit: number;
   offset: number;
@@ -55,10 +60,12 @@ export interface CustomerPagedQueryResponse {
   total: number;
   results: CustomerServerData[];
 }
+
 export interface CreatedBy {
   clientId: string;
   isPlatformClient: boolean;
 }
+
 export interface Response {
   body: ClientResponse<CustomerSignInResult>;
   error: ErrorObject | ErrorResponse;

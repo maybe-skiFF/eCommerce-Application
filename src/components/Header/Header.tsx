@@ -45,17 +45,26 @@ export function Header() {
   }
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar
-        className="header container"
+      <AppBar sx={{
+        width: '100 %',
+        maxWidth: '1280px',
+        boxSizing: 'border-box',
+        margin: ' 0 auto',
+        backgroundColor: '#ffffff',
+        padding: '8px 16px',
+      }}
         position="static"
         elevation={0}
-        sx={{ backgroundColor: '#ffffff' }}
       >
-        <Toolbar className="toolbar">
-          <Box className="logo" sx={{ flexGrow: 1 }}>
+        <Toolbar>
+          <Box sx={{ flexGrow: 1 }}>
             <Link
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                marginLeft: '10px',
+              }}
               component={RouterLink}
-              className="toolbar__link"
               color="textPrimary"
               underline="none"
               to="/"
@@ -75,7 +84,10 @@ export function Header() {
           <Box className="search">
             <Search />
           </Box>
-          <Box className="login">
+          <Box
+            sx={{
+              marginRight: '20px',
+            }}>
             <Link
               component={RouterLink}
               className="login__link login"
@@ -130,6 +142,6 @@ export function Header() {
           </Box>
         </Toolbar>
       </AppBar>
-    </Box>
+    </Box >
   );
 }

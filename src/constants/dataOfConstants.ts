@@ -15,7 +15,7 @@ export const months: string[] = [
   'December 11',
 ];
 
-export const addresses: Address[] = [
+export const listOfAddresses: Address[] = [
   {
     country: '',
     city: '',

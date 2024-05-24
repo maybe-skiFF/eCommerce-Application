@@ -1,4 +1,5 @@
 export const SERVICE_MESSAGES = {
+  addToCart: 'add to cart',
   authorization: 'Registration',
   address: 'Chooce your address',
   addressShipping: 'Chooce your shipping address',
@@ -41,4 +42,6 @@ export const SERVICE_MESSAGES = {
   allFields: 'All fieids have to be choice',
   dataOfBirth: 'Data of your birth',
   page404BtnText: 'Back To MainPage',
+  school: 'RSSchool',
+  year: '2024',
 };

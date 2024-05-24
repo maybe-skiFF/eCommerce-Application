@@ -7,11 +7,13 @@ import {
 } from '@mui/material';
 
 import { useState } from 'react';
+import { useCustomer } from 'src/context/context';
 import { months } from 'src/constants/dataOfConstants';
 import { getFormControl } from 'src/utils/createFormControl';
 import { checkAge } from 'src/utils/checkAge';
 import { STYLE_FOR_DATATIME } from 'src/constants/STYLES';
 import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
+
 const days: string[] = [];
 const years: string[] = [];
 
@@ -24,9 +26,8 @@ for (let i = 2024; i > 1924; i--) {
 }
 
 export const AgeBlock = () => {
-  const [day, setDay] = useState<string>('');
-  const [month, setMonth] = useState<string>('');
-  const [year, setYear] = useState<string>('');
+  const { customer, setCustomer } = useCustomer();
+  const [dateParts, setDateParts] = useState({ day: '', month: '', year: '' });
   const [ageEnough, setAgeEnough] = useState<string>(
     SERVICE_MESSAGES.startCheck,
   );
@@ -37,27 +38,25 @@ export const AgeBlock = () => {
       ? ''
       : ageEnough;
 
-  localStorage.setItem('isAgeEnough', ageEnough);
-
-  const handleDay = (event: SelectChangeEvent): void => {
-    setDay(event.target.value);
-    handleMouseOut();
-  };
-
-  const handleMonth = (event: SelectChangeEvent): void => {
-    setMonth(event.target.value);
-    handleMouseOut();
-  };
-
-  const handleYear = (event: SelectChangeEvent): void => {
-    setYear(event.target.value);
+  const handleDateChange = (part: keyof typeof dateParts, value: string) => {
+    setDateParts(prevState => ({
+      ...prevState,
+      [part]: value,
+    }));
     handleMouseOut();
   };
 
   const handleMouseOut = () => {
-    if (checkAge(day, month, year) > 12 && checkAge(day, month, year) < 400) {
-      setAgeEnough(SERVICE_MESSAGES.checkDone);
-    } else if (checkAge(day, month, year) === 404) {
+    const age = checkAge(dateParts.day, dateParts.month, dateParts.year);
+    if (age > 12 && age < 400) {
+      setCustomer({
+        ...customer,
+        dateOfBirth:
+          dateParts.year + '-' + dateParts.month + '-' + dateParts.day,
+      });
+    } else if (
+      checkAge(dateParts.day, dateParts.month, dateParts.year) === 404
+    ) {
       setAgeEnough(SERVICE_MESSAGES.allFields);
     } else {
       setAgeEnough(SERVICE_MESSAGES.tooYoung);
@@ -91,30 +90,30 @@ export const AgeBlock = () => {
       >
         {getFormControl(
           'day',
-          day,
+          dateParts.day,
           days,
           STYLE_FOR_DATATIME,
           '',
-          handleDay,
-          handleMouseOut,
+          (event: SelectChangeEvent) =>
+            handleDateChange('day', event.target.value),
         )}
         {getFormControl(
           'month',
-          month,
+          dateParts.month,
           months,
           STYLE_FOR_DATATIME,
           '',
-          handleMonth,
-          handleMouseOut,
+          (event: SelectChangeEvent) =>
+            handleDateChange('month', event.target.value),
         )}
         {getFormControl(
           'year',
-          year,
+          dateParts.year,
           years,
           STYLE_FOR_DATATIME,
           '',
-          handleYear,
-          handleMouseOut,
+          (event: SelectChangeEvent) =>
+            handleDateChange('year', event.target.value),
         )}
         <FormHelperText sx={{ width: '80%', textAlign: 'center' }}>
           {textError}
