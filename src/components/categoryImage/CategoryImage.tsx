@@ -1,9 +1,10 @@
 import { Box, Typography } from '@mui/material';
 import categoryForMenImg from '../../assets/image/for-men.jpg';
 import categoryForWomenImg from '../../assets/image/for-women.jpg';
+import { Category } from '../categoryChoice/CategoryChoice';
 
 interface CategoryImageProps {
-  selectedCategory: string;
+  selectedCategory: string | Category;
 }
 
 export function CategoryImage({ selectedCategory }: CategoryImageProps) {
@@ -24,7 +25,6 @@ export function CategoryImage({ selectedCategory }: CategoryImageProps) {
         width: '100%',
         alignContent: 'center',
       }}
-      className="navigation__image"
     >
       <Typography
         sx={{
@@ -38,6 +38,8 @@ export function CategoryImage({ selectedCategory }: CategoryImageProps) {
       >
         {selectedCategory === 'for-men' && 'FOR MEN'}
         {selectedCategory === 'for-women' && 'FOR WOMEN'}
+        {selectedCategory === 'for-kids' && 'FOR KIDS'}
+        {selectedCategory === 'new-arrivals' && 'NEW ARRIVALS'}
       </Typography>
     </Box >
   );

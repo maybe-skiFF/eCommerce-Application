@@ -4,29 +4,21 @@ import { ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { CategoryImage } from 'src/components/categoryImage/CategoryImage';
 import { createCategories } from 'src/serverPart/ApiRoot';
 
-const getCategoryKeys = async () => {
-  try {
-    const response = await createCategories();
-    const keys = response.filter(item => item !== undefined).map(item => item!)
-      .sort((a, b) => a.localeCompare(b));
-    return keys;
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
-};
+export interface Category {
+  id: string | undefined;
+  key: string | undefined;
+}
 
 export function CategoryChoice() {
-
-  const [selectedCategory, setCategory] = useState<string>('');
-  const [categoryKeys, setCategoryKeys] = useState<string[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [categories, setCategories] = useState<Category[]>([]);
 
   useEffect(() => {
     const fetchCategoryKeys = async () => {
       try {
-        const keys = await getCategoryKeys();
-        setCategoryKeys(keys);
-        setCategory(keys[0] || '');
+        const categories = await createCategories();
+        setCategories(categories);
+        setSelectedCategory(categories[0].key || null);
       } catch (error) {
         console.error(error);
       }
@@ -35,11 +27,12 @@ export function CategoryChoice() {
   }, []);
 
   const handleChange = (
-    _event: MouseEvent<HTMLElement>,
+    event: MouseEvent<HTMLElement>,
     newCategory: string | null,
   ) => {
     if (newCategory !== null) {
-      setCategory(newCategory);
+      setSelectedCategory(newCategory);
+      console.log(`${event.currentTarget.dataset.id || ''}`);
     }
   };
 
@@ -51,23 +44,25 @@ export function CategoryChoice() {
           display: 'flex',
           justifyContent: 'center',
         }}
-        value={selectedCategory}
         exclusive
         onChange={handleChange}
         aria-label="Platform"
       >
-        {categoryKeys.map((key) => (
+        {categories.map(category => (
           <ToggleButton
             sx={{
               width: '200px',
             }}
-            key={key}
-            value={key}>
-            {key.toUpperCase()}
+            key={category.id || ''}
+            data-id={category.id || ''}
+            value={category.key || ''}>
+            {category.key?.toUpperCase() || ''}
           </ToggleButton>
         ))}
       </ToggleButtonGroup>
-      <CategoryImage selectedCategory={selectedCategory || ''} />
+      <CategoryImage
+        selectedCategory={selectedCategory || ''}
+      />
     </>
   );
 }

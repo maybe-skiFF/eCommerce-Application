@@ -106,18 +106,24 @@ const deleteContact = async (id: string) => {
     .execute();
 };
 
-const createCategories = () => {
-  return myApiRoot.categories().get().execute()
-    .then(response => {
-      const keys = response.body.results
-        .filter(item => !item.parent)
-        .map(item => item.key);
-      return keys;
-    })
-    .catch(error => {
-      console.error(error);
-      throw error;
-    });
+interface Category {
+  id: string;
+  key: string | undefined;
+}
+const createCategories = async (): Promise<Category[]> => {
+  try {
+    const response = await myApiRoot.categories().get().execute();
+    const categories: Category[] = response.body.results
+      .filter(item => !item.parent)
+      .map(item => ({
+        id: item.id,
+        key: item.key
+      }));
+    return categories;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 };
 
 export {
