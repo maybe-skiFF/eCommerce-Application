@@ -11,13 +11,12 @@ import Container from '@mui/material/Container';
 
 import { RegistrationBlock } from 'src/components/forms/RegistrationBlock';
 import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
-import { Header } from '../../Header/Header';
+import { HeaderWrapper } from 'src/components/HeaderWrapper/HeaderWrapper';
 
 export function RegistrationPage(): ReactNode {
   localStorage.clear();
   return (
-    <>
-      <Header></Header>
+    <HeaderWrapper>
       <Container className="container" component="main" maxWidth="lg">
         <CssBaseline />
         <Box
@@ -49,6 +48,6 @@ export function RegistrationPage(): ReactNode {
           </Grid>
         </Box>
       </Container>
-    </>
+    </HeaderWrapper>
   );
 }

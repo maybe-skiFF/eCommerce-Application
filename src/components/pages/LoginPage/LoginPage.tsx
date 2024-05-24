@@ -8,12 +8,11 @@ import { Link as RouterLink } from 'react-router-dom';
 import { LoginForm } from './../../forms/LoginForm';
 import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
 import { PATHS } from 'src/constants/PATHS';
-import { Header } from '../../Header/Header';
+import { HeaderWrapper } from 'src/components/HeaderWrapper/HeaderWrapper';
 
 export function LoginPage(): ReactNode {
   return (
-    <>
-      <Header></Header>
+    <HeaderWrapper>
       <Grid
         className="container"
         container
@@ -53,6 +52,6 @@ export function LoginPage(): ReactNode {
           </Grid>
         </Grid>
       </Grid>
-    </>
+    </HeaderWrapper>
   );
 }
