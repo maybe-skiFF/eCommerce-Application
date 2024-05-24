@@ -1,17 +1,21 @@
-import './App.css';
-import { Button } from './components/UI/Button';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { CustomerProvider } from './context/CustomerProvider';
+import { IsAuthProvider } from './context/IsAuthProvider';
+import { RouterProvider } from 'react-router-dom';
+import { CreateRouter } from './components/router/CreateRouter';
 
+import './App.css';
+
+const defaultTheme = createTheme();
 function App() {
   return (
-    <>
-      <div>
-        <Button>Here we are</Button>
-      </div>
-      <h1>Vite + React</h1>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <IsAuthProvider>
+      <CustomerProvider>
+        <ThemeProvider theme={defaultTheme}>
+          <RouterProvider router={CreateRouter()} />
+        </ThemeProvider>
+      </CustomerProvider>
+    </IsAuthProvider>
   );
 }
 
