@@ -25,6 +25,11 @@ const getProject = (): Promise<ClientResponse<Project>> => {
 const getToken = (): Promise<ClientResponse<CustomerPagedQueryResponse>> => {
   return myApiRoot.customers().get().execute();
 };
+
+const getCategories = () => {
+  return myApiRoot.categories().get().execute();
+};
+
 const createCustomerDraft = (customerData: CustomerData) => {
   const { firstName, lastName, email, password, key, dateOfBirth, addresses } =
     customerData;
@@ -101,6 +106,20 @@ const deleteContact = async (id: string) => {
     .execute();
 };
 
+const createCategories = () => {
+  return myApiRoot.categories().get().execute()
+    .then(response => {
+      const keys = response.body.results
+        .filter(item => !item.parent)
+        .map(item => item.key);
+      return keys;
+    })
+    .catch(error => {
+      console.error(error);
+      throw error;
+    });
+};
+
 export {
   getProject,
   createCustomer,
@@ -109,4 +128,6 @@ export {
   getPasswordFlow,
   createMyCustomer,
   deleteContact,
+  getCategories,
+  createCategories,
 };

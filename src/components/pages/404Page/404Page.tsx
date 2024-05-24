@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Box, Button, Typography } from '@mui/material';
 
-import styles from './404Page.module.scss';
 import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
 import { Header } from '../../Header/Header';
 import pageNotFoundImg from '../../../assets/image/404-image.jpeg';
@@ -10,11 +9,20 @@ export function Page404() {
   return (
     <>
       <Header />
-      <Box className={styles.page404Wrapper}>
-        <img
-          className={styles.Page404Img}
+      <Box sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}>
+        <Box
+          component="img"
           src={pageNotFoundImg}
           alt="404-image"
+          sx={{
+            maxWidth: '60%',
+            height: '60%',
+          }}
         />
         <Typography variant="h6" align="center">
           {SERVICE_MESSAGES.page404Text}
