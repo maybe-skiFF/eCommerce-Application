@@ -73,14 +73,15 @@ export function Header() {
   ]
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar sx={{
-        width: '100 %',
-        maxWidth: '1280px',
-        boxSizing: 'border-box',
-        margin: ' 0 auto',
-        backgroundColor: '#ffffff',
-        padding: '8px 16px',
-      }}
+      <AppBar
+        sx={{
+          width: '100 %',
+          maxWidth: '1280px',
+          boxSizing: 'border-box',
+          margin: ' 0 auto',
+          backgroundColor: '#ffffff',
+          padding: '8px 16px',
+        }}
         position="static"
         elevation={0}
       >
@@ -140,6 +141,6 @@ export function Header() {
           </Box>
         </Toolbar>
       </AppBar>
-    </Box >
+    </Box>
   );
 }
