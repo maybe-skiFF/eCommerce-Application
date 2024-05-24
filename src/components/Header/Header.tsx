@@ -43,6 +43,34 @@ export function Header() {
         setOpen(true);
       });
   }
+
+  const navigationLinks = [
+    {
+      icon: <LoginIcon />,
+      label: SERVICE_MESSAGES.login,
+      to: isAuth ? '/' : '/login',
+      className: 'login__link login',
+    },
+    {
+      icon: <PersonIcon />,
+      label: SERVICE_MESSAGES.authorization,
+      to: isAuth ? '/' : '/registration',
+      className: 'login__link login',
+    },
+    {
+      icon: <ShoppingCartIcon />,
+      label: SERVICE_MESSAGES.cart,
+      to: '/',
+      className: 'login__link login',
+    },
+    {
+      icon: <LogoutIcon />,
+      label: SERVICE_MESSAGES.logout,
+      to: '/login',
+      className: isAuth ? 'login login__link' : 'logout__btn',
+      onClick: () => void logoutUserHandler(),
+    },
+  ]
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar
@@ -85,61 +113,30 @@ export function Header() {
           <Box className="search">
             <Search />
           </Box>
-          <Box
-            sx={{
-              marginRight: '20px',
-            }}
-          >
-            <Link
-              component={RouterLink}
-              className="login__link login"
-              color="textPrimary"
-              underline="none"
-              to={isAuth ? '/' : '/login'}
-              sx={{ width: '100px', marginLeft: '3%' }}
-            >
-              <LoginIcon />
-              {SERVICE_MESSAGES.login}
-            </Link>
-          </Box>
-          <Box className="login">
-            <Link
-              component={RouterLink}
-              className="login__link login"
-              color="textPrimary"
-              underline="none"
-              to={isAuth ? '/' : '/registration'}
-              sx={{ width: '100px', marginLeft: '3%' }}
-            >
-              <PersonIcon />
-              {SERVICE_MESSAGES.authorization}
-            </Link>
-          </Box>
-          <Box className="login">
-            <Link
-              component={RouterLink}
-              to="/"
-              className="login__link login"
-              color="textPrimary"
-              underline="none"
-            >
-              <ShoppingCartIcon />
-              {SERVICE_MESSAGES.cart}
-            </Link>
-          </Box>
-          <Box className="login">
-            <Link
-              component={RouterLink}
-              to="/login"
-              className={isAuth ? 'login login__link ' : 'logout__btn'}
-              color="textPrimary"
-              underline="none"
-              ref={refLogout}
-              onClick={() => void logoutUserHandler()}
-            >
-              <LogoutIcon />
-              {SERVICE_MESSAGES.logout}
-            </Link>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            {navigationLinks.map((item, index) => (
+              <Box
+                key={index}
+                sx={{
+                  marginRight: index < 3 ? '20px' : '0',
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
+              >
+                <Link
+                  component={RouterLink}
+                  to={item.to}
+                  className={item.className}
+                  color="textPrimary"
+                  underline="none"
+                  ref={index === 3 ? refLogout : null}
+                  onClick={item.onClick}
+                >
+                  {item.icon}
+                  {item.label}
+                </Link>
+              </Box>
+            ))}
             {SimpleSnackbar(serverMessage, open, handleClose)}
           </Box>
         </Toolbar>
