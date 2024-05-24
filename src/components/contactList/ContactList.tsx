@@ -4,9 +4,9 @@ import { contactData } from 'src/constants/DATA_LIST';
 export function ContactList() {
   return (
     <List>
-      {contactData.map((item, index) => (
+      {contactData.map((item) => (
         <ListItem
-          key={index}>
+          key={item.id}>
           {item.link ? (
             <Link
               sx={{

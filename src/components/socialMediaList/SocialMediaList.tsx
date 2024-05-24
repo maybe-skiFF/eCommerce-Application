@@ -4,9 +4,9 @@ import { socialMediaData } from 'src/constants/DATA_LIST';
 export function SocialMediaList() {
   return (
     <List className="social__list">
-      {socialMediaData.map((item, index) => (
+      {socialMediaData.map((item) => (
         <ListItem
-          key={index}>
+          key={item.id}>
           <Link
             sx={{
               textDecoration: 'none',
