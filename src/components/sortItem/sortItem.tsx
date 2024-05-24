@@ -17,7 +17,12 @@ export function SortItem() {
   };
 
   return (
-    <Box className="sort" sx={{ minWidth: 120 }}>
+    <Box
+      sx={{
+        width: '30%',
+        marginTop: '20px',
+        marginBottom: '20px',
+      }}>
       <FormControl fullWidth>
         <InputLabel id="demo-simple-select-label">
           {SERVICE_MESSAGES.sort}
@@ -33,6 +38,6 @@ export function SortItem() {
           <MenuItem value={'cost'}>{SERVICE_MESSAGES.sortCategory_2}</MenuItem>
         </Select>
       </FormControl>
-    </Box>
+    </Box >
   );
 }
