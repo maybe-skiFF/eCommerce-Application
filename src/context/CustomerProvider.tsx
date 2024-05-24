@@ -6,7 +6,7 @@ import {
   useState,
 } from 'react';
 import { CustomerData } from 'src/utils/interfaces';
-
+import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
 interface Props {
   children: ReactElement;
 }
@@ -17,18 +17,18 @@ interface Context {
 }
 
 const intialDataCustomer: CustomerData = {
-  firstName: '',
-  lastName: '',
-  email: '',
-  password: '',
-  key: '',
-  dateOfBirth: '',
+  firstName: SERVICE_MESSAGES.startCheck,
+  lastName: SERVICE_MESSAGES.startCheck,
+  email: SERVICE_MESSAGES.startCheck,
+  password: SERVICE_MESSAGES.startCheck,
+  key: Date.now().toString(),
+  dateOfBirth: SERVICE_MESSAGES.startCheck,
   addresses: [
     {
-      country: '',
-      city: '',
-      streetName: '',
-      postalCode: '',
+      country: SERVICE_MESSAGES.startCheck,
+      city: SERVICE_MESSAGES.startCheck,
+      streetName: SERVICE_MESSAGES.startCheck,
+      postalCode: SERVICE_MESSAGES.startCheck,
     },
   ],
 };

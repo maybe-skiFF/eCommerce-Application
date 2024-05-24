@@ -1,5 +1,6 @@
 import { ChangeEvent, FormEvent, SyntheticEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useCustomer } from 'src/context/context';
 import {
   Box,
   Grid,
@@ -25,30 +26,25 @@ import { SubmitButton } from '../SubmitButton/SubmitButton';
 import { SimpleSnackbar } from '../SimpleSnackbar/SimpleSnackbar';
 import { ErrorObject } from '@commercetools/platform-sdk';
 import { useIsAuth } from 'src/context/context';
+import { checkFullData } from 'src/utils/CheckFullData';
 
 export const RegistrationBlock = () => {
-  const [formData, setFormData] = useState({
-    statusName: SERVICE_MESSAGES.startCheck,
-    statusLastName: SERVICE_MESSAGES.startCheck,
-    currentStatusEmail: SERVICE_MESSAGES.startCheck,
-    currentStatusPassword: SERVICE_MESSAGES.startCheck,
-  });
+  const [formData, setFormData] = useState<string>(SERVICE_MESSAGES.startCheck);
 
-  const [isCurrentAge, setIsCurrentAge] = useState<string>(
-    SERVICE_MESSAGES.startCheck,
-  );
-  const [isCurrentAddress, setIsCurrentAddress] = useState<string>(
-    SERVICE_MESSAGES.startCheck,
-  );
+  const { customer, setCustomer } = useCustomer();
+
   const [openDefaultAddress, setOpenDefaultAddress] = useState<boolean>(false);
 
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const [open, setOpen] = useState<boolean>(false);
+
   const [serverMessage, setServerMessage] = useState<string>('');
 
   const navigate = useNavigate();
+
   const { setIsAuth } = useIsAuth();
+
   const handleClose = (event: SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
       return event;
@@ -59,46 +55,27 @@ export const RegistrationBlock = () => {
     setOpenDefaultAddress(!openDefaultAddress);
   };
 
-  const handleName = (event: ChangeEvent<HTMLInputElement>): void => {
-    setFormData({
-      ...formData,
-      statusName: checkValidationTextField(event.target.value),
-    });
+  const handleChange = (nameField: string, property: string): void => {
+    let funcCheck = checkValidationTextField(property);
+    if (nameField === 'password') {
+      funcCheck = checkValidationFieldPassword(property);
+    } else if (nameField === 'email') {
+      funcCheck = checkValidationFieldEmail(property);
+    }
+    funcCheck === SERVICE_MESSAGES.checkDone
+      ? setCustomer({ ...customer, [nameField]: property })
+      : setCustomer({ ...customer, [nameField]: funcCheck });
+    checkFullData(customer)
+      ? setFormData(SERVICE_MESSAGES.checkDone)
+      : setFormData(SERVICE_MESSAGES.startCheck);
   };
 
-  const handleLastName = (event: ChangeEvent<HTMLInputElement>): void => {
-    setFormData({
-      ...formData,
-      statusLastName: checkValidationTextField(event.target.value),
-    });
+  const doRewriteFormData = () => {
+    checkFullData(customer)
+      ? setFormData(SERVICE_MESSAGES.checkDone)
+      : setFormData(SERVICE_MESSAGES.startCheck);
   };
 
-  const handleOnInputEmail = (event: ChangeEvent<HTMLInputElement>): void => {
-    setFormData({
-      ...formData,
-      currentStatusEmail: checkValidationFieldEmail(event.target.value),
-    });
-  };
-
-  const handleOnInputPassword = (
-    event: ChangeEvent<HTMLInputElement>,
-  ): void => {
-    setFormData({
-      ...formData,
-      currentStatusPassword: checkValidationFieldPassword(event.target.value),
-    });
-  };
-
-  const handleStatusAge = () => {
-    setIsCurrentAge(
-      localStorage.getItem('isAgeEnough') ?? SERVICE_MESSAGES.startCheck,
-    );
-  };
-  const handleStatusAddress = () => {
-    setIsCurrentAddress(
-      localStorage.getItem('isAddressCorrect') ?? SERVICE_MESSAGES.startCheck,
-    );
-  };
   const handleClickShowPassword = () => setShowPassword(show => !show);
 
   const handleSubmit = async (
@@ -110,7 +87,7 @@ export const RegistrationBlock = () => {
     if (openDefaultAddress) {
       kindOfAddresses.push('shipping');
     }
-    const customer: CustomerData = {
+    const myCustomer: CustomerData = {
       firstName: data.get('firstName') as string,
       lastName: data.get('lastName') as string,
       email: data.get('email') as string,
@@ -124,8 +101,10 @@ export const RegistrationBlock = () => {
         (data.get('day ') as string),
       addresses: [],
     };
-    getAddressesArray(kindOfAddresses, customer.addresses, data);
-    await createCustomer(customer)
+
+    getAddressesArray(kindOfAddresses, myCustomer.addresses, data);
+
+    await createCustomer(myCustomer)
       .then(() => {
         navigate('/');
         setIsAuth(true);
@@ -135,6 +114,7 @@ export const RegistrationBlock = () => {
         setOpen(true);
       });
   };
+
   return (
     <Box
       component="form"
@@ -158,40 +138,62 @@ export const RegistrationBlock = () => {
         sx={{ margin: '0 auto', justifyContent: 'space-between' }}
       >
         <Grid item xs={15} md={5} sm={6} lg={6}>
-          {getTextForm('firstName', formData.statusName, handleName, true)}
+          {getTextForm(
+            'firstName',
+            customer.firstName,
+            (event: ChangeEvent<HTMLInputElement>) => {
+              handleChange('firstName', event.target.value);
+            },
+            true,
+          )}
         </Grid>
         <Grid item xs={15} md={5} sm={6} lg={6}>
           {getTextForm(
             'lastName',
-            formData.statusLastName,
-            handleLastName,
+            customer.lastName,
+            (event: ChangeEvent<HTMLInputElement>) => {
+              handleChange('lastName', event.target.value);
+            },
             true,
           )}
         </Grid>
         <Grid item xs={15} md={5} sm={6} lg={6}>
           {getTextForm(
             'email',
-            formData.currentStatusEmail,
-            handleOnInputEmail,
+            customer.email,
+            (event: ChangeEvent<HTMLInputElement>) => {
+              handleChange('email', event.target.value);
+            },
             true,
           )}
         </Grid>
         <Grid item xs={15} md={5} sm={6} lg={6}>
           {getTextForm(
             'password',
-            formData.currentStatusPassword,
-            handleOnInputPassword,
+            customer.password,
+            (event: ChangeEvent<HTMLInputElement>) => {
+              handleChange('password', event.target.value);
+            },
             showPassword,
             getInputProps(handleClickShowPassword, showPassword),
           )}
         </Grid>
-        <Grid item xs={12} md={5.5} sm={12} onMouseLeave={handleStatusAge}>
+        <Grid item xs={12} md={5.5} sm={12} onMouseOver={doRewriteFormData}>
           <AgeBlock />
         </Grid>
-        <Grid item xs={12} md={5.5} sm={12} onMouseLeave={handleStatusAddress}>
+        <Grid item xs={12} md={5.5} sm={12} onMouseOver={doRewriteFormData}>
           <AddressBlock text={SERVICE_MESSAGES.address} value={'default'} />
         </Grid>
-        <Grid item xs={9} md={5.5} sm={12} ml={'8%'} mr={'8%'} mt={1}>
+        <Grid
+          item
+          xs={9}
+          md={5.5}
+          sm={12}
+          ml={'8%'}
+          mr={'8%'}
+          mt={1}
+          onMouseOver={doRewriteFormData}
+        >
           <FormControlLabel
             control={
               <Checkbox
@@ -209,7 +211,7 @@ export const RegistrationBlock = () => {
             }
           />
         </Grid>
-        <Grid item xs={12} md={5.5} sm={12} onMouseLeave={handleStatusAge}>
+        <Grid item xs={12} md={5.5} sm={12}>
           <Collapse in={openDefaultAddress} timeout="auto" unmountOnExit>
             <AddressBlock
               text={SERVICE_MESSAGES.addressShipping}
@@ -218,18 +220,7 @@ export const RegistrationBlock = () => {
           </Collapse>
         </Grid>
       </Grid>
-
-      {SubmitButton(
-        [
-          formData.statusName,
-          formData.statusLastName,
-          formData.currentStatusEmail,
-          formData.currentStatusPassword,
-          isCurrentAge,
-          isCurrentAddress,
-        ],
-        SERVICE_MESSAGES.authorization,
-      )}
+      {SubmitButton([formData], SERVICE_MESSAGES.authorization)}
     </Box>
   );
 };
