@@ -71,7 +71,6 @@ export function Header() {
       onClick: () => void logoutUserHandler(),
     },
   ]
-
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar sx={{
