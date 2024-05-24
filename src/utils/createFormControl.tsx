@@ -48,7 +48,6 @@ export const getFormControl = (
   styles: object,
   kind: string,
   callback?: (event: SelectChangeEvent) => void,
-  callback2?: () => void,
 ): JSX.Element => {
   return (
     <div style={{ maxWidth: '600px', minWidth: '100px', marginLeft: '1%' }}>
@@ -84,7 +83,6 @@ export const getFormControl = (
           }}
           key={`${purpose}`}
           onChange={callback}
-          onMouseLeave={callback2}
         >
           {getListItems(items)}
         </Select>
@@ -126,10 +124,8 @@ export const getTextForm = (
       id={purpose}
       autoComplete={`current-${purpose}`}
       error={
-        state === SERVICE_MESSAGES.checkDone ||
-        state === SERVICE_MESSAGES.startCheck
-          ? false
-          : true
+        Object.values(SERVICE_MESSAGES).some(value => value === state) &&
+        state !== SERVICE_MESSAGES.startCheck
       }
       helperText={state}
       sx={{ width: 'calc(90% - 15px)' }}
