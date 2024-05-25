@@ -130,6 +130,32 @@ const createCategories = async (): Promise<Category[]> => {
   }
 };
 
+const createProducts = async (categoryId: string) => {
+  try {
+    const response = await myApiRoot.products().get().execute();
+    const products = response.body.results;
+
+    const filteredProducts = products.filter(product => {
+      return product.masterData.current.categories.some(category => category.id === categoryId);
+    });
+
+    return filteredProducts;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+async function getProductsByCategory(categoryId: string) {
+  try {
+    const products = await createProducts(categoryId);
+    console.log(products);
+    return products;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 export {
   getProject,
   createCustomer,
@@ -141,4 +167,5 @@ export {
   getCategories,
   createCategories,
   getProducts,
+  getProductsByCategory,
 };

@@ -3,6 +3,7 @@ import { MouseEvent } from 'react';
 import { ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { CategoryImage } from 'src/components/categoryImage/CategoryImage';
 import { createCategories } from 'src/serverPart/ApiRoot';
+import { getProductsByCategory } from 'src/serverPart/ApiRoot';
 
 export interface Category {
   id: string | undefined;
@@ -19,6 +20,7 @@ export function CategoryChoice() {
         const categories = await createCategories();
         setCategories(categories);
         setSelectedCategory(categories[0].key || null);
+        getProductsByCategory(categories[0].id);
       } catch (error) {
         console.error(error);
       }
@@ -32,7 +34,7 @@ export function CategoryChoice() {
   ) => {
     if (newCategory !== null) {
       setSelectedCategory(newCategory);
-      console.log(`${event.currentTarget.dataset.id || ''}`);
+      getProductsByCategory(`${event.currentTarget.dataset.id || ''}`);
     }
   };
 

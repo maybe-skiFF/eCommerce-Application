@@ -46,13 +46,13 @@ export function ShopCard() {
               <Typography variant="h6" component="h3" p={0}>
                 {item.title}
               </Typography>
-              <Typography variant="body1" className="item__text">
+              <Typography variant="body1">
                 {item.text}
               </Typography>
-              <Typography variant="h6" className="item__price">
+              <Typography variant="h6">
                 {item.price}
               </Typography>
-              <Button variant="outlined" className="item__button">
+              <Button variant="outlined">
                 {SERVICE_MESSAGES.addToCart}
               </Button>
             </CardContent>
