@@ -110,52 +110,6 @@ const deleteContact = async (id: string) => {
     .execute();
 };
 
-interface Category {
-  id: string;
-  key: string | undefined;
-}
-const createCategories = async (): Promise<Category[]> => {
-  try {
-    const response = await myApiRoot.categories().get().execute();
-    const categories: Category[] = response.body.results
-      .filter(item => !item.parent)
-      .map(item => ({
-        id: item.id,
-        key: item.key
-      }));
-    return categories;
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
-};
-
-const createProducts = async (categoryId: string) => {
-  try {
-    const response = await myApiRoot.products().get().execute();
-    const products = response.body.results;
-
-    const filteredProducts = products.filter(product => {
-      return product.masterData.current.categories.some(category => category.id === categoryId);
-    });
-
-    return filteredProducts;
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
-};
-
-async function getProductsByCategory(categoryId: string) {
-  try {
-    const products = await createProducts(categoryId);
-    console.log(products);
-    return products;
-  } catch (error) {
-    console.error(error);
-  }
-}
-
 export {
   getProject,
   createCustomer,
@@ -165,7 +119,5 @@ export {
   createMyCustomer,
   deleteContact,
   getCategories,
-  createCategories,
   getProducts,
-  getProductsByCategory,
 };
