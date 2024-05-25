@@ -3,6 +3,8 @@ import { MouseEvent } from 'react';
 import { ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { CategoryImage } from 'src/components/categoryImage/CategoryImage';
 import { getCategories, getProducts } from 'src/serverPart/ApiRoot';
+import { ShopCard } from '../shopCard/ShopCard';
+import { SortItem } from 'src/components/sortItem/sortItem';
 
 export interface Category {
   id: string | undefined;
@@ -46,26 +48,45 @@ export function CategoryChoice() {
     }
   };
 
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
+
   async function getProductsByCategory(categoryId: string) {
     try {
-      const products = await createProducts(categoryId);
-      console.log(products);
-      return products;
+      const serverProducts = await createProducts(categoryId);
+      const products = getPureProducts(serverProducts);
+      setProducts(products);
+      ShopCard(products);
+      console.log(serverProducts);
+      console.log(products)
     } catch (error) {
       console.error(error);
     }
   }
 
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [categories, setCategories] = useState<Category[]>([]);
+  function getPureProducts(products: Product[]): PureProduct[] {
+    return products.map(product => ({
+      id: product.id,
+      key: product.key,
+      description: product.masterData.current.description['en-US'],
+      image: product.masterData.current.masterVariant.images[0]['url'],
+      price: product.masterData.current.masterVariant.prices[0].value.centAmount,
+    }));
+  }
 
   useEffect(() => {
     const fetchCategoryKeys = async () => {
       try {
         const categories = await createCategories();
         setCategories(categories);
-        setSelectedCategory(categories[0].key || null);
-        getProductsByCategory(categories[0].id);
+
+        if (categories.length > 0) {
+          const firstCategoryId = categories[0].id;
+          setSelectedCategory(categories[0].key || null);
+          await getProductsByCategory(firstCategoryId);
+          ShopCard(products);
+        }
       } catch (error) {
         console.error(error);
       }
@@ -81,7 +102,7 @@ export function CategoryChoice() {
       setSelectedCategory(newCategory);
       getProductsByCategory(`${event.currentTarget.dataset.id || ''}`);
     }
-  };
+  }
 
   return (
     <>
@@ -114,6 +135,8 @@ export function CategoryChoice() {
       <CategoryImage
         selectedCategory={selectedCategory || ''}
       />
+      <SortItem />
+      <ShopCard products={products} />
     </>
   );
 }

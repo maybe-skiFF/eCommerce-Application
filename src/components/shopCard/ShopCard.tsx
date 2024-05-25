@@ -6,10 +6,20 @@ import {
   CardContent,
   CardMedia,
 } from '@mui/material';
-import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
-import { items } from 'src/server-data/shop-data';
 
-export function ShopCard() {
+interface Product {
+  id: string;
+  key: string;
+  description: string;
+  image: string;
+  price: number;
+}
+
+interface ShopCardProps {
+  products: Product[];
+}
+
+export function ShopCard({ products }: ShopCardProps) {
   return (
     <Box
       sx={{
@@ -18,10 +28,12 @@ export function ShopCard() {
         flexWrap: 'wrap',
         justifyContent: 'space-between',
         width: '100%',
-      }}>
-      {
-        items.map(item => (
+      }}
+    >
+      {products && products.length > 0 ? (
+        products.map((product) => (
           <Card
+            key={product.id}
             sx={{
               width: '30%',
               height: '600px',
@@ -30,10 +42,10 @@ export function ShopCard() {
               boxSizing: 'border-box',
               cursor: 'pointer',
             }}
-            key={item.id}>
+          >
             <CardMedia
               component="div"
-              image={item.image}
+              image={product.image}
               sx={{
                 width: '100%',
                 height: '300px',
@@ -44,21 +56,17 @@ export function ShopCard() {
             />
             <CardContent>
               <Typography variant="h6" component="h3" p={0}>
-                {item.title}
+                {product.key}
               </Typography>
-              <Typography variant="body1">
-                {item.text}
-              </Typography>
-              <Typography variant="h6">
-                {item.price}
-              </Typography>
-              <Button variant="outlined">
-                {SERVICE_MESSAGES.addToCart}
-              </Button>
+              <Typography variant="body1">{product.description.length > 100 ? `${product.description.substring(0, 100)}...` : product.description}</Typography>
+              <Typography variant="h6">{product.price / 100} USD</Typography>
+              <Button variant="outlined">Add to Cart</Button>
             </CardContent>
           </Card>
         ))
-      }
-    </Box >
+      ) : (
+        <Typography variant="h6">No products to display.</Typography>
+      )}
+    </Box>
   );
 }

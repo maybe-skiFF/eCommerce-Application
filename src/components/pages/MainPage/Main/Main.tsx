@@ -1,5 +1,3 @@
-import { ShopCard } from 'src/components/shopCard/ShopCard';
-import { SortItem } from 'src/components/sortItem/sortItem';
 import { CategoryChoice } from 'src/components/categoryChoice/CategoryChoice';
 import { Box } from '@mui/material';
 
@@ -14,8 +12,6 @@ export function Main() {
         margin: '0 auto',
       }}>
       <CategoryChoice />
-      <SortItem />
-      <ShopCard />
     </Box>
   );
 }
