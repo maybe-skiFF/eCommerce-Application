@@ -48,7 +48,11 @@ export function CategoryChoice() {
         onChange={handleChange}
         aria-label="Platform"
       >
-        {categories.map(category => (
+        {categories.sort((a, b) => {
+          const aKey = a.key || '';
+          const bKey = b.key || '';
+          return aKey.localeCompare(bKey);
+        }).map(category => (
           <ToggleButton
             sx={{
               width: '200px',

@@ -30,6 +30,10 @@ const getCategories = () => {
   return myApiRoot.categories().get().execute();
 };
 
+const getProducts = () => {
+  return myApiRoot.products().get().execute();
+};
+
 const createCustomerDraft = (customerData: CustomerData) => {
   const { firstName, lastName, email, password, key, dateOfBirth, addresses } =
     customerData;
@@ -136,4 +140,5 @@ export {
   deleteContact,
   getCategories,
   createCategories,
+  getProducts,
 };

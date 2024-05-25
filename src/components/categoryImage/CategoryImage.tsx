@@ -1,6 +1,8 @@
 import { Box, Typography } from '@mui/material';
 import categoryForMenImg from '../../assets/image/for-men.jpg';
 import categoryForWomenImg from '../../assets/image/for-women.jpg';
+import categoryForKidsImg from '../../assets/image/for-kids.webp';
+import categoryNewArrivalsImg from '../../assets/image/new-arrivals.webp';
 import { Category } from '../categoryChoice/CategoryChoice';
 
 interface CategoryImageProps {
@@ -8,10 +10,25 @@ interface CategoryImageProps {
 }
 
 export function CategoryImage({ selectedCategory }: CategoryImageProps) {
-  const backgroundImageSrc =
-    selectedCategory === 'for-men'
-      ? `url(${categoryForMenImg})`
-      : `url(${categoryForWomenImg})`;
+  let backgroundImageSrc;
+
+  switch (selectedCategory) {
+    case 'for-men':
+      backgroundImageSrc = `url(${categoryForMenImg})`;
+      break;
+    case 'for-women':
+      backgroundImageSrc = `url(${categoryForWomenImg})`;
+      break;
+    case 'for-kids':
+      backgroundImageSrc = `url(${categoryForKidsImg})`;
+      break;
+    case 'new-arrivals':
+      backgroundImageSrc = `url(${categoryNewArrivalsImg})`;
+      break;
+    default:
+      backgroundImageSrc = 'none';
+      break;
+  }
 
   return (
     <Box
