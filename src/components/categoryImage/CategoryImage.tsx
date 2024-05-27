@@ -3,7 +3,7 @@ import categoryForMenImg from '../../assets/image/for-men.jpg';
 import categoryForWomenImg from '../../assets/image/for-women.jpg';
 import categoryForKidsImg from '../../assets/image/for-kids.webp';
 import categoryNewArrivalsImg from '../../assets/image/new-arrivals.webp';
-import { Category } from '../categoryChoice/CategoryChoice';
+import { Category } from 'src/utils/interfaces';
 
 interface CategoryImageProps {
   selectedCategory: string | Category;
@@ -48,7 +48,7 @@ export function CategoryImage({ selectedCategory }: CategoryImageProps) {
           fontSize: '36px',
           color: 'white',
           fontWeight: 'bold',
-          textAlign: 'center'
+          textAlign: 'center',
         }}
         variant="body1"
         className="navigation__title"
@@ -58,6 +58,6 @@ export function CategoryImage({ selectedCategory }: CategoryImageProps) {
         {selectedCategory === 'for-kids' && 'FOR KIDS'}
         {selectedCategory === 'new-arrivals' && 'NEW ARRIVALS'}
       </Typography>
-    </Box >
+    </Box>
   );
 }

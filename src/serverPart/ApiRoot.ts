@@ -31,7 +31,10 @@ const getCategories = () => {
 };
 
 const getProducts = () => {
-  return myApiRoot.products().get().execute();
+  return myApiRoot
+    .products()
+    .get({ queryArgs: { limit: 200 } })
+    .execute();
 };
 
 const createCustomerDraft = (customerData: CustomerData) => {

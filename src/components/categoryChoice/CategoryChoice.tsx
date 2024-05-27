@@ -5,26 +5,18 @@ import { CategoryImage } from 'src/components/categoryImage/CategoryImage';
 import { getCategories, getProducts } from 'src/serverPart/ApiRoot';
 import { ShopCard } from '../shopCard/ShopCard';
 import { SortItem } from 'src/components/sortItem/sortItem';
-
-export interface Category {
-  id: string | undefined;
-  key: string | undefined;
-}
+import { Category, ProductData, ProductPure } from 'src/utils/interfaces';
 
 export function CategoryChoice() {
-
-  interface Category {
-    id: string;
-    key: string | undefined;
-  }
   const createCategories = async (): Promise<Category[]> => {
     try {
       const response = await getCategories();
+      console.log(response);
       const categories: Category[] = response.body.results
         .filter(item => !item.parent)
         .map(item => ({
           id: item.id,
-          key: item.key
+          key: item.key,
         }));
       return categories;
     } catch (error) {
@@ -39,7 +31,9 @@ export function CategoryChoice() {
       const products = response.body.results;
 
       const filteredProducts = products.filter(product => {
-        return product.masterData.current.categories.some(category => category.id === categoryId);
+        return product.masterData.current.categories.some(
+          category => category.id === categoryId,
+        );
       });
       return filteredProducts;
     } catch (error) {
@@ -50,28 +44,27 @@ export function CategoryChoice() {
 
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [categories, setCategories] = useState<Category[]>([]);
-  const [products, setProducts] = useState<Product[]>([]);
+  const [products, setProducts] = useState([]);
 
   async function getProductsByCategory(categoryId: string) {
     try {
       const serverProducts = await createProducts(categoryId);
-      const products = getPureProducts(serverProducts);
-      setProducts(products);
-      ShopCard(products);
-      console.log(serverProducts);
-      console.log(products)
+      const products = getPureProducts(serverProducts as never[]);
+      setProducts(products as never[]);
+      ShopCard({ products: products });
     } catch (error) {
       console.error(error);
     }
   }
 
-  function getPureProducts(products: Product[]): PureProduct[] {
+  function getPureProducts(products: ProductData[]): ProductPure[] {
     return products.map(product => ({
       id: product.id,
       key: product.key,
       description: product.masterData.current.description['en-US'],
       image: product.masterData.current.masterVariant.images[0]['url'],
-      price: product.masterData.current.masterVariant.prices[0].value.centAmount,
+      price:
+        product.masterData.current.masterVariant.prices[0].value.centAmount,
     }));
   }
 
@@ -83,9 +76,11 @@ export function CategoryChoice() {
 
         if (categories.length > 0) {
           const firstCategoryId = categories[0].id;
-          setSelectedCategory(categories[0].key || null);
-          await getProductsByCategory(firstCategoryId);
-          ShopCard(products);
+          if (categories[0].key) {
+            setSelectedCategory(categories[0].key);
+            await getProductsByCategory(firstCategoryId as string);
+            ShopCard({ products: products });
+          }
         }
       } catch (error) {
         console.error(error);
@@ -100,9 +95,9 @@ export function CategoryChoice() {
   ) => {
     if (newCategory !== null) {
       setSelectedCategory(newCategory);
-      getProductsByCategory(`${event.currentTarget.dataset.id || ''}`);
+      getProductsByCategory(`${event.currentTarget.dataset.id ?? ''}`);
     }
-  }
+  };
 
   return (
     <>
@@ -116,25 +111,26 @@ export function CategoryChoice() {
         onChange={handleChange}
         aria-label="Platform"
       >
-        {categories.sort((a, b) => {
-          const aKey = a.key || '';
-          const bKey = b.key || '';
-          return aKey.localeCompare(bKey);
-        }).map(category => (
-          <ToggleButton
-            sx={{
-              width: '200px',
-            }}
-            key={category.id || ''}
-            data-id={category.id || ''}
-            value={category.key || ''}>
-            {category.key?.toUpperCase() || ''}
-          </ToggleButton>
-        ))}
+        {categories
+          .sort((a, b) => {
+            const aKey = a.key ?? '';
+            const bKey = b.key ?? '';
+            return aKey.localeCompare(bKey);
+          })
+          .map(category => (
+            <ToggleButton
+              sx={{
+                width: '200px',
+              }}
+              key={category.id ?? ''}
+              data-id={category.id ?? ''}
+              value={category.key ?? ''}
+            >
+              {category.key?.toUpperCase() ?? ''}
+            </ToggleButton>
+          ))}
       </ToggleButtonGroup>
-      <CategoryImage
-        selectedCategory={selectedCategory || ''}
-      />
+      <CategoryImage selectedCategory={selectedCategory ?? ''} />
       <SortItem />
       <ShopCard products={products} />
     </>

@@ -4,9 +4,8 @@ import { socialMediaData } from 'src/constants/DATA_LIST';
 export function SocialMediaList() {
   return (
     <List className="social__list">
-      {socialMediaData.map((item) => (
-        <ListItem
-          key={item.id}>
+      {socialMediaData.map(item => (
+        <ListItem key={item.id}>
           <Link
             sx={{
               textDecoration: 'none',
@@ -15,12 +14,9 @@ export function SocialMediaList() {
               alignItems: 'center',
             }}
             target="_blank"
-            href={item.link}>
-            <Box
-              sx={{ marginRight: '5px' }}
-            >
-              {item.icon}
-            </Box>
+            href={item.link}
+          >
+            <Box sx={{ marginRight: '5px' }}>{item.icon}</Box>
             {item.name}
           </Link>
         </ListItem>

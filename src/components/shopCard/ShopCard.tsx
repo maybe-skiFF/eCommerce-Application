@@ -6,18 +6,7 @@ import {
   CardContent,
   CardMedia,
 } from '@mui/material';
-
-interface Product {
-  id: string;
-  key: string;
-  description: string;
-  image: string;
-  price: number;
-}
-
-interface ShopCardProps {
-  products: Product[];
-}
+import { ShopCardProps } from 'src/utils/interfaces';
 
 export function ShopCard({ products }: ShopCardProps) {
   return (
@@ -31,7 +20,7 @@ export function ShopCard({ products }: ShopCardProps) {
       }}
     >
       {products && products.length > 0 ? (
-        products.map((product) => (
+        products.map(product => (
           <Card
             key={product.id}
             sx={{
@@ -58,7 +47,11 @@ export function ShopCard({ products }: ShopCardProps) {
               <Typography variant="h6" component="h3" p={0}>
                 {product.key}
               </Typography>
-              <Typography variant="body1">{product.description.length > 100 ? `${product.description.substring(0, 100)}...` : product.description}</Typography>
+              <Typography variant="body1">
+                {product.description.length > 100
+                  ? `${product.description.substring(0, 100)}...`
+                  : product.description}
+              </Typography>
               <Typography variant="h6">{product.price / 100} USD</Typography>
               <Button variant="outlined">Add to Cart</Button>
             </CardContent>
