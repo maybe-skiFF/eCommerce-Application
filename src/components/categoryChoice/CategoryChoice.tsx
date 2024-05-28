@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
 import { MouseEvent } from 'react';
-import { ToggleButton, ToggleButtonGroup } from '@mui/material';
+import { Box, ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { CategoryImage } from 'src/components/categoryImage/CategoryImage';
 import { getCategories, getProducts } from 'src/serverPart/ApiRoot';
 import { ShopCard } from '../shopCard/ShopCard';
 import { SortItem } from 'src/components/sortItem/sortItem';
 import { Category, ProductData, ProductPure } from 'src/utils/interfaces';
+import { CategoryChoiceSub } from '../categoryChoiceSub/categotyChoiceSub';
 
 export function CategoryChoice() {
   const createCategories = async (): Promise<Category[]> => {
@@ -45,6 +46,8 @@ export function CategoryChoice() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [categories, setCategories] = useState<Category[]>([]);
   const [products, setProducts] = useState([]);
+  const [isSubCategoryVisible, setIsSubCategoryVisible] = useState(false);
+  const [selectedKey, setSelectedKey] = useState<string | null>(null);
 
   async function getProductsByCategory(categoryId: string) {
     try {
@@ -99,37 +102,58 @@ export function CategoryChoice() {
     }
   };
 
+  const handleMouseEnter = () => {
+    setIsSubCategoryVisible(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsSubCategoryVisible(false);
+  };
+
+  const handleButtonMouseEnter = (key: string) => {
+    setSelectedKey(key);
+  };
+
   return (
     <>
-      <ToggleButtonGroup
-        sx={{
-          width: '100%',
-          display: 'flex',
-          justifyContent: 'center',
-        }}
-        exclusive
-        onChange={handleChange}
-        aria-label="Platform"
-      >
-        {categories
-          .sort((a, b) => {
-            const aKey = a.key ?? '';
-            const bKey = b.key ?? '';
-            return aKey.localeCompare(bKey);
-          })
-          .map(category => (
-            <ToggleButton
-              sx={{
-                width: '200px',
-              }}
-              key={category.id ?? ''}
-              data-id={category.id ?? ''}
-              value={category.key ?? ''}
-            >
-              {category.key?.toUpperCase() ?? ''}
-            </ToggleButton>
-          ))}
-      </ToggleButtonGroup>
+      <Box onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+        <ToggleButtonGroup
+          sx={{
+            width: '100%',
+            height: '50px',
+            display: 'flex',
+            justifyContent: 'center',
+          }}
+          exclusive
+          onChange={handleChange}
+          aria-label="Platform"
+        >
+          {categories
+            .sort((a, b) => {
+              const aKey = a.key ?? '';
+              const bKey = b.key ?? '';
+              return bKey.localeCompare(aKey);
+            })
+            .map(category => (
+              <ToggleButton
+                sx={{
+                  width: '200px',
+                  height: '50px',
+                }}
+                key={category.id ?? ''}
+                data-id={category.id ?? ''}
+                value={category.key ?? ''}
+                onMouseEnter={() => handleButtonMouseEnter(category.key ?? '')}
+              >
+                {category.key?.toUpperCase() ?? ''}
+              </ToggleButton>
+            ))}
+        </ToggleButtonGroup>
+        <CategoryChoiceSub
+          isVisible={isSubCategoryVisible}
+          selectedKey={selectedKey}
+        />
+      </Box>
       <CategoryImage selectedCategory={selectedCategory ?? ''} />
       <SortItem />
       <ShopCard products={products} />

@@ -110,3 +110,8 @@ export interface ProductPure {
 export interface ShopCardProps {
   products: ProductPure[];
 }
+
+export interface CategoryChoiceSubProps {
+  isVisible: boolean;
+  selectedKey: string | null;
+}
