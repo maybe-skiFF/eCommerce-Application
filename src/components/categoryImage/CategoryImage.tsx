@@ -14,12 +14,20 @@ export function CategoryImage({ selectedCategory }: CategoryImageProps) {
 
   switch (selectedCategory) {
     case 'for-men':
+    case 'shirts':
+    case 'shorts':
+    case 'boots':
       backgroundImageSrc = `url(${categoryForMenImg})`;
       break;
     case 'for-women':
+    case 'dresses':
+    case 'skirts':
+    case 'shoes':
       backgroundImageSrc = `url(${categoryForWomenImg})`;
       break;
     case 'for-kids':
+    case 'cloth':
+    case 'toys':
       backgroundImageSrc = `url(${categoryForKidsImg})`;
       break;
     case 'discount':
@@ -53,10 +61,14 @@ export function CategoryImage({ selectedCategory }: CategoryImageProps) {
         variant="body1"
         className="navigation__title"
       >
-        {selectedCategory === 'for-men' && 'FOR MEN'}
-        {selectedCategory === 'for-women' && 'FOR WOMEN'}
-        {selectedCategory === 'for-kids' && 'FOR KIDS'}
-        {selectedCategory === 'discount' && 'DISCOUNT'}
+        {(['for-men', 'shirts', 'shorts', 'boots']
+          .includes(selectedCategory as string)) && 'FOR MEN'}
+        {(['for-women', 'dresses', 'skirts', 'shoes']
+          .includes(selectedCategory as string)) && 'FOR WOMEN'}
+        {(['for-kids', 'cloth', 'toys']
+          .includes(selectedCategory as string)) && 'FOR KIDS'}
+        {(['discount']
+          .includes(selectedCategory as string)) && 'DISCOUNT'}
       </Typography>
     </Box>
   );

@@ -114,4 +114,8 @@ export interface ShopCardProps {
 export interface CategoryChoiceSubProps {
   isVisible: boolean;
   selectedKey: string | null;
+  handleChangeProp: (
+    event: React.MouseEvent<HTMLElement>,
+    newCategory: string | null
+  ) => void;
 }

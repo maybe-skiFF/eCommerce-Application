@@ -4,6 +4,7 @@ import { CategoryChoiceSubProps } from 'src/utils/interfaces';
 export function CategoryChoiceSub({
   isVisible,
   selectedKey,
+  handleChangeProp
 }: CategoryChoiceSubProps) {
   const categories = [
     {
@@ -50,12 +51,13 @@ export function CategoryChoiceSub({
         justifyContent: 'center',
       }}
       exclusive
+      onChange={handleChangeProp}
       aria-label="Platform"
     >
       {selectedCategory?.subcategories.map(subcategory => (
         <ToggleButton
-          key={subcategory.id}
-          value={subcategory.id}
+          key={subcategory.key}
+          value={subcategory.key}
           data-id={subcategory.id ?? ''}
           sx={{
             width: '200px',

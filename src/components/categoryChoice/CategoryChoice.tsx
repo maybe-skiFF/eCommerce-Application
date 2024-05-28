@@ -152,6 +152,7 @@ export function CategoryChoice() {
         <CategoryChoiceSub
           isVisible={isSubCategoryVisible}
           selectedKey={selectedKey}
+          handleChangeProp={handleChange}
         />
       </Box>
       <CategoryImage selectedCategory={selectedCategory ?? ''} />
