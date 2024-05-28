@@ -1,5 +1,5 @@
 import { ChangeEvent, FormEvent, SyntheticEvent, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import { useCustomer } from 'src/context/context';
 import {
   Box,
@@ -14,19 +14,34 @@ import { getTextForm, getInputProps } from 'src/utils/createFormControl';
 import { AgeBlock } from './AgeBlock';
 import { AddressBlock } from './AddressBlock';
 import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
-import { createCustomer } from 'src/serverPart/ApiRoot';
-import { getAddressesArray } from 'src/utils/getAddressesArray';
+// import { queryMyCustomer } from 'src/serverPart/ApiRoot';
+// import { getAddressesArray } from 'src/utils/getAddressesArray';
 import {
   checkValidationFieldPassword,
   checkValidationFieldEmail,
   checkValidationTextField,
 } from 'src/utils/checkValidationField';
-import { CustomerData } from 'src/utils/interfaces';
+// import { CustomerData } from 'src/utils/interfaces';
 import { SubmitButton } from '../SubmitButton/SubmitButton';
 import { SimpleSnackbar } from '../SimpleSnackbar/SimpleSnackbar';
-import { ErrorObject } from '@commercetools/platform-sdk';
-import { useIsAuth } from 'src/context/context';
+import {
+  // ClientResponse,
+  // CustomerSignInResult,
+  ErrorObject,
+  // createApiBuilderFromCtpClient,
+} from '@commercetools/platform-sdk';
+// import { useIsAuth } from 'src/context/context';
 import { checkFullData } from 'src/utils/CheckFullData';
+// import {
+//   ClientBuilder,
+//   PasswordAuthMiddlewareOptions,
+// } from '@commercetools/sdk-client-v2';
+// import { PROJECT_DATA } from 'src/serverPart/PROJECT_DATA';
+// import {
+//   authMiddlewareOptions,
+//   httpMiddlewareOptions,
+// } from 'src/serverPart/BuildClient';
+import { getToken } from 'src/serverPart/ApiRoot';
 
 export const RegistrationBlock = () => {
   const [formData, setFormData] = useState<string>(SERVICE_MESSAGES.startCheck);
@@ -41,9 +56,9 @@ export const RegistrationBlock = () => {
 
   const [serverMessage, setServerMessage] = useState<string>('');
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
-  const { setIsAuth } = useIsAuth();
+  // const { setIsAuth } = useIsAuth();
 
   const handleClose = (event: SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
@@ -82,33 +97,70 @@ export const RegistrationBlock = () => {
     event: FormEvent<HTMLFormElement>,
   ): Promise<void> => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    const kindOfAddresses = ['default'];
-    if (openDefaultAddress) {
-      kindOfAddresses.push('shipping');
-    }
-    const myCustomer: CustomerData = {
-      firstName: data.get('firstName') as string,
-      lastName: data.get('lastName') as string,
-      email: data.get('email') as string,
-      password: data.get('password') as string,
-      key: new Date().valueOf() + '',
-      dateOfBirth:
-        (data.get('year ') as string) +
-        '-' +
-        (data.get('month ') as string) +
-        '-' +
-        (data.get('day ') as string),
-      addresses: [],
-    };
+    // const data = new FormData(event.currentTarget);
+    // const kindOfAddresses = ['default'];
+    // if (openDefaultAddress) {
+    //   kindOfAddresses.push('shipping');
+    // }
+    // const myCustomer: CustomerData = {
+    //   firstName: data.get('firstName') as string,
+    //   lastName: data.get('lastName') as string,
+    //   email: data.get('email') as string,
+    //   password: data.get('password') as string,
+    //   key: new Date().valueOf() + '',
+    //   dateOfBirth:
+    //     (data.get('year ') as string) +
+    //     '-' +
+    //     (data.get('month ') as string) +
+    //     '-' +
+    //     (data.get('day ') as string),
+    //   addresses: [],
+    // };
 
-    getAddressesArray(kindOfAddresses, myCustomer.addresses, data);
+    // getAddressesArray(kindOfAddresses, myCustomer.addresses, data);
 
-    await createCustomer(myCustomer)
-      .then(() => {
-        navigate('/');
-        setIsAuth(true);
-      })
+    // await createCustomer(customer)
+    //   .then(() => {
+    //     navigate('/');
+    //     setIsAuth(true);
+    //   })
+    //   .catch((error: ErrorObject) => {
+    //     setServerMessage(error.message);
+    //     setOpen(true);
+    //   });
+    // const projectKey = PROJECT_DATA.CTP_PROJECT_KEY ?? '';
+    // const options: PasswordAuthMiddlewareOptions = {
+    //   host: PROJECT_DATA.CTP_AUTH_URL ?? '',
+    //   projectKey: PROJECT_DATA.CTP_PROJECT_KEY,
+    //   credentials: {
+    //     clientId: PROJECT_DATA.CTP_CLIENT_ID,
+    //     clientSecret: PROJECT_DATA.CTP_CLIENT_SECRET,
+    //     user: {
+    //       username: customer.email,
+    //       password: customer.password,
+    //     },
+    //   },
+    //   scopes: [`manage_project:${projectKey}`],
+    //   fetch,
+    // };
+    // const myClient = new ClientBuilder()
+    //   .withPasswordFlow(options)
+    //   .withClientCredentialsFlow(authMiddlewareOptions)
+    //   // .withProjectKey(projectKey)
+    //   .withHttpMiddleware(httpMiddlewareOptions)
+    //   .build();
+    // const myNewApiRoot = createApiBuilderFromCtpClient(myClient).withProjectKey(
+    //   {
+    //     projectKey: PROJECT_DATA.CTP_PROJECT_KEY,
+    //   },
+    // );
+    await getToken()
+      .then(answer => console.log(answer))
+      // .then(answer => {
+      //   console.log(answer);
+      //   navigate('/');
+      //   setIsAuth(true);
+      // })
       .catch((error: ErrorObject) => {
         setServerMessage(error.message);
         setOpen(true);

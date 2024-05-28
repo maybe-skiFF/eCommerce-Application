@@ -68,6 +68,10 @@ const createMyCustomer = async (
     })
     .execute();
 };
+
+const queryMyCustomer = (customerID: string) => {
+  return apiRoot.customers().withId({ ID: customerID }).get().execute();
+};
 const getPasswordFlow = async (
   // BEARER_TOKEN: string,
   email: string,
@@ -117,7 +121,7 @@ const createCategories = async (): Promise<Category[]> => {
       .filter(item => !item.parent)
       .map(item => ({
         id: item.id,
-        key: item.key
+        key: item.key,
       }));
     return categories;
   } catch (error) {
@@ -133,6 +137,7 @@ export {
   getToken,
   getPasswordFlow,
   createMyCustomer,
+  queryMyCustomer,
   deleteContact,
   getCategories,
   createCategories,

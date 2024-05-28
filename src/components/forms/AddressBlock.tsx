@@ -38,6 +38,7 @@ export const AddressBlock = (props: AddressProps) => {
 
   const doRewriteCustomer = () => {
     if (checkFullData(dateParts)) {
+      customer.addresses = [];
       customer.addresses.push(dateParts);
       console.log(customer);
     }
