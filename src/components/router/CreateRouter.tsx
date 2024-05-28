@@ -3,6 +3,7 @@ import { MainPage } from '../pages/MainPage/MainPage';
 import { LoginPage } from '../pages/LoginPage/LoginPage';
 import { RegistrationPage } from '../pages/RegistrationPage/RegistrationPage';
 import { Page404 } from '../pages/404Page/404Page';
+import { DetailedProductPage } from '../pages/DetailedProductPage/DetailedProductPage';
 import { useIsAuth } from 'src/context/context';
 
 export const CreateRouter = () => {
@@ -11,6 +12,10 @@ export const CreateRouter = () => {
     {
       path: '/',
       element: <MainPage />,
+    },
+    {
+      path: '/product/:key',
+      element: <DetailedProductPage />,
     },
     {
       path: '/login',

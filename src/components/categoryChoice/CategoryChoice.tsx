@@ -65,7 +65,7 @@ export function CategoryChoice() {
       id: product.id,
       key: product.key,
       description: product.masterData.current.description['en-US'],
-      image: product.masterData.current.masterVariant.images[0]['url'],
+      image: product.masterData.current.masterVariant.images[0].url,
       price:
         product.masterData.current.masterVariant.prices[0].value.centAmount,
     }));
@@ -81,7 +81,7 @@ export function CategoryChoice() {
           const firstCategoryId = categories[0].id;
           if (categories[0].key) {
             setSelectedCategory(categories[0].key);
-            await getProductsByCategory(firstCategoryId as string);
+            await getProductsByCategory(firstCategoryId!);
             ShopCard({ products: products });
           }
         }

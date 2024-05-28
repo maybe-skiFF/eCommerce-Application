@@ -33,7 +33,7 @@ const getCategories = () => {
 const getProducts = () => {
   return myApiRoot
     .products()
-    .get({ queryArgs: { limit: 200 } })
+    .get({ queryArgs: { limit: 20 } })
     .execute();
 };
 
