@@ -71,3 +71,47 @@ export interface Response {
   error: ErrorObject | ErrorResponse;
   statusCode: number;
 }
+
+export interface Category {
+  id: string | undefined;
+  key: string | undefined;
+}
+
+export interface ProductData {
+  id: string;
+  key: string | undefined;
+  masterData: {
+    current: {
+      description: {
+        'en-US': string;
+      };
+      masterVariant: {
+        images: {
+          url: string;
+        }[];
+        prices: {
+          value: {
+            centAmount: number;
+          };
+        }[];
+      };
+    };
+  };
+}
+
+export interface ProductPure {
+  id: string;
+  key: string | undefined;
+  description: string;
+  image: string;
+  price: number;
+}
+
+export interface ShopCardProps {
+  products: ProductPure[];
+}
+
+export interface CategoryChoiceSubProps {
+  isVisible: boolean;
+  selectedKey: string | null;
+}

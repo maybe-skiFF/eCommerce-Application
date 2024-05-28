@@ -70,7 +70,7 @@ export function Header() {
       className: isAuth ? 'login login__link' : 'logout__btn',
       onClick: () => void logoutUserHandler(),
     },
-  ]
+  ];
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar
