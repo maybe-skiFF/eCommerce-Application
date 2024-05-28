@@ -1,17 +1,34 @@
 import { Box, Typography } from '@mui/material';
 import categoryForMenImg from '../../assets/image/for-men.jpg';
 import categoryForWomenImg from '../../assets/image/for-women.jpg';
-import { Category } from '../categoryChoice/CategoryChoice';
+import categoryForKidsImg from '../../assets/image/for-kids.webp';
+import categoryNewArrivalsImg from '../../assets/image/discount.webp';
+import { Category } from 'src/utils/interfaces';
 
 interface CategoryImageProps {
   selectedCategory: string | Category;
 }
 
 export function CategoryImage({ selectedCategory }: CategoryImageProps) {
-  const backgroundImageSrc =
-    selectedCategory === 'for-men'
-      ? `url(${categoryForMenImg})`
-      : `url(${categoryForWomenImg})`;
+  let backgroundImageSrc;
+
+  switch (selectedCategory) {
+    case 'for-men':
+      backgroundImageSrc = `url(${categoryForMenImg})`;
+      break;
+    case 'for-women':
+      backgroundImageSrc = `url(${categoryForWomenImg})`;
+      break;
+    case 'for-kids':
+      backgroundImageSrc = `url(${categoryForKidsImg})`;
+      break;
+    case 'discount':
+      backgroundImageSrc = `url(${categoryNewArrivalsImg})`;
+      break;
+    default:
+      backgroundImageSrc = 'none';
+      break;
+  }
 
   return (
     <Box
@@ -31,7 +48,7 @@ export function CategoryImage({ selectedCategory }: CategoryImageProps) {
           fontSize: '36px',
           color: 'white',
           fontWeight: 'bold',
-          textAlign: 'center'
+          textAlign: 'center',
         }}
         variant="body1"
         className="navigation__title"
@@ -39,8 +56,8 @@ export function CategoryImage({ selectedCategory }: CategoryImageProps) {
         {selectedCategory === 'for-men' && 'FOR MEN'}
         {selectedCategory === 'for-women' && 'FOR WOMEN'}
         {selectedCategory === 'for-kids' && 'FOR KIDS'}
-        {selectedCategory === 'new-arrivals' && 'NEW ARRIVALS'}
+        {selectedCategory === 'discount' && 'DISCOUNT'}
       </Typography>
-    </Box >
+    </Box>
   );
 }

@@ -30,7 +30,7 @@ export const socialMediaData: SocialMediaItem[] = [
     id: '3',
     icon: <YouTubeIcon />,
     name: 'youtube',
-    link: 'https:/www.youtube.com/'
+    link: 'https:/www.youtube.com/',
   },
 ];
 

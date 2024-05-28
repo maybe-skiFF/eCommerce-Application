@@ -30,6 +30,13 @@ const getCategories = () => {
   return myApiRoot.categories().get().execute();
 };
 
+const getProducts = () => {
+  return myApiRoot
+    .products()
+    .get({ queryArgs: { limit: 200 } })
+    .execute();
+};
+
 const createCustomerDraft = (customerData: CustomerData) => {
   const { firstName, lastName, email, password, key, dateOfBirth, addresses } =
     customerData;
@@ -106,26 +113,6 @@ const deleteContact = async (id: string) => {
     .execute();
 };
 
-interface Category {
-  id: string;
-  key: string | undefined;
-}
-const createCategories = async (): Promise<Category[]> => {
-  try {
-    const response = await myApiRoot.categories().get().execute();
-    const categories: Category[] = response.body.results
-      .filter(item => !item.parent)
-      .map(item => ({
-        id: item.id,
-        key: item.key
-      }));
-    return categories;
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
-};
-
 export {
   getProject,
   createCustomer,
@@ -135,5 +122,5 @@ export {
   createMyCustomer,
   deleteContact,
   getCategories,
-  createCategories,
+  getProducts,
 };

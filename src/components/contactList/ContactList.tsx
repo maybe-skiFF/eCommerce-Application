@@ -4,9 +4,8 @@ import { contactData } from 'src/constants/DATA_LIST';
 export function ContactList() {
   return (
     <List>
-      {contactData.map((item) => (
-        <ListItem
-          key={item.id}>
+      {contactData.map(item => (
+        <ListItem key={item.id}>
           {item.link ? (
             <Link
               sx={{
@@ -15,27 +14,19 @@ export function ContactList() {
                 display: 'flex',
                 alignItems: 'center',
               }}
-              href={item.link}>
-              <Box
-                sx={{ marginRight: '5px' }}
-              >
-                {item.icon}
-              </Box>
+              href={item.link}
+            >
+              <Box sx={{ marginRight: '5px' }}>{item.icon}</Box>
               {item.label}
             </Link>
           ) : (
             <>
-              <Box
-                sx={{ marginRight: '5px' }}
-              >
-                {item.icon}
-              </Box>
+              <Box sx={{ marginRight: '5px' }}>{item.icon}</Box>
               {item.label}
             </>
           )}
         </ListItem>
-      ))
-      }
-    </List >
+      ))}
+    </List>
   );
 }
