@@ -36,7 +36,7 @@ export function ShopCard({ products }: ShopCardProps) {
           >
             <Link
               component={ReactLink}
-              to={`/product/${product.key}`}
+              to={`/catalog/${product.id}`}
               color={'inherit'}
               underline="none"
             >

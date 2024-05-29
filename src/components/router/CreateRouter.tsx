@@ -14,7 +14,7 @@ export const CreateRouter = () => {
       element: <MainPage />,
     },
     {
-      path: '/product/:key',
+      path: '/catalog/:key',
       element: <DetailedProductPage />,
     },
     {
