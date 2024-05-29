@@ -7,7 +7,7 @@ import {
 } from 'react';
 import { Box } from '@mui/material';
 
-import { getProject, checkCustomer } from 'src/serverPart/ApiRoot';
+import { getMyCustomer, getApiWithCredentials } from 'src/serverPart/ApiRoot';
 import { getTextForm, getInputProps } from 'src/utils/createFormControl';
 import { SubmitButton } from '../SubmitButton/SubmitButton';
 import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
@@ -18,7 +18,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { SimpleSnackbar } from '../SimpleSnackbar/SimpleSnackbar';
 import { useIsAuth } from 'src/context/context';
-import { ErrorObject } from '@commercetools/platform-sdk';
+import { ClientResponse, ErrorObject } from '@commercetools/platform-sdk';
 
 export const SubmitBlock = (): ReactNode => {
   const [currentStatusEmail, setCurrentStatusEmail] = useState<string>(
@@ -30,6 +30,8 @@ export const SubmitBlock = (): ReactNode => {
   const [serverMessage, setServerMessage] = useState<string>('');
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
+  // const { customer } = useCustomer();
+
   const handleClose = (event: SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
       return event;
@@ -65,22 +67,27 @@ export const SubmitBlock = (): ReactNode => {
     if (data.get('password') === '') {
       setCurrentStatusPassword(SERVICE_MESSAGES.notEmpty);
     }
-    await getProject().then(() => {
-      checkCustomer(data.get('email') as string)
-        .then(({ body }) => {
-          if (body.results.length === 0) {
-            setOpen(true);
-            setServerMessage(SERVICE_MESSAGES.errorMail);
-          } else {
-            navigate('/');
-            setIsAuth(true);
-          }
-        })
-        .catch((error: ErrorObject) => {
-          setServerMessage(error.message);
+    await getMyCustomer(
+      getApiWithCredentials(
+        data.get('email') as string,
+        data.get('password') as string,
+      ),
+      data.get('email') as string,
+      data.get('password') as string,
+    )
+      .then((answer: ClientResponse) => {
+        if (answer.statusCode !== 200) {
           setOpen(true);
-        });
-    });
+          setServerMessage(SERVICE_MESSAGES.errorMail);
+        } else {
+          navigate('/');
+          setIsAuth(true);
+        }
+      })
+      .catch((error: ErrorObject) => {
+        setServerMessage(error.message);
+        setOpen(true);
+      });
   };
 
   return (

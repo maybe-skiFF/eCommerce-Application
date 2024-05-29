@@ -1,37 +1,86 @@
-import { ctpClient, myClient } from './BuildClient';
+import {
+  authMiddlewareOptions,
+  ctpClient,
+  httpMiddlewareOptions,
+} from './BuildClient';
 import {
   ClientResponse,
   CustomerSignInResult,
   createApiBuilderFromCtpClient,
-  CustomerPagedQueryResponse,
   Project,
   ErrorObject,
-  // ApiRoot,
-  // CustomerToken,
+  ByProjectKeyRequestBuilder,
 } from '@commercetools/platform-sdk';
 
 import { CustomerData } from 'src/utils/interfaces';
 import { PROJECT_DATA } from './PROJECT_DATA';
+import {
+  Client,
+  PasswordAuthMiddlewareOptions,
+  ClientBuilder,
+  AuthMiddlewareOptions,
+} from '@commercetools/sdk-client-v2';
 
 const apiRoot = createApiBuilderFromCtpClient(ctpClient).withProjectKey({
   projectKey: PROJECT_DATA.CTP_PROJECT_KEY,
 });
-const myApiRoot = createApiBuilderFromCtpClient(myClient).withProjectKey({
-  projectKey: PROJECT_DATA.CTP_PROJECT_KEY,
-});
+
 const getProject = (): Promise<ClientResponse<Project>> => {
   return apiRoot.get().execute();
 };
-const getToken = (): Promise<ClientResponse<CustomerPagedQueryResponse>> => {
-  return myApiRoot.customers().get().execute();
-};
 
+const getApiWithCredentials = (
+  name: string,
+  password: string,
+): ByProjectKeyRequestBuilder => {
+  let client: Client;
+  if (name && password) {
+    const options: PasswordAuthMiddlewareOptions = {
+      host: PROJECT_DATA.CTP_AUTH_URL ?? '',
+      projectKey: PROJECT_DATA.CTP_PROJECT_KEY,
+      credentials: {
+        clientId: PROJECT_DATA.CTP_CLIENT_ID,
+        clientSecret: PROJECT_DATA.CTP_CLIENT_SECRET,
+        user: {
+          username: name,
+          password: password,
+        },
+      },
+      scopes: [`manage_project:${PROJECT_DATA.CTP_PROJECT_KEY}`],
+      fetch,
+    };
+    client = new ClientBuilder()
+      .withPasswordFlow(options)
+      .withClientCredentialsFlow(authMiddlewareOptions)
+      .withHttpMiddleware(httpMiddlewareOptions)
+      .withLoggerMiddleware()
+      .build();
+  } else {
+    const options: AuthMiddlewareOptions = {
+      host: PROJECT_DATA.CTP_AUTH_URL ?? '',
+      projectKey: PROJECT_DATA.CTP_PROJECT_KEY,
+      credentials: {
+        clientId: PROJECT_DATA.CTP_CLIENT_ID,
+        clientSecret: PROJECT_DATA.CTP_CLIENT_SECRET,
+      },
+      scopes: [`manage_project:${PROJECT_DATA.CTP_PROJECT_KEY}`],
+      fetch,
+    };
+    client = new ClientBuilder()
+      .withAnonymousSessionFlow(options)
+      .withLoggerMiddleware()
+      .build();
+  }
+  return createApiBuilderFromCtpClient(client).withProjectKey({
+    projectKey: PROJECT_DATA.CTP_PROJECT_KEY,
+  });
+};
 const getCategories = () => {
-  return myApiRoot.categories().get().execute();
+  return apiRoot.categories().get().execute();
 };
 
 const getProducts = () => {
-  return myApiRoot
+  return apiRoot
     .products()
     .get({ queryArgs: { limit: 200 } })
     .execute();
@@ -52,51 +101,30 @@ const createCustomerDraft = (customerData: CustomerData) => {
 };
 
 const createCustomer = async (
+  api: ByProjectKeyRequestBuilder,
   customerData: CustomerData,
 ): Promise<ErrorObject | ClientResponse<CustomerSignInResult>> => {
-  return await apiRoot
+  return await api
     .customers()
     .post({
       body: createCustomerDraft(customerData),
     })
     .execute();
 };
-const createMyCustomer = async (
+
+const getMyCustomer = async (
+  api: ByProjectKeyRequestBuilder,
   name: string,
   password: string,
 ): Promise<ClientResponse> => {
-  return await myApiRoot
-    .customers()
+  return await api
+    .me()
+    .login()
     .post({
       body: {
         email: name,
         password: password,
-      },
-    })
-    .execute();
-};
-const getPasswordFlow = async (
-  // BEARER_TOKEN: string,
-  email: string,
-  password: string,
-) => {
-  await apiRoot
-    .customers()
-    .get({
-      queryArgs: {
-        where: [`email="${email}"`, `password="${password}"`],
-      },
-    })
-    .execute();
-};
-const checkCustomer = async (
-  email: string,
-): Promise<ClientResponse<CustomerPagedQueryResponse>> => {
-  return await apiRoot
-    .customers()
-    .get({
-      queryArgs: {
-        where: `email="${email}"`,
+        updateProductData: true,
       },
     })
     .execute();
@@ -116,10 +144,8 @@ const deleteContact = async (id: string) => {
 export {
   getProject,
   createCustomer,
-  checkCustomer,
-  getToken,
-  getPasswordFlow,
-  createMyCustomer,
+  getApiWithCredentials,
+  getMyCustomer,
   deleteContact,
   getCategories,
   getProducts,

@@ -14,8 +14,7 @@ import { getTextForm, getInputProps } from 'src/utils/createFormControl';
 import { AgeBlock } from './AgeBlock';
 import { AddressBlock } from './AddressBlock';
 import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
-import { createCustomer } from 'src/serverPart/ApiRoot';
-import { getAddressesArray } from 'src/utils/getAddressesArray';
+import { createCustomer, getApiWithCredentials } from 'src/serverPart/ApiRoot';
 import {
   checkValidationFieldPassword,
   checkValidationFieldEmail,
@@ -27,6 +26,7 @@ import { SimpleSnackbar } from '../SimpleSnackbar/SimpleSnackbar';
 import { ErrorObject } from '@commercetools/platform-sdk';
 import { useIsAuth } from 'src/context/context';
 import { checkFullData } from 'src/utils/CheckFullData';
+import { getAddressesArray } from 'src/utils/getAddressesArray';
 
 export const RegistrationBlock = () => {
   const [formData, setFormData] = useState<string>(SERVICE_MESSAGES.startCheck);
@@ -101,11 +101,18 @@ export const RegistrationBlock = () => {
         (data.get('day ') as string),
       addresses: [],
     };
-
     getAddressesArray(kindOfAddresses, myCustomer.addresses, data);
-
-    await createCustomer(myCustomer)
-      .then(() => {
+    await getApiWithCredentials(customer.email, customer.password)
+      .me()
+      .get()
+      .execute()
+      .then(data => console.log(data, 'getAtiCredo'));
+    await createCustomer(
+      getApiWithCredentials(customer.email, customer.password),
+      myCustomer,
+    )
+      .then(data => {
+        console.log(data, 'tokenssss');
         navigate('/');
         setIsAuth(true);
       })
