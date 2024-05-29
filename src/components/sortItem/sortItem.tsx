@@ -8,12 +8,15 @@ import {
 } from '@mui/material';
 import { useState } from 'react';
 import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
+import { SortItemProps } from 'src/utils/interfaces';
 
-export function SortItem() {
+export function SortItem({ onValueChange }: SortItemProps) {
   const [value, setValue] = useState<string>('');
 
   const handleChange = (event: SelectChangeEvent<string>) => {
-    setValue(event.target.value);
+    const newValue = event.target.value;
+    setValue(newValue);
+    onValueChange(newValue);
   };
 
   return (
@@ -35,8 +38,18 @@ export function SortItem() {
           label={SERVICE_MESSAGES.sort}
           onChange={handleChange}
         >
-          <MenuItem value={'name'}>{SERVICE_MESSAGES.sortCategory_1}</MenuItem>
-          <MenuItem value={'cost'}>{SERVICE_MESSAGES.sortCategory_2}</MenuItem>
+          <MenuItem value={SERVICE_MESSAGES.sortCategory_1}>
+            {SERVICE_MESSAGES.sortCategory_1}
+          </MenuItem>
+          <MenuItem value={SERVICE_MESSAGES.sortCategory_2}>
+            {SERVICE_MESSAGES.sortCategory_2}
+          </MenuItem>
+          <MenuItem value={SERVICE_MESSAGES.sortCategory_3}>
+            {SERVICE_MESSAGES.sortCategory_3}
+          </MenuItem>
+          <MenuItem value={SERVICE_MESSAGES.sortCategory_4}>
+            {SERVICE_MESSAGES.sortCategory_4}
+          </MenuItem>
         </Select>
       </FormControl>
     </Box>

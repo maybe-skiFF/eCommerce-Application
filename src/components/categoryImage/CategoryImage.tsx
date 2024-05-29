@@ -2,7 +2,7 @@ import { Box, Typography } from '@mui/material';
 import categoryForMenImg from '../../assets/image/for-men.jpg';
 import categoryForWomenImg from '../../assets/image/for-women.jpg';
 import categoryForKidsImg from '../../assets/image/for-kids.webp';
-import categoryNewArrivalsImg from '../../assets/image/discount.webp';
+import categoryNewArrivalsImg from '../../assets/image/new arrivals.webp';
 import { Category } from 'src/utils/interfaces';
 
 interface CategoryImageProps {
@@ -14,15 +14,23 @@ export function CategoryImage({ selectedCategory }: CategoryImageProps) {
 
   switch (selectedCategory) {
     case 'for-men':
+    case 'shirts':
+    case 'shorts':
+    case 'boots':
       backgroundImageSrc = `url(${categoryForMenImg})`;
       break;
     case 'for-women':
+    case 'dresses':
+    case 'skirts':
+    case 'shoes':
       backgroundImageSrc = `url(${categoryForWomenImg})`;
       break;
     case 'for-kids':
+    case 'cloth':
+    case 'toys':
       backgroundImageSrc = `url(${categoryForKidsImg})`;
       break;
-    case 'discount':
+    case 'new-arrivals':
       backgroundImageSrc = `url(${categoryNewArrivalsImg})`;
       break;
     default:
@@ -53,10 +61,16 @@ export function CategoryImage({ selectedCategory }: CategoryImageProps) {
         variant="body1"
         className="navigation__title"
       >
-        {selectedCategory === 'for-men' && 'FOR MEN'}
-        {selectedCategory === 'for-women' && 'FOR WOMEN'}
-        {selectedCategory === 'for-kids' && 'FOR KIDS'}
-        {selectedCategory === 'discount' && 'DISCOUNT'}
+        {['for-men', 'shirts', 'shorts', 'boots'].includes(
+          selectedCategory as string,
+        ) && 'FOR MEN'}
+        {['for-women', 'dresses', 'skirts', 'shoes'].includes(
+          selectedCategory as string,
+        ) && 'FOR WOMEN'}
+        {['for-kids', 'cloth', 'toys'].includes(selectedCategory as string) &&
+          'FOR KIDS'}
+        {['new-arrivals'].includes(selectedCategory as string) &&
+          'NEW ARRIVALS'}
       </Typography>
     </Box>
   );
