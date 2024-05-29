@@ -10,15 +10,14 @@ import {
   Project,
   ErrorObject,
   ByProjectKeyRequestBuilder,
+  // CustomerPagedQueryResponse,
 } from '@commercetools/platform-sdk';
 
 import { CustomerData } from 'src/utils/interfaces';
 import { PROJECT_DATA } from './PROJECT_DATA';
 import {
-  Client,
   PasswordAuthMiddlewareOptions,
   ClientBuilder,
-  AuthMiddlewareOptions,
 } from '@commercetools/sdk-client-v2';
 
 const apiRoot = createApiBuilderFromCtpClient(ctpClient).withProjectKey({
@@ -33,44 +32,27 @@ const getApiWithCredentials = (
   name: string,
   password: string,
 ): ByProjectKeyRequestBuilder => {
-  let client: Client;
-  if (name && password) {
-    const options: PasswordAuthMiddlewareOptions = {
-      host: PROJECT_DATA.CTP_AUTH_URL ?? '',
-      projectKey: PROJECT_DATA.CTP_PROJECT_KEY,
-      credentials: {
-        clientId: PROJECT_DATA.CTP_CLIENT_ID,
-        clientSecret: PROJECT_DATA.CTP_CLIENT_SECRET,
-        user: {
-          username: name,
-          password: password,
-        },
+  const options: PasswordAuthMiddlewareOptions = {
+    host: PROJECT_DATA.CTP_AUTH_URL ?? '',
+    projectKey: PROJECT_DATA.CTP_PROJECT_KEY,
+    credentials: {
+      clientId: PROJECT_DATA.CTP_CLIENT_ID,
+      clientSecret: PROJECT_DATA.CTP_CLIENT_SECRET,
+      user: {
+        username: name,
+        password: password,
       },
-      scopes: [`manage_project:${PROJECT_DATA.CTP_PROJECT_KEY}`],
-      fetch,
-    };
-    client = new ClientBuilder()
-      .withPasswordFlow(options)
-      .withClientCredentialsFlow(authMiddlewareOptions)
-      .withHttpMiddleware(httpMiddlewareOptions)
-      .withLoggerMiddleware()
-      .build();
-  } else {
-    const options: AuthMiddlewareOptions = {
-      host: PROJECT_DATA.CTP_AUTH_URL ?? '',
-      projectKey: PROJECT_DATA.CTP_PROJECT_KEY,
-      credentials: {
-        clientId: PROJECT_DATA.CTP_CLIENT_ID,
-        clientSecret: PROJECT_DATA.CTP_CLIENT_SECRET,
-      },
-      scopes: [`manage_project:${PROJECT_DATA.CTP_PROJECT_KEY}`],
-      fetch,
-    };
-    client = new ClientBuilder()
-      .withAnonymousSessionFlow(options)
-      .withLoggerMiddleware()
-      .build();
-  }
+    },
+    scopes: [`manage_project:${PROJECT_DATA.CTP_PROJECT_KEY}`],
+    fetch,
+  };
+  const client = new ClientBuilder()
+    .withHttpMiddleware(httpMiddlewareOptions)
+    .withClientCredentialsFlow(authMiddlewareOptions)
+    .withLoggerMiddleware()
+    .withPasswordFlow(options)
+    .build();
+
   return createApiBuilderFromCtpClient(client).withProjectKey({
     projectKey: PROJECT_DATA.CTP_PROJECT_KEY,
   });

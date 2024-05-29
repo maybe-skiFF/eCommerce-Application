@@ -18,7 +18,11 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { SimpleSnackbar } from '../SimpleSnackbar/SimpleSnackbar';
 import { useIsAuth } from 'src/context/context';
-import { ClientResponse, ErrorObject } from '@commercetools/platform-sdk';
+import {
+  ClientResponse,
+  // CustomerPagedQueryResponse,
+  ErrorObject,
+} from '@commercetools/platform-sdk';
 
 export const SubmitBlock = (): ReactNode => {
   const [currentStatusEmail, setCurrentStatusEmail] = useState<string>(
@@ -67,16 +71,17 @@ export const SubmitBlock = (): ReactNode => {
     if (data.get('password') === '') {
       setCurrentStatusPassword(SERVICE_MESSAGES.notEmpty);
     }
+    const myApi = getApiWithCredentials(
+      data.get('email') as string,
+      data.get('password') as string,
+    );
     await getMyCustomer(
-      getApiWithCredentials(
-        data.get('email') as string,
-        data.get('password') as string,
-      ),
+      myApi,
       data.get('email') as string,
       data.get('password') as string,
     )
-      .then((answer: ClientResponse) => {
-        if (answer.statusCode !== 200) {
+      .then((data: ClientResponse) => {
+        if (data.statusCode !== 200) {
           setOpen(true);
           setServerMessage(SERVICE_MESSAGES.errorMail);
         } else {

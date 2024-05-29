@@ -14,7 +14,11 @@ import { getTextForm, getInputProps } from 'src/utils/createFormControl';
 import { AgeBlock } from './AgeBlock';
 import { AddressBlock } from './AddressBlock';
 import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
-import { createCustomer, getApiWithCredentials } from 'src/serverPart/ApiRoot';
+import {
+  createCustomer,
+  getApiWithCredentials,
+  getMyCustomer,
+} from 'src/serverPart/ApiRoot';
 import {
   checkValidationFieldPassword,
   checkValidationFieldEmail,
@@ -102,24 +106,25 @@ export const RegistrationBlock = () => {
       addresses: [],
     };
     getAddressesArray(kindOfAddresses, myCustomer.addresses, data);
-    await getApiWithCredentials(customer.email, customer.password)
-      .me()
-      .get()
-      .execute()
-      .then(data => console.log(data, 'getAtiCredo'));
+
     await createCustomer(
       getApiWithCredentials(customer.email, customer.password),
       myCustomer,
-    )
-      .then(data => {
-        console.log(data, 'tokenssss');
-        navigate('/');
-        setIsAuth(true);
-      })
-      .catch((error: ErrorObject) => {
-        setServerMessage(error.message);
-        setOpen(true);
-      });
+    ).then(() =>
+      getMyCustomer(
+        getApiWithCredentials(customer.email, customer.password),
+        customer.email,
+        customer.password,
+      )
+        .then(() => {
+          navigate('/');
+          setIsAuth(true);
+        })
+        .catch((error: ErrorObject) => {
+          setServerMessage(error.message);
+          setOpen(true);
+        }),
+    );
   };
 
   return (
