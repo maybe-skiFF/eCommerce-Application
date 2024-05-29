@@ -2,7 +2,7 @@ import { Box, Typography } from '@mui/material';
 import categoryForMenImg from '../../assets/image/for-men.jpg';
 import categoryForWomenImg from '../../assets/image/for-women.jpg';
 import categoryForKidsImg from '../../assets/image/for-kids.webp';
-import categoryNewArrivalsImg from '../../assets/image/discount.webp';
+import categoryNewArrivalsImg from '../../assets/image/new arrivals.webp';
 import { Category } from 'src/utils/interfaces';
 
 interface CategoryImageProps {
@@ -30,7 +30,7 @@ export function CategoryImage({ selectedCategory }: CategoryImageProps) {
     case 'toys':
       backgroundImageSrc = `url(${categoryForKidsImg})`;
       break;
-    case 'discount':
+    case 'new-arrivals':
       backgroundImageSrc = `url(${categoryNewArrivalsImg})`;
       break;
     default:
@@ -69,7 +69,8 @@ export function CategoryImage({ selectedCategory }: CategoryImageProps) {
         ) && 'FOR WOMEN'}
         {['for-kids', 'cloth', 'toys'].includes(selectedCategory as string) &&
           'FOR KIDS'}
-        {['discount'].includes(selectedCategory as string) && 'DISCOUNT'}
+        {['new-arrivals'].includes(selectedCategory as string) &&
+          'NEW ARRIVALS'}
       </Typography>
     </Box>
   );

@@ -68,6 +68,9 @@ export function CategoryChoice() {
       image: product.masterData.current.masterVariant.images[0]['url'],
       price:
         product.masterData.current.masterVariant.prices[0].value.centAmount,
+      discount:
+        product.masterData.current.masterVariant.prices[0].discounted?.value
+          ?.centAmount,
     }));
   }
 
@@ -138,7 +141,7 @@ export function CategoryChoice() {
             .sort((a, b) => {
               const aKey = a.key ?? '';
               const bKey = b.key ?? '';
-              return bKey.localeCompare(aKey);
+              return aKey.localeCompare(bKey);
             })
             .map(category => (
               <ToggleButton

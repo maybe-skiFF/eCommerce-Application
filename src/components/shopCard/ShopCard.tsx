@@ -101,24 +101,53 @@ export function ShopCard({ products, sortValue }: ShopCardProps) {
                 boxSizing: 'border-box',
                 border: '1px solid #ebedf0',
                 padding: '0',
+                backgroundSize: 'contain',
               }}
             />
             <CardContent>
-              <Typography variant="h5" component="h3" p={0}>
+              <Typography
+                variant="h5"
+                component="h3"
+                sx={{ marginBottom: '10px', fontWeight: '500' }}
+              >
                 {product.key}
               </Typography>
-              <Typography variant="body1">
+              <Typography variant="body1" sx={{ height: '80px' }}>
                 {product.description.length > 100
                   ? `${product.description.substring(0, 100)}...`
                   : product.description}
               </Typography>
-              <Typography variant="h6">{product.price / 100} USD</Typography>
+              {!isNaN(product.discount) ? (
+                <Box sx={{ height: '80px' }}>
+                  <Typography
+                    variant="h6"
+                    sx={{
+                      textDecoration: 'line-through',
+                      color: 'text.secondary',
+                    }}
+                  >
+                    {product.price / 100} EUR
+                  </Typography>
+                  <Typography
+                    sx={{ color: 'red', fontWeight: '700' }}
+                    variant="h6"
+                  >
+                    {product.discount / 100} EUR - with discount
+                  </Typography>
+                </Box>
+              ) : (
+                <Box sx={{ height: '80px' }}>
+                  <Typography variant="h6">
+                    {product.price / 100} EUR
+                  </Typography>
+                </Box>
+              )}
               <Button variant="outlined">Add to Cart</Button>
             </CardContent>
           </Card>
         ))
       ) : (
-        <Typography variant="h6">No products to display.</Typography>
+        <Typography variant="h6">no products to display.</Typography>
       )}
     </Box>
   );
