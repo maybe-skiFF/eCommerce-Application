@@ -4,7 +4,7 @@ import { CategoryChoiceSubProps } from 'src/utils/interfaces';
 export function CategoryChoiceSub({
   isVisible,
   selectedKey,
-  handleChangeProp
+  handleChangeProp,
 }: CategoryChoiceSubProps) {
   const categories = [
     {

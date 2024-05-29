@@ -61,14 +61,15 @@ export function CategoryImage({ selectedCategory }: CategoryImageProps) {
         variant="body1"
         className="navigation__title"
       >
-        {(['for-men', 'shirts', 'shorts', 'boots']
-          .includes(selectedCategory as string)) && 'FOR MEN'}
-        {(['for-women', 'dresses', 'skirts', 'shoes']
-          .includes(selectedCategory as string)) && 'FOR WOMEN'}
-        {(['for-kids', 'cloth', 'toys']
-          .includes(selectedCategory as string)) && 'FOR KIDS'}
-        {(['discount']
-          .includes(selectedCategory as string)) && 'DISCOUNT'}
+        {['for-men', 'shirts', 'shorts', 'boots'].includes(
+          selectedCategory as string,
+        ) && 'FOR MEN'}
+        {['for-women', 'dresses', 'skirts', 'shoes'].includes(
+          selectedCategory as string,
+        ) && 'FOR WOMEN'}
+        {['for-kids', 'cloth', 'toys'].includes(selectedCategory as string) &&
+          'FOR KIDS'}
+        {['discount'].includes(selectedCategory as string) && 'DISCOUNT'}
       </Typography>
     </Box>
   );

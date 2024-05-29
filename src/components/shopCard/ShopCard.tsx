@@ -6,9 +6,69 @@ import {
   CardContent,
   CardMedia,
 } from '@mui/material';
-import { ShopCardProps } from 'src/utils/interfaces';
+import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
+import { ProductPure, ShopCardProps } from 'src/utils/interfaces';
 
-export function ShopCard({ products }: ShopCardProps) {
+function sortProductsByKeyAscending(products: ProductPure[]) {
+  return products.sort((a, b) => {
+    const keyA = (a.key ?? '').toLowerCase();
+    const keyB = (b.key ?? '').toLowerCase();
+
+    if (keyA < keyB) return -1;
+    if (keyA > keyB) return 1;
+    return 0;
+  });
+}
+
+function sortProductsByKeyDescending(products: ProductPure[]) {
+  return products.sort((a, b) => {
+    const keyA = (a.key ?? '').toLowerCase();
+    const keyB = (b.key ?? '').toLowerCase();
+
+    if (keyA > keyB) return -1;
+    if (keyA < keyB) return 1;
+    return 0;
+  });
+}
+
+function sortProductsByPriceAscending(products: ProductPure[]) {
+  return products.sort((a, b) => {
+    const keyA = a.price;
+    const keyB = b.price;
+
+    if (keyA < keyB) return -1;
+    if (keyA > keyB) return 1;
+    return 0;
+  });
+}
+
+function sortProductsByPriceDescending(products: ProductPure[]) {
+  return products.sort((a, b) => {
+    const keyA = a.price;
+    const keyB = b.price;
+
+    if (keyA > keyB) return -1;
+    if (keyA < keyB) return 1;
+    return 0;
+  });
+}
+
+export function ShopCard({ products, sortValue }: ShopCardProps) {
+  const sortProducts = (products: ProductPure[]) => {
+    switch (sortValue) {
+      case SERVICE_MESSAGES.sortCategory_1:
+        return sortProductsByKeyAscending(products);
+      case SERVICE_MESSAGES.sortCategory_2:
+        return sortProductsByKeyDescending(products);
+      case SERVICE_MESSAGES.sortCategory_3:
+        return sortProductsByPriceAscending(products);
+      case SERVICE_MESSAGES.sortCategory_4:
+        return sortProductsByPriceDescending(products);
+      default:
+        return products;
+    }
+  };
+
   return (
     <Box
       sx={{
@@ -20,7 +80,7 @@ export function ShopCard({ products }: ShopCardProps) {
       }}
     >
       {products && products.length > 0 ? (
-        products.map(product => (
+        sortProducts(products).map(product => (
           <Card
             key={product.id}
             sx={{
@@ -44,7 +104,7 @@ export function ShopCard({ products }: ShopCardProps) {
               }}
             />
             <CardContent>
-              <Typography variant="h6" component="h3" p={0}>
+              <Typography variant="h5" component="h3" p={0}>
                 {product.key}
               </Typography>
               <Typography variant="body1">

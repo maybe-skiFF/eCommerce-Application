@@ -109,6 +109,7 @@ export interface ProductPure {
 
 export interface ShopCardProps {
   products: ProductPure[];
+  sortValue: string;
 }
 
 export interface CategoryChoiceSubProps {
@@ -116,6 +117,10 @@ export interface CategoryChoiceSubProps {
   selectedKey: string | null;
   handleChangeProp: (
     event: React.MouseEvent<HTMLElement>,
-    newCategory: string | null
+    newCategory: string | null,
   ) => void;
+}
+
+export interface SortItemProps {
+  onValueChange: (newValue: string) => void;
 }

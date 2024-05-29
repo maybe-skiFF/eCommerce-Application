@@ -54,7 +54,7 @@ export function CategoryChoice() {
       const serverProducts = await createProducts(categoryId);
       const products = getPureProducts(serverProducts as never[]);
       setProducts(products as never[]);
-      ShopCard({ products: products });
+      ShopCard({ products: products, sortValue: '' });
     } catch (error) {
       console.error(error);
     }
@@ -81,15 +81,15 @@ export function CategoryChoice() {
           const firstCategoryId = categories[0].id;
           if (categories[0].key) {
             setSelectedCategory(categories[0].key);
-            await getProductsByCategory(firstCategoryId as string);
-            ShopCard({ products: products });
+            await getProductsByCategory(firstCategoryId ?? '');
+            ShopCard({ products: products, sortValue: '' });
           }
         }
       } catch (error) {
         console.error(error);
       }
     };
-    fetchCategoryKeys();
+    void fetchCategoryKeys();
   }, []);
 
   const handleChange = (
@@ -98,7 +98,7 @@ export function CategoryChoice() {
   ) => {
     if (newCategory !== null) {
       setSelectedCategory(newCategory);
-      getProductsByCategory(`${event.currentTarget.dataset.id ?? ''}`);
+      void getProductsByCategory(`${event.currentTarget.dataset.id ?? ''}`);
     }
   };
 
@@ -112,6 +112,12 @@ export function CategoryChoice() {
 
   const handleButtonMouseEnter = (key: string) => {
     setSelectedKey(key);
+  };
+
+  const [sortValue, setSortValue] = useState<string>('');
+
+  const handleSortValueChange = (newValue: string) => {
+    setSortValue(newValue);
   };
 
   return (
@@ -156,8 +162,8 @@ export function CategoryChoice() {
         />
       </Box>
       <CategoryImage selectedCategory={selectedCategory ?? ''} />
-      <SortItem />
-      <ShopCard products={products} />
+      <SortItem onValueChange={handleSortValueChange} />
+      <ShopCard products={products} sortValue={sortValue} />
     </>
   );
 }
