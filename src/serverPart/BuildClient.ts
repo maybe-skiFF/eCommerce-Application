@@ -29,6 +29,5 @@ export const ctpClient = new ClientBuilder()
   .withProjectKey(projectKey)
   .withClientCredentialsFlow(authMiddlewareOptions)
   .withHttpMiddleware(httpMiddlewareOptions)
-  .withLoggerMiddleware()
   .withAnonymousSessionFlow(authMiddlewareOptions)
   .build();

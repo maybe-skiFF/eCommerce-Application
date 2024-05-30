@@ -10,7 +10,6 @@ import {
   Project,
   ErrorObject,
   ByProjectKeyRequestBuilder,
-  // CustomerPagedQueryResponse,
 } from '@commercetools/platform-sdk';
 
 import { CustomerData } from 'src/utils/interfaces';
@@ -52,7 +51,6 @@ const getApiWithCredentials = (
     .withLoggerMiddleware()
     .withPasswordFlow(options)
     .build();
-
   return createApiBuilderFromCtpClient(client).withProjectKey({
     projectKey: PROJECT_DATA.CTP_PROJECT_KEY,
   });
@@ -83,10 +81,9 @@ const createCustomerDraft = (customerData: CustomerData) => {
 };
 
 const createCustomer = async (
-  api: ByProjectKeyRequestBuilder,
   customerData: CustomerData,
 ): Promise<ErrorObject | ClientResponse<CustomerSignInResult>> => {
-  return await api
+  return await apiRoot
     .customers()
     .post({
       body: createCustomerDraft(customerData),
@@ -107,6 +104,7 @@ const getMyCustomer = async (
         email: name,
         password: password,
         updateProductData: true,
+        activeCartSignInMode: 'MergeWithExistingCustomerCart',
       },
     })
     .execute();

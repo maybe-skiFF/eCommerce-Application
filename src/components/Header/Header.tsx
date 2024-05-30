@@ -8,7 +8,7 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
 import { Search } from 'src/components/search/Search';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
-import { useCustomer, useIsAuth } from 'src/context/context';
+import { useCustomer } from 'src/context/context';
 import { deleteContact } from 'src/serverPart/ApiRoot';
 import { ErrorObject } from '@commercetools/platform-sdk';
 import { SimpleSnackbar } from 'src/components/SimpleSnackbar/SimpleSnackbar';
@@ -19,7 +19,6 @@ export function Header() {
   const [serverMessage, setServerMessage] = useState<string>('');
   const [open, setOpen] = useState<boolean>(false);
   const { customer } = useCustomer();
-  const { isAuth, setIsAuth } = useIsAuth();
   const navigate = useNavigate();
   const handleClose = (event: SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
@@ -36,7 +35,7 @@ export function Header() {
     await deleteContact(customer.email)
       .then(() => {
         navigate('/login');
-        setIsAuth(false);
+        localStorage.clear();
       })
       .catch((error: ErrorObject) => {
         setServerMessage(error.message);
@@ -48,13 +47,13 @@ export function Header() {
     {
       icon: <LoginIcon />,
       label: SERVICE_MESSAGES.login,
-      to: isAuth ? '/' : '/login',
+      to: localStorage.getItem('isAuth') ? '/' : '/login',
       className: 'login__link login',
     },
     {
       icon: <PersonIcon />,
       label: SERVICE_MESSAGES.authorization,
-      to: isAuth ? '/' : '/registration',
+      to: localStorage.getItem('isAuth') ? '/' : '/registration',
       className: 'login__link login',
     },
     {
@@ -67,7 +66,9 @@ export function Header() {
       icon: <LogoutIcon />,
       label: SERVICE_MESSAGES.logout,
       to: '/login',
-      className: isAuth ? 'login login__link' : 'logout__btn',
+      className: localStorage.getItem('isAuth')
+        ? 'login login__link'
+        : 'logout__btn',
       onClick: () => void logoutUserHandler(),
     },
   ];

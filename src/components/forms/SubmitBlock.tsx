@@ -17,12 +17,7 @@ import {
 } from 'src/utils/checkValidationField';
 import { useNavigate } from 'react-router-dom';
 import { SimpleSnackbar } from '../SimpleSnackbar/SimpleSnackbar';
-import { useIsAuth } from 'src/context/context';
-import {
-  ClientResponse,
-  // CustomerPagedQueryResponse,
-  ErrorObject,
-} from '@commercetools/platform-sdk';
+import { ClientResponse, ErrorObject } from '@commercetools/platform-sdk';
 
 export const SubmitBlock = (): ReactNode => {
   const [currentStatusEmail, setCurrentStatusEmail] = useState<string>(
@@ -34,7 +29,6 @@ export const SubmitBlock = (): ReactNode => {
   const [serverMessage, setServerMessage] = useState<string>('');
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
-  // const { customer } = useCustomer();
 
   const handleClose = (event: SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
@@ -56,7 +50,6 @@ export const SubmitBlock = (): ReactNode => {
     }
   };
 
-  const { setIsAuth } = useIsAuth();
   const navigate = useNavigate();
 
   const handleClickShowPassword = () => setShowPassword(show => !show);
@@ -86,7 +79,7 @@ export const SubmitBlock = (): ReactNode => {
           setServerMessage(SERVICE_MESSAGES.errorMail);
         } else {
           navigate('/');
-          setIsAuth(true);
+          localStorage.setItem('isAuth', 'true');
         }
       })
       .catch((error: ErrorObject) => {

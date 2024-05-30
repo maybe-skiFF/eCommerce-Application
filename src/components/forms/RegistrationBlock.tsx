@@ -107,24 +107,31 @@ export const RegistrationBlock = () => {
     };
     getAddressesArray(kindOfAddresses, myCustomer.addresses, data);
 
-    await createCustomer(
-      getApiWithCredentials(customer.email, customer.password),
-      myCustomer,
-    ).then(() =>
-      getMyCustomer(
-        getApiWithCredentials(customer.email, customer.password),
-        customer.email,
-        customer.password,
-      )
-        .then(() => {
+    const myApi = getApiWithCredentials(
+      data.get('email') as string,
+      data.get('password') as string,
+    );
+    await createCustomer(myCustomer)
+      .then(data => {
+        if (data.statusCode === 201) {
           navigate('/');
           setIsAuth(true);
-        })
-        .catch((error: ErrorObject) => {
-          setServerMessage(error.message);
-          setOpen(true);
-        }),
-    );
+          localStorage.setItem('isAuth', 'true');
+        }
+      })
+      .then(async response => {
+        const res = response;
+        console.log(res, 'response');
+        await getMyCustomer(
+          myApi,
+          data.get('email') as string,
+          data.get('password') as string,
+        );
+      })
+      .catch((error: ErrorObject) => {
+        setServerMessage(error.message);
+        setOpen(true);
+      });
   };
 
   return (
