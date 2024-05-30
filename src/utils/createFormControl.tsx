@@ -125,7 +125,8 @@ export const getTextForm = (
       autoComplete={`current-${purpose}`}
       error={
         Object.values(SERVICE_MESSAGES).some(value => value === state) &&
-        state !== SERVICE_MESSAGES.startCheck
+        state !== SERVICE_MESSAGES.startCheck &&
+        state !== SERVICE_MESSAGES.checkDone
       }
       helperText={state}
       sx={{ width: 'calc(90% - 15px)' }}
