@@ -11,20 +11,39 @@ import {
   RadioGroup,
   Typography,
 } from '@mui/material';
-// import { useState } from 'react';
 
 interface ProductObj {
   productDataById: Product | undefined;
 }
 
 export function DetailedProductWrapper({ productDataById }: ProductObj) {
-  // const [productName, setProductName] = useState<string>();
   if (!productDataById) return;
-  // setProductName(productDataById.key);
+
+  const productDiscountPrice =
+    productDataById.masterData.current.masterVariant.prices![2].discounted
+      ?.value?.centAmount;
+  const productPrice =
+    productDataById.masterData.current.masterVariant.prices![2].value
+      ?.centAmount;
+  const productDescription =
+    productDataById.masterData.current.description!['en-US'];
+  const productImage =
+    productDataById.masterData.current.masterVariant.images![0].url;
+  const productName = productDataById.masterData.current.name['en-US'];
   console.log(productDataById);
+
+  function checkDiscountPrice() {
+    let isDiscounted = false;
+    if (productDiscountPrice) {
+      isDiscounted = true;
+      return isDiscounted;
+    }
+    return false;
+  }
+  console.log(checkDiscountPrice());
+
   return (
     <Box sx={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap' }}>
-      <div>{productDataById.id}</div>
       <Box
         sx={{
           display: 'flex',
@@ -36,16 +55,37 @@ export function DetailedProductWrapper({ productDataById }: ProductObj) {
         <Box>
           <ImageList sx={{ width: 600, height: 300 }} cols={1}>
             <ImageListItem>
-              <img
-                src="https://images.unsplash.com/photo-1551963831-b3b1ca40c98e"
-                alt="image"
-              />
+              <img src={productImage} alt="image" />
             </ImageListItem>
           </ImageList>
         </Box>
         <Box sx={{ display: 'flex', flexDirection: 'column', rowGap: 4 }}>
-          <Typography variant="h4">Product Name</Typography>
-          <Typography variant="h5">Product Description</Typography>
+          <Typography variant="h4">{productName}</Typography>
+          <Typography variant="h5">
+            {productDescription.length > 100
+              ? `${productDescription.slice(0, 100)}...`
+              : productDescription}
+          </Typography>
+          {checkDiscountPrice() ? (
+            <Box sx={{ height: '80px' }}>
+              <Typography
+                variant="h6"
+                sx={{
+                  textDecoration: 'line-through',
+                  color: 'text.secondary',
+                }}
+              >
+                {productPrice / 100} EUR
+              </Typography>
+              <Typography sx={{ color: 'red', fontWeight: '700' }} variant="h6">
+                {(productDiscountPrice ?? 0) / 100} EUR - with discount
+              </Typography>
+            </Box>
+          ) : (
+            <Box sx={{ height: '80px' }}>
+              <Typography variant="h6">{productPrice / 100} EUR</Typography>
+            </Box>
+          )}
           <FormControl>
             <FormLabel id="demo-row-radio-buttons-group-label">
               Select Color
