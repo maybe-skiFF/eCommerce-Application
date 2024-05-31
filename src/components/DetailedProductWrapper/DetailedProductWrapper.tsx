@@ -27,9 +27,7 @@ export function DetailedProductWrapper({ productDataById }: ProductObj) {
   const productDescription =
     productDataById.masterData.current.description!['en-US'];
   const productImgArr = productDataById.masterData.current.masterVariant.images;
-  console.log(productImgArr);
   const productName = productDataById.masterData.current.name['en-US'];
-  console.log(productDataById);
 
   function checkDiscountPrice() {
     let isDiscounted = false;
@@ -39,7 +37,6 @@ export function DetailedProductWrapper({ productDataById }: ProductObj) {
     }
     return false;
   }
-  console.log(checkDiscountPrice());
 
   return (
     <Box sx={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap' }}>

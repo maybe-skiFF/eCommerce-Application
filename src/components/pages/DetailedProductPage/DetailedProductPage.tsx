@@ -15,7 +15,6 @@ export const DetailedProductPage = () => {
       try {
         const response = await getProductById(key ?? '');
         const data = response.body;
-        console.log(data);
         setProductDataById(data);
         return data;
       } catch (error) {

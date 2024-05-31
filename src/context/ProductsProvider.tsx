@@ -40,6 +40,11 @@ const initialProductsData: ProductData = {
         ],
         prices: [
           {
+            discounted: {
+              value: {
+                centAmount: 0,
+              },
+            },
             value: {
               centAmount: 0,
             },
