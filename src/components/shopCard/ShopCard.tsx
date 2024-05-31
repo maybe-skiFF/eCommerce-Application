@@ -7,10 +7,70 @@ import {
   CardMedia,
   Link,
 } from '@mui/material';
-import { ShopCardProps } from 'src/utils/interfaces';
+import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
+import { ProductPure, ShopCardProps } from 'src/utils/interfaces';
 import { Link as ReactLink } from 'react-router-dom';
 
-export function ShopCard({ products }: ShopCardProps) {
+function sortProductsByKeyAscending(products: ProductPure[]) {
+  return products.sort((a, b) => {
+    const keyA = (a.key ?? '').toLowerCase();
+    const keyB = (b.key ?? '').toLowerCase();
+
+    if (keyA < keyB) return -1;
+    if (keyA > keyB) return 1;
+    return 0;
+  });
+}
+
+function sortProductsByKeyDescending(products: ProductPure[]) {
+  return products.sort((a, b) => {
+    const keyA = (a.key ?? '').toLowerCase();
+    const keyB = (b.key ?? '').toLowerCase();
+
+    if (keyA > keyB) return -1;
+    if (keyA < keyB) return 1;
+    return 0;
+  });
+}
+
+function sortProductsByPriceAscending(products: ProductPure[]) {
+  return products.sort((a, b) => {
+    const keyA = a.price;
+    const keyB = b.price;
+
+    if (keyA < keyB) return -1;
+    if (keyA > keyB) return 1;
+    return 0;
+  });
+}
+
+function sortProductsByPriceDescending(products: ProductPure[]) {
+  return products.sort((a, b) => {
+    const keyA = a.price;
+    const keyB = b.price;
+
+    if (keyA > keyB) return -1;
+    if (keyA < keyB) return 1;
+    return 0;
+  });
+}
+
+export function ShopCard({ products, sortValue }: ShopCardProps) {
+  const sortProducts = (products: ProductPure[]) => {
+    switch (sortValue) {
+      case SERVICE_MESSAGES.sortCategory_1:
+        return sortProductsByKeyAscending(products);
+      case SERVICE_MESSAGES.sortCategory_2:
+        return sortProductsByKeyDescending(products);
+      case SERVICE_MESSAGES.sortCategory_3:
+        return sortProductsByPriceAscending(products);
+      case SERVICE_MESSAGES.sortCategory_4:
+        return sortProductsByPriceDescending(products);
+      default:
+        return products;
+    }
+  };
+
   return (
     <Box
       sx={{
@@ -22,7 +82,7 @@ export function ShopCard({ products }: ShopCardProps) {
       }}
     >
       {products && products.length > 0 ? (
-        products.map(product => (
+        sortProducts(products).map(product => (
           <Card
             key={product.id}
             sx={{
@@ -49,18 +109,47 @@ export function ShopCard({ products }: ShopCardProps) {
                   boxSizing: 'border-box',
                   border: '1px solid #ebedf0',
                   padding: '0',
+                  backgroundSize: 'contain',
                 }}
               />
               <CardContent>
-                <Typography variant="h6" component="h3" p={0}>
+                <Typography
+                  variant="h5"
+                  component="h3"
+                  sx={{ marginBottom: '10px', fontWeight: '500' }}
+                >
                   {product.key}
                 </Typography>
-                <Typography variant="body1">
+                <Typography variant="body1" sx={{ height: '80px' }}>
                   {product.description.length > 100
                     ? `${product.description.substring(0, 100)}...`
                     : product.description}
                 </Typography>
-                <Typography variant="h6">{product.price / 100} USD</Typography>
+                {!isNaN(product.discount) ? (
+                  <Box sx={{ height: '80px' }}>
+                    <Typography
+                      variant="h6"
+                      sx={{
+                        textDecoration: 'line-through',
+                        color: 'text.secondary',
+                      }}
+                    >
+                      {product.price / 100} EUR
+                    </Typography>
+                    <Typography
+                      sx={{ color: 'red', fontWeight: '700' }}
+                      variant="h6"
+                    >
+                      {product.discount / 100} EUR - with discount
+                    </Typography>
+                  </Box>
+                ) : (
+                  <Box sx={{ height: '80px' }}>
+                    <Typography variant="h6">
+                      {product.price / 100} EUR
+                    </Typography>
+                  </Box>
+                )}
                 <Button
                   onClick={e => {
                     e.preventDefault();
@@ -74,7 +163,7 @@ export function ShopCard({ products }: ShopCardProps) {
           </Card>
         ))
       ) : (
-        <Typography variant="h6">No products to display.</Typography>
+        <Typography variant="h6">no products to display.</Typography>
       )}
     </Box>
   );
