@@ -85,7 +85,7 @@ export function Header() {
         position="static"
         elevation={0}
       >
-        <Toolbar>
+        <Toolbar style={{ flexWrap: 'wrap', justifyContent: 'center' }}>
           <Box sx={{ flexGrow: 1 }}>
             <Link
               sx={{

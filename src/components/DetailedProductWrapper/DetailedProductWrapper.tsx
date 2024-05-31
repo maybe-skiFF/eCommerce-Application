@@ -5,12 +5,11 @@ import {
   FormControl,
   FormControlLabel,
   FormLabel,
-  ImageList,
-  ImageListItem,
   Radio,
   RadioGroup,
   Typography,
 } from '@mui/material';
+import { SwiperSlider } from '../SwiperSlider/SwiperSlider';
 
 interface ProductObj {
   productDataById: Product | undefined;
@@ -27,8 +26,8 @@ export function DetailedProductWrapper({ productDataById }: ProductObj) {
       ?.centAmount;
   const productDescription =
     productDataById.masterData.current.description!['en-US'];
-  const productImage =
-    productDataById.masterData.current.masterVariant.images![0].url;
+  const productImgArr = productDataById.masterData.current.masterVariant.images;
+  console.log(productImgArr);
   const productName = productDataById.masterData.current.name['en-US'];
   console.log(productDataById);
 
@@ -48,16 +47,12 @@ export function DetailedProductWrapper({ productDataById }: ProductObj) {
         sx={{
           display: 'flex',
           flexWrap: 'wrap',
-          justifyContent: 'space-between',
+          justifyContent: 'center',
           alignItems: 'center',
         }}
       >
         <Box>
-          <ImageList sx={{ width: 600, height: 300 }} cols={1}>
-            <ImageListItem>
-              <img src={productImage} alt="image" />
-            </ImageListItem>
-          </ImageList>
+          <SwiperSlider productImgArr={productImgArr} />
         </Box>
         <Box sx={{ display: 'flex', flexDirection: 'column', rowGap: 4 }}>
           <Typography variant="h4">{productName}</Typography>
