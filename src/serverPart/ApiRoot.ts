@@ -10,6 +10,7 @@ import {
   Project,
   ErrorObject,
   ByProjectKeyRequestBuilder,
+  Customer,
 } from '@commercetools/platform-sdk';
 
 import { CustomerData } from 'src/utils/interfaces';
@@ -62,7 +63,7 @@ const getCategories = () => {
 const getProducts = () => {
   return apiRoot
     .products()
-    .get({ queryArgs: { limit: 200 } })
+    .get({ queryArgs: { limit: 20 } })
     .execute();
 };
 
@@ -110,6 +111,10 @@ const getMyCustomer = async (
     .execute();
 };
 
+const checkCustomer = async (id: string): Promise<ClientResponse<Customer>> => {
+  return await apiRoot.customers().withId({ ID: id }).get().execute();
+};
+
 const deleteContact = async (id: string) => {
   return await apiRoot
     .customers()
@@ -126,6 +131,7 @@ export {
   createCustomer,
   getApiWithCredentials,
   getMyCustomer,
+  checkCustomer,
   deleteContact,
   getCategories,
   getProducts,

@@ -28,7 +28,6 @@ import { CustomerData } from 'src/utils/interfaces';
 import { SubmitButton } from '../SubmitButton/SubmitButton';
 import { SimpleSnackbar } from '../SimpleSnackbar/SimpleSnackbar';
 import { ErrorObject } from '@commercetools/platform-sdk';
-import { useIsAuth } from 'src/context/context';
 import { checkFullData } from 'src/utils/CheckFullData';
 import { getAddressesArray } from 'src/utils/getAddressesArray';
 
@@ -46,8 +45,6 @@ export const RegistrationBlock = () => {
   const [serverMessage, setServerMessage] = useState<string>('');
 
   const navigate = useNavigate();
-
-  const { setIsAuth } = useIsAuth();
 
   const handleClose = (event: SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
@@ -115,7 +112,7 @@ export const RegistrationBlock = () => {
       .then(data => {
         if (data.statusCode === 201) {
           navigate('/');
-          setIsAuth(true);
+          void caches.open(`id ${data.body.email}`);
           localStorage.setItem('isAuth', 'true');
         }
       })

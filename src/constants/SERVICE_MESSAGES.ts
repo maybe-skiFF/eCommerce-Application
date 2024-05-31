@@ -20,6 +20,7 @@ export const SERVICE_MESSAGES = {
   isNoValid: 'Email address must be  formatted (e.g., user@example.com).',
   login: 'Login',
   logout: 'Logout',
+  manageAccounts: 'Your account',
   noAccount: `Don't have an account?`,
   notEmpty: 'The field cannot be empty',
   page404Text:

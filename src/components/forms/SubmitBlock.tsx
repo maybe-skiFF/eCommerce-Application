@@ -15,9 +15,14 @@ import {
   checkValidationFieldEmail,
   checkValidationFieldPassword,
 } from 'src/utils/checkValidationField';
+import { setCookie } from 'src/utils/cookieWork';
 import { useNavigate } from 'react-router-dom';
 import { SimpleSnackbar } from '../SimpleSnackbar/SimpleSnackbar';
-import { ClientResponse, ErrorObject } from '@commercetools/platform-sdk';
+import {
+  ClientResponse,
+  Customer,
+  ErrorObject,
+} from '@commercetools/platform-sdk';
 
 export const SubmitBlock = (): ReactNode => {
   const [currentStatusEmail, setCurrentStatusEmail] = useState<string>(
@@ -68,18 +73,21 @@ export const SubmitBlock = (): ReactNode => {
       data.get('email') as string,
       data.get('password') as string,
     );
+
     await getMyCustomer(
       myApi,
       data.get('email') as string,
       data.get('password') as string,
     )
-      .then((data: ClientResponse) => {
-        if (data.statusCode !== 200) {
+      .then(({ body, statusCode }: ClientResponse<Customer>) => {
+        if (statusCode !== 200) {
           setOpen(true);
           setServerMessage(SERVICE_MESSAGES.errorMail);
         } else {
           navigate('/');
           localStorage.setItem('isAuth', 'true');
+          setCookie('myID', body.customer.id);
+          console.log(body.customer.id);
         }
       })
       .catch((error: ErrorObject) => {

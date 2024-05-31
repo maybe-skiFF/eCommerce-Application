@@ -1,12 +1,14 @@
 import { CustomerSignInResult, ErrorObject } from '@commercetools/platform-sdk';
 import { ClientResponse } from '@commercetools/sdk-client-v2';
 import { ErrorResponse } from 'react-router-dom';
+import { Address } from '@commercetools/platform-sdk';
 
-export interface Address {
-  country: string;
-  city: string;
-  postalCode: string;
-  streetName: string[];
+export interface SettingsPersonalData {
+  firstName: string;
+  lastName: string;
+  dateOfBirth: string;
+  email: string;
+  password: string;
 }
 
 export interface CustomerData {
@@ -26,6 +28,11 @@ export interface CustomerAddress {
   streetName: string;
 }
 
+export interface SettingsAddress {
+  addresses: Address[];
+  billingAddress: string[];
+  shippingAddress: string[];
+}
 export interface DataTime {
   day: string[];
   month: string[];

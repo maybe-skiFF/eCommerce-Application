@@ -1,6 +1,7 @@
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import {
+  Box,
   FormControl,
   IconButton,
   InputAdornment,
@@ -8,12 +9,19 @@ import {
   MenuItem,
   Select,
   SelectChangeEvent,
+  Stack,
   TextField,
 } from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
+import SaveIcon from '@mui/icons-material/Save';
 
 import { ChangeEvent } from 'react';
 import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
 import { STYLE_FOR_HELPER } from 'src/constants/STYLES';
+import { SettingsAddress, SettingsNames } from './interfaces';
+import { Customer } from '@commercetools/platform-sdk';
+
+// import { Address } from '@commercetools/platform-sdk';
 
 const createListItem = (item: string) => {
   const sameValue = item.split(' ');
@@ -34,6 +42,7 @@ const createListItem = (item: string) => {
     </MenuItem>
   );
 };
+
 const getListItems = (
   items: string[] | string,
 ): JSX.Element[] | JSX.Element => {
@@ -41,6 +50,7 @@ const getListItems = (
     ? items.map(item => createListItem(item))
     : createListItem(items);
 };
+
 export const getFormControl = (
   purpose: string,
   selectValue: string,
@@ -136,5 +146,50 @@ export const getTextForm = (
       onInput={callback}
       InputProps={inputProps}
     />
+  );
+};
+
+export const createSettingsField = (
+  data: Customer | undefined,
+  arr: string[],
+) => {
+  if (!data) {
+    return;
+  }
+  return (
+    <Box sx={{ width: '100%' }}>
+      <Stack spacing={3} padding={'1%'} alignItems={'center'}>
+        {getSettingsList(data, arr)}
+      </Stack>
+    </Box>
+  );
+};
+
+const getSettingsList = (
+  data: Customer,
+  arr: string[] | SettingsAddress,
+): (JSX.Element | undefined)[] | undefined => {
+  if (Array.isArray(arr)) {
+    arr.map((item: string) => {
+      if (Object.prototype.hasOwnProperty.call(data, item)) {
+        return getSettingsItem(item, data[`${item}`] as string);
+      }
+    });
+  }
+};
+
+const getSettingsItem = (key: string, value: string): JSX.Element => {
+  return (
+    <Box sx={{ width: '100%' }}>
+      <TextField
+        sx={{ width: '40%', marginLeft: '20%', marginRight: '10%' }}
+        disabled
+        id={key}
+        label={key}
+        defaultValue={value}
+      />
+      <EditIcon sx={{ margin: '1% 2%' }} />
+      <SaveIcon sx={{ margin: '1%' }} />
+    </Box>
   );
 };

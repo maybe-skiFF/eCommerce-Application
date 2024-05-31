@@ -3,6 +3,7 @@ import { Box, AppBar, Toolbar, Link, Typography } from '@mui/material';
 import CheckroomIcon from '@mui/icons-material/Checkroom';
 import PersonIcon from '@mui/icons-material/Person';
 import LoginIcon from '@mui/icons-material/Login';
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import LogoutIcon from '@mui/icons-material/Logout';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
@@ -13,6 +14,7 @@ import { deleteContact } from 'src/serverPart/ApiRoot';
 import { ErrorObject } from '@commercetools/platform-sdk';
 import { SimpleSnackbar } from 'src/components/SimpleSnackbar/SimpleSnackbar';
 import { SyntheticEvent, useState, useRef } from 'react';
+import { deleteCookie } from 'src/utils/cookieWork';
 
 export function Header() {
   const refLogout = useRef<HTMLAnchorElement>(null);
@@ -26,6 +28,7 @@ export function Header() {
     }
     setOpen(false);
   };
+
   async function logoutUserHandler() {
     if (refLogout.current) {
       refLogout.current.classList.remove('login');
@@ -36,6 +39,7 @@ export function Header() {
       .then(() => {
         navigate('/login');
         localStorage.clear();
+        deleteCookie('myID');
       })
       .catch((error: ErrorObject) => {
         setServerMessage(error.message);
@@ -45,15 +49,24 @@ export function Header() {
 
   const navigationLinks = [
     {
+      icon: <ManageAccountsIcon />,
+      label: SERVICE_MESSAGES.manageAccounts,
+      to: '/customer',
+      className:
+        localStorage.getItem('isAuth') === 'true'
+          ? 'login login__link'
+          : 'logout__btn',
+    },
+    {
       icon: <LoginIcon />,
       label: SERVICE_MESSAGES.login,
-      to: localStorage.getItem('isAuth') ? '/' : '/login',
+      to: localStorage.getItem('isAuth') === 'true' ? '/' : '/login',
       className: 'login__link login',
     },
     {
       icon: <PersonIcon />,
       label: SERVICE_MESSAGES.authorization,
-      to: localStorage.getItem('isAuth') ? '/' : '/registration',
+      to: localStorage.getItem('isAuth') === 'true' ? '/' : '/registration',
       className: 'login__link login',
     },
     {
@@ -66,9 +79,10 @@ export function Header() {
       icon: <LogoutIcon />,
       label: SERVICE_MESSAGES.logout,
       to: '/login',
-      className: localStorage.getItem('isAuth')
-        ? 'login login__link'
-        : 'logout__btn',
+      className:
+        localStorage.getItem('isAuth') === 'true'
+          ? 'login login__link'
+          : 'logout__btn',
       onClick: () => void logoutUserHandler(),
     },
   ];
