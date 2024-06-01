@@ -6,7 +6,6 @@ import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
-import { Search } from 'src/components/search/Search';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useCustomer, useIsAuth } from 'src/context/context';
 import { deleteContact } from 'src/serverPart/ApiRoot';
@@ -109,9 +108,6 @@ export function Header() {
                 {SERVICE_MESSAGES.headerTitle}
               </Typography>
             </Link>
-          </Box>
-          <Box className="search">
-            <Search />
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             {navigationLinks.map((item, index) => (

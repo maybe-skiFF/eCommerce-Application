@@ -48,13 +48,14 @@ export function CategoryChoice() {
   const [products, setProducts] = useState([]);
   const [isSubCategoryVisible, setIsSubCategoryVisible] = useState(false);
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
+  const [sortValue, setSortValue] = useState<string>('');
 
   async function getProductsByCategory(categoryId: string) {
     try {
       const serverProducts = await createProducts(categoryId);
       const products = getPureProducts(serverProducts as never[]);
       setProducts(products as never[]);
-      ShopCard({ products: products, sortValue: '' });
+      return <ShopCard products={products} sortValue="" />;
     } catch (error) {
       console.error(error);
     }
@@ -85,7 +86,6 @@ export function CategoryChoice() {
           if (categories[0].key) {
             setSelectedCategory(categories[0].key);
             await getProductsByCategory(firstCategoryId ?? '');
-            ShopCard({ products: products, sortValue: '' });
           }
         }
       } catch (error) {
@@ -116,8 +116,6 @@ export function CategoryChoice() {
   const handleButtonMouseEnter = (key: string) => {
     setSelectedKey(key);
   };
-
-  const [sortValue, setSortValue] = useState<string>('');
 
   const handleSortValueChange = (newValue: string) => {
     setSortValue(newValue);

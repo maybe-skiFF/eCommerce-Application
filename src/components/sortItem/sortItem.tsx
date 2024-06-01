@@ -22,7 +22,7 @@ export function SortItem({ onValueChange }: SortItemProps) {
   return (
     <Box
       sx={{
-        width: '30%',
+        width: '300px',
         marginTop: '20px',
         marginBottom: '20px',
       }}
