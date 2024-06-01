@@ -1,4 +1,9 @@
-import { CustomerSignInResult, ErrorObject } from '@commercetools/platform-sdk';
+import {
+  CategoryReference,
+  CustomerSignInResult,
+  ErrorObject,
+  LocalizedString,
+} from '@commercetools/platform-sdk';
 import { ClientResponse } from '@commercetools/sdk-client-v2';
 import { ErrorResponse } from 'react-router-dom';
 
@@ -129,4 +134,105 @@ export interface CategoryChoiceSubProps {
 
 export interface SortItemProps {
   onValueChange: (newValue: string) => void;
+}
+
+export interface ProductDataFromServer {
+  id: string;
+  key?: string | undefined;
+  version: number;
+  masterData: {
+    current: {
+      categories?: CategoryReference[];
+      description: LocalizedString | undefined;
+      masterVariant: {
+        attributes: [];
+        id: number;
+        images: [
+          {
+            dimensions: {
+              h: number;
+              w: number;
+            };
+            url: string;
+          },
+        ];
+        prices: [
+          {
+            value: {
+              type: string;
+              fractionDigits: number;
+              centAmount: number;
+              currencyCode: string;
+            };
+            id: string;
+          },
+        ];
+        sku: string;
+      };
+      name: {
+        en: string;
+      };
+      slug: {
+        en: string;
+      };
+      variants: [];
+      searchKeywords: object;
+    };
+    hasStagedChanges: false;
+    published: true;
+    staged: {
+      categories: [
+        {
+          id: string;
+          typeId: string;
+        },
+      ];
+      description: {
+        en: string;
+      };
+      masterVariant: {
+        attributes: [];
+        id: number;
+        images: [
+          {
+            dimensions: {
+              h: number;
+              w: number;
+            };
+            url: string;
+          },
+        ];
+        prices: [
+          {
+            value: {
+              type: string;
+              fractionDigits: number;
+              centAmount: number;
+              currencyCode: string;
+            };
+            id: string;
+          },
+        ];
+        sku: string;
+      };
+      name: {
+        en: string;
+      };
+      slug: {
+        en: string;
+      };
+      variants: [];
+      searchKeywords: object;
+    };
+  };
+  productType: {
+    id: string;
+    typeId: string;
+  };
+  taxCategory: {
+    id: string | undefined;
+    typeId: string | undefined;
+  };
+  createdAt: string;
+  lastModifiedAt: string;
 }

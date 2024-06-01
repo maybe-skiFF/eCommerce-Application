@@ -33,8 +33,12 @@ const getCategories = () => {
 const getProducts = () => {
   return myApiRoot
     .products()
-    .get({ queryArgs: { limit: 200 } })
+    .get({ queryArgs: { limit: 20 } })
     .execute();
+};
+
+const getProductById = (ID: string) => {
+  return myApiRoot.products().withId({ ID }).get().execute();
 };
 
 const createCustomerDraft = (customerData: CustomerData) => {
@@ -123,4 +127,5 @@ export {
   deleteContact,
   getCategories,
   getProducts,
+  getProductById,
 };
