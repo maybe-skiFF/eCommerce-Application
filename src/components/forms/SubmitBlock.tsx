@@ -17,6 +17,7 @@ import {
 } from 'src/utils/checkValidationField';
 import { setCookie } from 'src/utils/cookieWork';
 import { useNavigate } from 'react-router-dom';
+import { useIsAuth } from 'src/context/context';
 import { SimpleSnackbar } from '../SimpleSnackbar/SimpleSnackbar';
 import {
   ClientResponse,
@@ -34,6 +35,7 @@ export const SubmitBlock = (): ReactNode => {
   const [serverMessage, setServerMessage] = useState<string>('');
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
+  const { setIsAuth } = useIsAuth();
 
   const handleClose = (event: SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
@@ -86,6 +88,7 @@ export const SubmitBlock = (): ReactNode => {
         } else {
           navigate('/');
           localStorage.setItem('isAuth', 'true');
+          setIsAuth(true);
           setCookie('myID', body.customer.id);
           console.log(body.customer.id);
         }

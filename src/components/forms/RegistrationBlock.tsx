@@ -1,6 +1,6 @@
 import { ChangeEvent, FormEvent, SyntheticEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useCustomer } from 'src/context/context';
+import { useCustomer, useIsAuth } from 'src/context/context';
 import {
   Box,
   Grid,
@@ -27,9 +27,10 @@ import {
 import { CustomerData } from 'src/utils/interfaces';
 import { SubmitButton } from '../SubmitButton/SubmitButton';
 import { SimpleSnackbar } from '../SimpleSnackbar/SimpleSnackbar';
-import { ErrorObject } from '@commercetools/platform-sdk';
+import { ClientResponse, ErrorObject } from '@commercetools/platform-sdk';
 import { checkFullData } from 'src/utils/CheckFullData';
 import { getAddressesArray } from 'src/utils/getAddressesArray';
+import { setCookie } from 'src/utils/cookieWork';
 
 export const RegistrationBlock = () => {
   const [formData, setFormData] = useState<string>(SERVICE_MESSAGES.startCheck);
@@ -45,6 +46,8 @@ export const RegistrationBlock = () => {
   const [serverMessage, setServerMessage] = useState<string>('');
 
   const navigate = useNavigate();
+
+  const { setIsAuth } = useIsAuth();
 
   const handleClose = (event: SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
@@ -112,8 +115,8 @@ export const RegistrationBlock = () => {
       .then(data => {
         if (data.statusCode === 201) {
           navigate('/');
-          void caches.open(`id ${data.body.email}`);
           localStorage.setItem('isAuth', 'true');
+          setIsAuth(true);
         }
       })
       .then(async response => {
@@ -123,7 +126,9 @@ export const RegistrationBlock = () => {
           myApi,
           data.get('email') as string,
           data.get('password') as string,
-        );
+        ).then(({ body }: ClientResponse) => {
+          setCookie('myID', body.customer.id as string);
+        });
       })
       .catch((error: ErrorObject) => {
         setServerMessage(error.message);

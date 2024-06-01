@@ -4,9 +4,22 @@ import { LoginPage } from '../pages/LoginPage/LoginPage';
 import { RegistrationPage } from '../pages/RegistrationPage/RegistrationPage';
 import { Page404 } from '../pages/404Page/404Page';
 import { CustomerPage } from '../pages/CustomerPage/CustomerPage';
+import { useIsAuth } from 'src/context/context';
+import { useEffect, useState } from 'react';
 
 export const CreateRouter = () => {
-  console.log(localStorage.getItem('isAuth'), 'LS');
+  const { isAuth } = useIsAuth();
+  const [authState, setAuthState] = useState<boolean>(false);
+  const lS: boolean = localStorage.getItem('isAuth') === 'true';
+  console.log(localStorage.getItem('isAuth'), 'LS', isAuth, 'isAuth');
+
+  useEffect(() => {
+    function getPaths() {
+      lS || isAuth ? setAuthState(true) : setAuthState(false);
+    }
+    getPaths();
+  }, [lS, isAuth]);
+
   const arrRouter = [
     {
       path: '/',
@@ -14,30 +27,15 @@ export const CreateRouter = () => {
     },
     {
       path: '/login',
-      element:
-        localStorage.getItem('isAuth') === 'true' ? (
-          <MainPage />
-        ) : (
-          <LoginPage />
-        ),
+      element: authState ? <MainPage /> : <LoginPage />,
     },
     {
       path: '/registration',
-      element:
-        localStorage.getItem('isAuth') === 'true' ? (
-          <MainPage />
-        ) : (
-          <RegistrationPage />
-        ),
+      element: authState ? <MainPage /> : <RegistrationPage />,
     },
     {
       path: '/customer',
-      element:
-        localStorage.getItem('isAuth') === 'true' ? (
-          <CustomerPage />
-        ) : (
-          <RegistrationPage />
-        ),
+      element: !authState ? <CustomerPage /> : <RegistrationPage />,
     },
     {
       path: '*',

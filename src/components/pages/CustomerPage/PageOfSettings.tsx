@@ -3,9 +3,8 @@ import { Box } from '@mui/material';
 import { checkCustomer } from 'src/serverPart/ApiRoot';
 import { getCookie } from 'src/utils/cookieWork';
 import { createSettingsField } from 'src/utils/createFormControl';
-// import { SettingsPersonalData } from 'src/utils/interfaces';
 import { Customer } from '@commercetools/platform-sdk';
-// import { SettingsPersonalData } from 'src/utils/interfaces';
+import { SettingsAddress } from 'src/utils/interfaces';
 
 export const PageOfSettings = (numberPage: number) => {
   const [customerDataById, setCustomerDataById] = useState<

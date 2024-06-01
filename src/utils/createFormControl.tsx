@@ -170,7 +170,7 @@ const getSettingsList = (
   arr: string[] | SettingsAddress,
 ): (JSX.Element | undefined)[] | undefined => {
   if (Array.isArray(arr)) {
-    arr.map((item: string) => {
+    return arr.map((item: string) => {
       if (Object.prototype.hasOwnProperty.call(data, item)) {
         return getSettingsItem(item, data[`${item}`] as string);
       }

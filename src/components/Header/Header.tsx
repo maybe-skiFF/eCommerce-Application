@@ -14,9 +14,11 @@ import { deleteContact } from 'src/serverPart/ApiRoot';
 import { ErrorObject } from '@commercetools/platform-sdk';
 import { SimpleSnackbar } from 'src/components/SimpleSnackbar/SimpleSnackbar';
 import { SyntheticEvent, useState, useRef } from 'react';
+import { useIsAuth } from 'src/context/context';
 import { deleteCookie } from 'src/utils/cookieWork';
 
 export function Header() {
+  const { isAuth, setIsAuth } = useIsAuth();
   const refLogout = useRef<HTMLAnchorElement>(null);
   const [serverMessage, setServerMessage] = useState<string>('');
   const [open, setOpen] = useState<boolean>(false);
@@ -39,6 +41,7 @@ export function Header() {
       .then(() => {
         navigate('/login');
         localStorage.clear();
+        setIsAuth(false);
         deleteCookie('myID');
       })
       .catch((error: ErrorObject) => {
@@ -53,20 +56,23 @@ export function Header() {
       label: SERVICE_MESSAGES.manageAccounts,
       to: '/customer',
       className:
-        localStorage.getItem('isAuth') === 'true'
+        localStorage.getItem('isAuth') === 'true' || isAuth
           ? 'login login__link'
           : 'logout__btn',
     },
     {
       icon: <LoginIcon />,
       label: SERVICE_MESSAGES.login,
-      to: localStorage.getItem('isAuth') === 'true' ? '/' : '/login',
+      to: localStorage.getItem('isAuth') === 'true' || isAuth ? '/' : '/login',
       className: 'login__link login',
     },
     {
       icon: <PersonIcon />,
       label: SERVICE_MESSAGES.authorization,
-      to: localStorage.getItem('isAuth') === 'true' ? '/' : '/registration',
+      to:
+        localStorage.getItem('isAuth') === 'true' || isAuth
+          ? '/'
+          : '/registration',
       className: 'login__link login',
     },
     {
@@ -80,7 +86,7 @@ export function Header() {
       label: SERVICE_MESSAGES.logout,
       to: '/login',
       className:
-        localStorage.getItem('isAuth') === 'true'
+        localStorage.getItem('isAuth') === 'true' || isAuth
           ? 'login login__link'
           : 'logout__btn',
       onClick: () => void logoutUserHandler(),
