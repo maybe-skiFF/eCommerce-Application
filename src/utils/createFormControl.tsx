@@ -18,10 +18,12 @@ import SaveIcon from '@mui/icons-material/Save';
 import { ChangeEvent } from 'react';
 import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
 import { STYLE_FOR_HELPER } from 'src/constants/STYLES';
-import { SettingsAddress, SettingsNames } from './interfaces';
-import { Customer } from '@commercetools/platform-sdk';
-
-// import { Address } from '@commercetools/platform-sdk';
+import { ValueOfCustomer } from './interfaces';
+import {
+  // Address,
+  Customer,
+  // StoreKeyReference,
+} from '@commercetools/platform-sdk';
 
 const createListItem = (item: string) => {
   const sameValue = item.split(' ');
@@ -151,7 +153,7 @@ export const getTextForm = (
 
 export const createSettingsField = (
   data: Customer | undefined,
-  arr: string[],
+  arr: [keyof Customer],
 ) => {
   if (!data) {
     return;
@@ -167,18 +169,24 @@ export const createSettingsField = (
 
 const getSettingsList = (
   data: Customer,
-  arr: string[] | SettingsAddress,
-): (JSX.Element | undefined)[] | undefined => {
+  arr: [keyof Customer] | keyof Customer,
+): JSX.Element[] | undefined => {
+  const result: JSX.Element[] = [];
   if (Array.isArray(arr)) {
-    return arr.map((item: string) => {
-      if (Object.prototype.hasOwnProperty.call(data, item)) {
-        return getSettingsItem(item, data[`${item}`] as string);
+    arr.map((item: keyof Customer) => {
+      if (Array.isArray(item)) {
+        return getSettingsList(data, item);
       }
+      result.push(getSettingsItem(item, data[item]));
     });
   }
+  return result;
 };
 
-const getSettingsItem = (key: string, value: string): JSX.Element => {
+const getSettingsItem = (
+  key: keyof Customer,
+  value: ValueOfCustomer,
+): JSX.Element => {
   return (
     <Box sx={{ width: '100%' }}>
       <TextField

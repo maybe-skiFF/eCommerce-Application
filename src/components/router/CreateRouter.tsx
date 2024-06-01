@@ -35,7 +35,7 @@ export const CreateRouter = () => {
     },
     {
       path: '/customer',
-      element: !authState ? <CustomerPage /> : <RegistrationPage />,
+      element: authState ? <CustomerPage /> : <RegistrationPage />,
     },
     {
       path: '*',

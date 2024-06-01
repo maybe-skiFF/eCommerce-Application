@@ -5,7 +5,7 @@ import { HeaderWrapper } from 'src/components/HeaderWrapper/HeaderWrapper';
 import { Box } from '@mui/material';
 import { PageOfSettings } from './PageOfSettings';
 
-export function CustomerPage(): ReactNode {
+export const CustomerPage = (): ReactNode => {
   return (
     <HeaderWrapper>
       <Box
@@ -23,4 +23,4 @@ export function CustomerPage(): ReactNode {
       </Box>
     </HeaderWrapper>
   );
-}
+};

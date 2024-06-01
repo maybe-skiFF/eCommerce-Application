@@ -1,4 +1,11 @@
-import { CustomerSignInResult, ErrorObject } from '@commercetools/platform-sdk';
+import {
+  CustomFields,
+  CustomerGroupReference,
+  CustomerSignInResult,
+  ErrorObject,
+  LastModifiedBy,
+  StoreKeyReference,
+} from '@commercetools/platform-sdk';
 import { ClientResponse } from '@commercetools/sdk-client-v2';
 import { ErrorResponse } from 'react-router-dom';
 import { Address } from '@commercetools/platform-sdk';
@@ -137,3 +144,16 @@ export interface CategoryChoiceSubProps {
 export interface SortItemProps {
   onValueChange: (newValue: string) => void;
 }
+
+export type ValueOfCustomer =
+  | string
+  | number
+  | boolean
+  | string[]
+  | LastModifiedBy
+  | CreatedBy
+  | Address
+  | Address[]
+  | CustomerGroupReference
+  | CustomFields
+  | StoreKeyReference[];
