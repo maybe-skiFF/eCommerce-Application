@@ -112,7 +112,12 @@ export function ShopCard({ products, sortValue }: ShopCardProps) {
                 marginBottom: '40px',
                 boxSizing: 'border-box',
                 cursor: 'pointer',
-                alignItems: 'center'
+                alignItems: 'center',
+                transition: 'all 0.3s ease',
+                '&:hover': {
+                  transform: 'scale(1.05)',
+                  boxShadow: '0 5px 15px rgba(0, 0, 0, 0.3)',
+                }
               }}
             >
               <CardMedia
@@ -131,7 +136,7 @@ export function ShopCard({ products, sortValue }: ShopCardProps) {
                 <Typography
                   variant="h5"
                   component="h3"
-                  sx={{ marginBottom: '10px', fontWeight: '500' }}
+                  sx={{ marginBottom: '10px', fontWeight: '500', height: '60px' }}
                 >
                   {product.key}
                 </Typography>
@@ -141,7 +146,7 @@ export function ShopCard({ products, sortValue }: ShopCardProps) {
                     : product.description}
                 </Typography>
                 {!isNaN(product.discount) ? (
-                  <Box sx={{ height: '80px' }}>
+                  <Box sx={{ height: '60px' }}>
                     <Typography
                       variant="h6"
                       sx={{
@@ -159,7 +164,7 @@ export function ShopCard({ products, sortValue }: ShopCardProps) {
                     </Typography>
                   </Box>
                 ) : (
-                  <Box sx={{ height: '80px' }}>
+                  <Box sx={{ height: '60px' }}>
                     <Typography variant="h6">
                       {product.price / 100} EUR
                     </Typography>
