@@ -90,7 +90,13 @@ export function ShopCard({ products, sortValue }: ShopCardProps) {
         label="search item"
         value={searchTerm}
         onChange={handleSearchChange}
-        sx={{ marginBottom: '20px', width: '300px' }}
+        sx={{
+          marginBottom: '20px',
+          width: '300px',
+          '@media (max-width: 426px)': {
+            width: '100%',
+          },
+        }}
       />
       <Box
         sx={{
@@ -99,6 +105,9 @@ export function ShopCard({ products, sortValue }: ShopCardProps) {
           flexWrap: 'wrap',
           justifyContent: 'space-between',
           width: '100%',
+          '@media (max-width: 767px)': {
+            justifyContent: 'center',
+          },
         }}
       >
         {filteredProducts && filteredProducts.length > 0 ? (
@@ -117,7 +126,10 @@ export function ShopCard({ products, sortValue }: ShopCardProps) {
                 '&:hover': {
                   transform: 'scale(1.05)',
                   boxShadow: '0 5px 15px rgba(0, 0, 0, 0.3)',
-                }
+                },
+                '@media (max-width: 426px)': {
+                  width: '100%',
+                },
               }}
             >
               <CardMedia
@@ -136,7 +148,11 @@ export function ShopCard({ products, sortValue }: ShopCardProps) {
                 <Typography
                   variant="h5"
                   component="h3"
-                  sx={{ marginBottom: '10px', fontWeight: '500', height: '60px' }}
+                  sx={{
+                    marginBottom: '10px',
+                    fontWeight: '500',
+                    height: '60px',
+                  }}
                 >
                   {product.key}
                 </Typography>
@@ -170,7 +186,9 @@ export function ShopCard({ products, sortValue }: ShopCardProps) {
                     </Typography>
                   </Box>
                 )}
-                <Button variant="outlined">Add to Cart</Button>
+                <Button sx={{ marginTop: '10px' }} variant="outlined">
+                  Add to Cart
+                </Button>
               </CardContent>
             </Card>
           ))

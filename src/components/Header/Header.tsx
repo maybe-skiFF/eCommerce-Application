@@ -84,8 +84,20 @@ export function Header() {
         position="static"
         elevation={0}
       >
-        <Toolbar>
-          <Box sx={{ flexGrow: 1 }}>
+        <Toolbar
+          sx={{
+            flexGrow: 1,
+            '@media (max-width: 767px)': {
+              display: 'flex',
+              flexDirection: 'column',
+            },
+          }}
+        >
+          <Box
+            sx={{
+              flexGrow: 1,
+            }}
+          >
             <Link
               sx={{
                 display: 'flex',
@@ -103,6 +115,9 @@ export function Header() {
                 component="div"
                 sx={{
                   flexGrow: 1,
+                  '@media (max-width: 767px)': {
+                    marginBottom: '10px',
+                  },
                 }}
               >
                 {SERVICE_MESSAGES.headerTitle}
@@ -114,9 +129,10 @@ export function Header() {
               <Box
                 key={index}
                 sx={{
-                  marginRight: index < 3 ? '20px' : '0',
+                  marginRight: '20px',
                   display: 'flex',
                   alignItems: 'center',
+                  width: '60px',
                 }}
               >
                 <Link
@@ -127,6 +143,7 @@ export function Header() {
                   underline="none"
                   ref={index === 3 ? refLogout : null}
                   onClick={item.onClick}
+                  sx={{ width: '100%' }}
                 >
                   {item.icon}
                   {item.label}

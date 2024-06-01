@@ -25,6 +25,9 @@ export function SortItem({ onValueChange }: SortItemProps) {
         width: '300px',
         marginTop: '20px',
         marginBottom: '20px',
+        '@media (max-width: 426px)': {
+          width: '100%',
+        },
       }}
     >
       <FormControl fullWidth>
