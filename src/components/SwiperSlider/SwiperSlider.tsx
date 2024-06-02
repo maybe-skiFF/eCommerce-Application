@@ -20,11 +20,6 @@ export function SwiperSlider({ productImgArr }: IProductImgArr) {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  // const style = {
-  //   margin: '0 auto',
-  //   bacgroundColor: 'red',
-  // };
-
   return (
     <Swiper
       modules={[Navigation, Pagination, Scrollbar, A11y]}
@@ -32,8 +27,6 @@ export function SwiperSlider({ productImgArr }: IProductImgArr) {
       slidesPerView={1}
       navigation
       scrollbar={{ draggable: true }}
-      onSwiper={swiper => console.log(swiper)}
-      onSlideChange={() => console.log('slide change')}
       style={{ maxWidth: 370 }}
     >
       {productImgArr?.map(el => (
