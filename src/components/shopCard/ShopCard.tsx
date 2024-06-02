@@ -116,7 +116,7 @@ export function ShopCard({ products, sortValue }: ShopCardProps) {
               key={product.id}
               sx={{
                 width: '300px',
-                height: '600px',
+                height: '700px',
                 border: '1px solid #ebedf0',
                 marginBottom: '40px',
                 boxSizing: 'border-box',
@@ -137,11 +137,11 @@ export function ShopCard({ products, sortValue }: ShopCardProps) {
                 image={product.image}
                 sx={{
                   width: '100%',
-                  height: '300px',
+                  height: '400px',
                   boxSizing: 'border-box',
                   border: '1px solid #ebedf0',
                   padding: '0',
-                  backgroundSize: 'contain',
+                  backgroundSize: 'cover',
                 }}
               />
               <CardContent>
