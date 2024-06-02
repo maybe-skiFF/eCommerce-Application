@@ -37,8 +37,10 @@ export interface CustomerAddress {
 
 export interface SettingsAddress {
   addresses: Address[];
-  billingAddress: string[];
-  shippingAddress: string[];
+  billingAddressIds?: string[];
+  shippingAddressIds?: string[];
+  defaultBillingAddressId?: string;
+  defaultShippingAddressId?: string;
 }
 export interface DataTime {
   day: string[];
@@ -143,6 +145,14 @@ export interface CategoryChoiceSubProps {
 
 export interface SortItemProps {
   onValueChange: (newValue: string) => void;
+}
+
+export interface AnswerAddress {
+  id: string;
+  country: string;
+  city: string;
+  streetName: string;
+  postalCode: string;
 }
 
 export type ValueOfCustomer =

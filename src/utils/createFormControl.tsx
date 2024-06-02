@@ -18,12 +18,14 @@ import SaveIcon from '@mui/icons-material/Save';
 import { ChangeEvent } from 'react';
 import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
 import { STYLE_FOR_HELPER } from 'src/constants/STYLES';
-import { ValueOfCustomer } from './interfaces';
 import {
-  // Address,
-  Customer,
-  // StoreKeyReference,
-} from '@commercetools/platform-sdk';
+  ValueOfCustomer,
+  // AnswerAddress,
+  // CustomerServerData,
+  // CustomerAddress,
+} from './interfaces';
+
+import { Address, Customer } from '@commercetools/platform-sdk';
 
 const createListItem = (item: string) => {
   const sameValue = item.split(' ');
@@ -151,40 +153,51 @@ export const getTextForm = (
   );
 };
 
-export const createSettingsField = (
-  data: Customer | undefined,
-  arr: [keyof Customer],
-) => {
+const getLoopForObject = (data: Customer | Address, array: string[]) => {
+  console.log(data, 'data');
+  const result = [];
+  for (const [key, value] of Object.entries(data)) {
+    console.log(Object.entries(data));
+    if (array.includes(key)) {
+      if (Object.prototype.hasOwnProperty.call(data, 'country')) {
+        result.push(
+          getSettingsItem(key as keyof Address, value as ValueOfCustomer),
+        );
+      }
+      result.push(
+        getSettingsItem(key as keyof Customer, value as ValueOfCustomer),
+      );
+    }
+  }
+  return result;
+};
+
+export const createSettingsField = (data: Customer | undefined) => {
   if (!data) {
     return;
   }
   return (
     <Box sx={{ width: '100%' }}>
       <Stack spacing={3} padding={'1%'} alignItems={'center'}>
-        {getSettingsList(data, arr)}
+        {getSettingsAddress(data)}
       </Stack>
     </Box>
   );
 };
 
-const getSettingsList = (
-  data: Customer,
-  arr: [keyof Customer] | keyof Customer,
-): JSX.Element[] | undefined => {
-  const result: JSX.Element[] = [];
-  if (Array.isArray(arr)) {
-    arr.map((item: keyof Customer) => {
-      if (Array.isArray(item)) {
-        return getSettingsList(data, item);
-      }
-      result.push(getSettingsItem(item, data[item]));
-    });
-  }
-  return result;
+export const getSettingsList = (data: Customer): JSX.Element[] | undefined => {
+  const pagePersonalData: string[] = [
+    'firstName',
+    'lastName',
+    'dateOfBirth',
+    'email',
+    'password',
+  ];
+  return getLoopForObject(data, pagePersonalData);
 };
 
 const getSettingsItem = (
-  key: keyof Customer,
+  key: keyof Customer | keyof Address,
   value: ValueOfCustomer,
 ): JSX.Element => {
   return (
@@ -200,4 +213,33 @@ const getSettingsItem = (
       <SaveIcon sx={{ margin: '1%' }} />
     </Box>
   );
+};
+
+const getAddressBlock = (label: string, data: Address) => {
+  const pageOfAddresses: string[] = [
+    'country',
+    'city',
+    'streetName',
+    'postalCode',
+  ];
+  return (
+    <Box>
+      <TextField
+        sx={{ width: '40%', marginLeft: '20%', marginRight: '10%' }}
+        disabled
+        id={label}
+        label={label}
+      />
+      {getLoopForObject(data, pageOfAddresses)}
+    </Box>
+  );
+};
+export const getSettingsAddress = (data: Customer): JSX.Element | undefined => {
+  if (data.addresses.length === 1) {
+    getAddressBlock(SERVICE_MESSAGES.address, data.addresses[0]);
+  }
+  return getAddressBlock(SERVICE_MESSAGES.address, data.addresses[1]);
+  // const currentObject = addressesArray.filter(
+  //   address => address.id === addressID,
+  // );
 };
