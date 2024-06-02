@@ -7,6 +7,7 @@ import { ShopCard } from '../shopCard/ShopCard';
 import { SortItem } from 'src/components/sortItem/sortItem';
 import { Category, ProductData, ProductPure } from 'src/utils/interfaces';
 import { CategoryChoiceSub } from '../categoryChoiceSub/categotyChoiceSub';
+import { CreateBreadcrumbs } from '../breadcrumbs/breadcrumbs';
 
 export function CategoryChoice() {
   const createCategories = async (): Promise<Category[]> => {
@@ -163,6 +164,7 @@ export function CategoryChoice() {
         />
       </Box>
       <CategoryImage selectedCategory={selectedCategory ?? ''} />
+      <CreateBreadcrumbs selectedCategory={selectedCategory ?? ''} />
       <SortItem onValueChange={handleSortValueChange} />
       <ShopCard products={products} sortValue={sortValue} />
     </>

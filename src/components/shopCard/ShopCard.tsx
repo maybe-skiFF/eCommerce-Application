@@ -176,7 +176,7 @@ export function ShopCard({ products, sortValue }: ShopCardProps) {
                       sx={{ color: 'red', fontWeight: '700' }}
                       variant="h6"
                     >
-                      {product.discount / 100} EUR - with discount
+                      {product.discount / 100} EUR - discount
                     </Typography>
                   </Box>
                 ) : (
