@@ -33,9 +33,10 @@ export function SwiperSlider({ productImgArr }: IProductImgArr) {
         <SwiperSlide key={el.url}>
           <img
             onClick={handleOpen}
-            style={{ width: 500, height: 500 }}
+            style={{ width: '100$', height: '500px' }}
             src={el.url}
             alt="image"
+            className='image'
           />
           <Modal
             sx={{
@@ -61,7 +62,7 @@ export function SwiperSlider({ productImgArr }: IProductImgArr) {
               />
               <img
                 className="popapSliderImg"
-                style={{ width: 700, height: 600 }}
+                style={{ width: '100%', height: 600 }}
                 src={el.url}
                 alt="image"
               />

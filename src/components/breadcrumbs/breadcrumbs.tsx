@@ -6,12 +6,12 @@ export function CreateBreadcrumbs({
   selectedCategory: string;
 }) {
   return (
-    <Breadcrumbs sx={{ marginTop: '20px' }} aria-label="breadcrumb">
+    <Breadcrumbs sx={{ marginTop: '20px', fontSize: '24px' }} aria-label="breadcrumb">
       <Link underline="hover" color="inherit" href="/">
         main
       </Link>
       {getIntermediateBreadcrumb(selectedCategory)}
-      <Typography color="text.primary">{selectedCategory}</Typography>
+      <Typography sx={{ fontSize: '24px' }} color="text.primary">{selectedCategory}</Typography>
     </Breadcrumbs>
   );
 }
