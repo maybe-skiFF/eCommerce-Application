@@ -1,10 +1,10 @@
 import { CategoryChoice } from 'src/components/categoryChoice/CategoryChoice';
-import { Container } from '@mui/material';
+import { Box } from '@mui/material';
 
 export function Main() {
   return (
-    <Container maxWidth="lg">
+    <Box>
       <CategoryChoice />
-    </Container>
+    </Box>
   );
 }
