@@ -7,6 +7,9 @@ import { ShopCard } from '../shopCard/ShopCard';
 import { SortItem } from 'src/components/sortItem/sortItem';
 import { Category, ProductData, ProductPure } from 'src/utils/interfaces';
 import { CategoryChoiceSub } from '../categoryChoiceSub/categotyChoiceSub';
+import { CreateBreadcrumbs } from '../breadcrumbs/breadcrumbs';
+import { useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 export function CategoryChoice() {
   const createCategories = async (): Promise<Category[]> => {
@@ -48,13 +51,14 @@ export function CategoryChoice() {
   const [products, setProducts] = useState([]);
   const [isSubCategoryVisible, setIsSubCategoryVisible] = useState(false);
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
+  const [sortValue, setSortValue] = useState<string>('');
 
   async function getProductsByCategory(categoryId: string) {
     try {
       const serverProducts = await createProducts(categoryId);
       const products = getPureProducts(serverProducts as never[]);
       setProducts(products as never[]);
-      ShopCard({ products: products, sortValue: '' });
+      return <ShopCard products={products} sortValue="" />;
     } catch (error) {
       console.error(error);
     }
@@ -73,7 +77,7 @@ export function CategoryChoice() {
           ?.centAmount,
     }));
   }
-
+  const { key } = useParams();
   useEffect(() => {
     const fetchCategoryKeys = async () => {
       try {
@@ -82,11 +86,20 @@ export function CategoryChoice() {
 
         if (categories.length > 0) {
           const firstCategoryId = categories[0].id;
-          if (categories[0].key) {
-            setSelectedCategory(categories[0].key);
-            await getProductsByCategory(firstCategoryId ?? '');
-            ShopCard({ products: products, sortValue: '' });
+          if (key) {
+            const matchingCategory = categories.find(c => c.key === key);
+            if (matchingCategory) {
+              setSelectedCategory(matchingCategory.key ?? '');
+              await getProductsByCategory(matchingCategory.id ?? '');
+            } else if (categories[0].key) {
+              setSelectedCategory(categories[0].key ?? '');
+              await getProductsByCategory(firstCategoryId ?? '');
+              navigate(`/${categories[0].key}`)
+            }
           }
+          setSelectedCategory(categories[0].key ?? '');
+          await getProductsByCategory(firstCategoryId ?? '')
+          navigate(`/${categories[0].key}`)
         }
       } catch (error) {
         console.error(error);
@@ -95,13 +108,34 @@ export function CategoryChoice() {
     void fetchCategoryKeys();
   }, []);
 
+  const navigate = useNavigate();
   const handleChange = (
     event: MouseEvent<HTMLElement>,
     newCategory: string | null,
   ) => {
     if (newCategory !== null) {
       setSelectedCategory(newCategory);
-      void getProductsByCategory(`${event.currentTarget.dataset.id ?? ''}`);
+      if (newCategory === 'cloth' || newCategory === 'toys') {
+        void getProductsByCategory(`${event.currentTarget.dataset.id ?? ''}`);
+        navigate(`/for-kids/${newCategory}`);
+      } else if (
+        newCategory === 'shirts' ||
+        newCategory === 'shorts' ||
+        newCategory === 'boots'
+      ) {
+        void getProductsByCategory(`${event.currentTarget.dataset.id ?? ''}`);
+        navigate(`/for-men/${newCategory}`);
+      } else if (
+        newCategory === 'dresses' ||
+        newCategory === 'skirts' ||
+        newCategory === 'shoes'
+      ) {
+        void getProductsByCategory(`${event.currentTarget.dataset.id ?? ''}`);
+        navigate(`/for-women/${newCategory}`);
+      } else {
+        void getProductsByCategory(`${event.currentTarget.dataset.id ?? ''}`);
+        navigate(`/${newCategory}`);
+      }
     }
   };
 
@@ -116,8 +150,6 @@ export function CategoryChoice() {
   const handleButtonMouseEnter = (key: string) => {
     setSelectedKey(key);
   };
-
-  const [sortValue, setSortValue] = useState<string>('');
 
   const handleSortValueChange = (newValue: string) => {
     setSortValue(newValue);
@@ -165,6 +197,7 @@ export function CategoryChoice() {
         />
       </Box>
       <CategoryImage selectedCategory={selectedCategory ?? ''} />
+      <CreateBreadcrumbs selectedCategory={selectedCategory ?? ''} />
       <SortItem onValueChange={handleSortValueChange} />
       <ShopCard products={products} sortValue={sortValue} />
     </>

@@ -19,6 +19,9 @@ export function Footer() {
         sx={{
           display: 'flex',
           justifyContent: 'space-between',
+          '@media (max-width: 767px)': {
+            flexDirection: 'column',
+          },
         }}
       >
         <ContactList />
