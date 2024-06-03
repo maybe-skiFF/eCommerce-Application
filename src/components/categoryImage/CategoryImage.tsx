@@ -44,7 +44,7 @@ export function CategoryImage({ selectedCategory }: CategoryImageProps) {
         backgroundImage: backgroundImageSrc,
         backgroundSize: 'cover',
         backgroundRepeat: 'no-repeat',
-        backgroundPosition: 'center',
+        backgroundPosition: 'top',
         marginTop: '20px',
         height: '700px',
         width: '100%',
