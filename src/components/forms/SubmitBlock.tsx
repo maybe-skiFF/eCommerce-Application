@@ -21,7 +21,7 @@ import { useIsAuth } from 'src/context/context';
 import { SimpleSnackbar } from '../SimpleSnackbar/SimpleSnackbar';
 import {
   ClientResponse,
-  Customer,
+  CustomerSignInResult,
   ErrorObject,
 } from '@commercetools/platform-sdk';
 
@@ -81,7 +81,7 @@ export const SubmitBlock = (): ReactNode => {
       data.get('email') as string,
       data.get('password') as string,
     )
-      .then(({ body, statusCode }: ClientResponse<Customer>) => {
+      .then(({ body, statusCode }: ClientResponse<CustomerSignInResult>) => {
         if (statusCode !== 200) {
           setOpen(true);
           setServerMessage(SERVICE_MESSAGES.errorMail);

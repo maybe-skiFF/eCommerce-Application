@@ -115,6 +115,22 @@ const checkCustomer = async (id: string): Promise<ClientResponse<Customer>> => {
   return await apiRoot.customers().withId({ ID: id }).get().execute();
 };
 
+const updateCustomerEmail = async (
+  id: string,
+  version: number,
+  email: FormDataEntryValue,
+): Promise<ClientResponse<Customer>> => {
+  return await apiRoot
+    .customers()
+    .withId({ ID: id })
+    .post({
+      body: {
+        version: version,
+        actions: [{ action: 'changeEmail', email: email as string }],
+      },
+    })
+    .execute();
+};
 const deleteContact = async (id: string) => {
   return await apiRoot
     .customers()
@@ -132,6 +148,7 @@ export {
   getApiWithCredentials,
   getMyCustomer,
   checkCustomer,
+  updateCustomerEmail,
   deleteContact,
   getCategories,
   getProducts,

@@ -4,14 +4,15 @@ import { checkCustomer } from 'src/serverPart/ApiRoot';
 import { getCookie } from 'src/utils/cookieWork';
 import { createSettingsField } from 'src/utils/createFormControl';
 import { Customer } from '@commercetools/platform-sdk';
-// import { CustomerServerData } from 'src/utils/interfaces';
-// import { KeyOfCustomer } from 'src/utils/interfaces';
-// import { SettingsAddress } from 'src/utils/interfaces';
+import SettingsTabs from './Tabs';
 
 export const PageOfSettings = () => {
   const [customerDataById, setCustomerDataById] = useState<
     Customer | undefined
   >();
+  const [numberPage, setNumberPage] = useState<boolean>(true);
+
+  const handleClickShowSettings = () => setNumberPage(show => !show);
 
   const customerID = getCookie('myID');
   useEffect(() => {
@@ -30,8 +31,15 @@ export const PageOfSettings = () => {
   }, [customerID]);
 
   return (
-    <Box sx={{ flexGrow: 1, overflow: 'hidden', px: 3 }}>
-      {createSettingsField(customerDataById)}
-    </Box>
+    <div>
+      <div onClick={handleClickShowSettings}>
+        <SettingsTabs />
+      </div>
+      <div>
+        <Box sx={{ flexGrow: 1, overflow: 'hidden', px: 3 }} key={Date.now()}>
+          {createSettingsField(customerDataById, numberPage ? 1 : 2)}
+        </Box>
+      </div>
+    </div>
   );
 };

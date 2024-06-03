@@ -47,4 +47,7 @@ export const SERVICE_MESSAGES = {
   page404BtnText: 'Back To MainPage',
   school: 'RSSchool',
   year: '2024',
+  yourAddress: 'Your address',
+  yourShippingAddress: 'Your shipping address',
+  yourBillingAddress: 'Your billing address',
 };

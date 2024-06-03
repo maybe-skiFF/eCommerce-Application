@@ -15,6 +15,7 @@ export const CreateRouter = () => {
 
   useEffect(() => {
     function getPaths() {
+      console.log(lS, 'i see you');
       lS || isAuth ? setAuthState(true) : setAuthState(false);
     }
     getPaths();

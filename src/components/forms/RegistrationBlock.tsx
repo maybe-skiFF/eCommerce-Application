@@ -27,7 +27,11 @@ import {
 import { CustomerData } from 'src/utils/interfaces';
 import { SubmitButton } from '../SubmitButton/SubmitButton';
 import { SimpleSnackbar } from '../SimpleSnackbar/SimpleSnackbar';
-import { ClientResponse, ErrorObject } from '@commercetools/platform-sdk';
+import {
+  ClientResponse,
+  CustomerSignInResult,
+  ErrorObject,
+} from '@commercetools/platform-sdk';
 import { checkFullData } from 'src/utils/CheckFullData';
 import { getAddressesArray } from 'src/utils/getAddressesArray';
 import { setCookie } from 'src/utils/cookieWork';
@@ -126,8 +130,9 @@ export const RegistrationBlock = () => {
           myApi,
           data.get('email') as string,
           data.get('password') as string,
-        ).then(({ body }: ClientResponse) => {
-          setCookie('myID', body.customer.id as string);
+        ).then(({ body }: ClientResponse<CustomerSignInResult>) => {
+          console.log(body, 'thisBody');
+          setCookie('myID', body.customer.id);
         });
       })
       .catch((error: ErrorObject) => {

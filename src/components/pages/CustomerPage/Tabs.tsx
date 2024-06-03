@@ -4,17 +4,23 @@ import Tab from '@mui/material/Tab';
 import { useState, SyntheticEvent } from 'react';
 
 export default function SettingsTabs() {
-  const [value, setValue] = useState(0);
+  const [value, setValue] = useState('data');
 
-  const handleChange = (event: SyntheticEvent, newValue: number) => {
+  const handleChange = (event: SyntheticEvent, newValue: string) => {
     setValue(newValue);
   };
-
   return (
     <Box sx={{ width: '100%', bgcolor: 'background.paper' }}>
-      <Tabs value={value} onChange={handleChange} centered>
-        <Tab label="Item One" />
-        <Tab label="Item Two" />
+      <Tabs
+        value={value}
+        onChange={handleChange}
+        textColor="primary"
+        indicatorColor="primary"
+        aria-label="settings"
+        centered
+      >
+        <Tab value="data" label="Your data" />
+        <Tab value="address" label="Your addresses" />
       </Tabs>
     </Box>
   );

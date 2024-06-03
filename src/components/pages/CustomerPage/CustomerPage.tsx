@@ -1,6 +1,5 @@
 import { ReactNode } from 'react';
 
-import SettingsTabs from './Tabs';
 import { HeaderWrapper } from 'src/components/HeaderWrapper/HeaderWrapper';
 import { Box } from '@mui/material';
 import { PageOfSettings } from './PageOfSettings';
@@ -18,7 +17,6 @@ export const CustomerPage = (): ReactNode => {
           margin: '0 auto',
         }}
       >
-        <SettingsTabs />
         <PageOfSettings />
       </Box>
     </HeaderWrapper>

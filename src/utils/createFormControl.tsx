@@ -2,6 +2,8 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import {
   Box,
+  Chip,
+  Divider,
   FormControl,
   IconButton,
   InputAdornment,
@@ -12,20 +14,15 @@ import {
   Stack,
   TextField,
 } from '@mui/material';
+import { ChangeEvent, FormEvent } from 'react';
+import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
+import { STYLE_FOR_HELPER } from 'src/constants/STYLES';
+import { ValueOfCustomer } from './interfaces';
 import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
 
-import { ChangeEvent } from 'react';
-import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
-import { STYLE_FOR_HELPER } from 'src/constants/STYLES';
-import {
-  ValueOfCustomer,
-  // AnswerAddress,
-  // CustomerServerData,
-  // CustomerAddress,
-} from './interfaces';
-
-import { Address, Customer } from '@commercetools/platform-sdk';
+import { Address, ClientResponse, Customer } from '@commercetools/platform-sdk';
+import { updateCustomerEmail } from 'src/serverPart/ApiRoot';
 
 const createListItem = (item: string) => {
   const sameValue = item.split(' ');
@@ -153,93 +150,255 @@ export const getTextForm = (
   );
 };
 
-const getLoopForObject = (data: Customer | Address, array: string[]) => {
+const getLoopForObject = (
+  data: Customer | Address,
+  array: [
+    string,
+    (event: FormEvent<HTMLFormElement>) => Promise<ClientResponse<Customer>>,
+  ][],
+) => {
   console.log(data, 'data');
   const result = [];
   for (const [key, value] of Object.entries(data)) {
-    console.log(Object.entries(data));
-    if (array.includes(key)) {
-      if (Object.prototype.hasOwnProperty.call(data, 'country')) {
-        result.push(
-          getSettingsItem(key as keyof Address, value as ValueOfCustomer),
-        );
-      }
+    const neededData = array.filter(item => item[0] === key);
+    if (neededData.length) {
       result.push(
-        getSettingsItem(key as keyof Customer, value as ValueOfCustomer),
+        getSettingsItem(
+          key as keyof Customer,
+          value as ValueOfCustomer,
+          neededData[0][1],
+        ),
       );
     }
   }
   return result;
 };
-
-export const createSettingsField = (data: Customer | undefined) => {
+let uniKeyForStack = 'b';
+export const createSettingsField = (
+  data: Customer | undefined,
+  numberPage: 1 | 2,
+) => {
+  uniKeyForStack += 'c';
+  console.log(uniKeyForStack, 'un');
   if (!data) {
     return;
   }
   return (
     <Box sx={{ width: '100%' }}>
-      <Stack spacing={3} padding={'1%'} alignItems={'center'}>
-        {getSettingsAddress(data)}
+      <Stack
+        spacing={3}
+        padding={'1%'}
+        alignItems={'center'}
+        key={uniKeyForStack}
+      >
+        {numberPage === 1 ? getSettingsList(data) : getSettingsAddress(data)}
       </Stack>
     </Box>
   );
 };
 
 export const getSettingsList = (data: Customer): JSX.Element[] | undefined => {
-  const pagePersonalData: string[] = [
-    'firstName',
-    'lastName',
-    'dateOfBirth',
-    'email',
-    'password',
+  const pagePersonalData: [
+    string,
+    (event: FormEvent<HTMLFormElement>) => Promise<ClientResponse<Customer>>,
+  ][] = [
+    [
+      'firstName',
+      event =>
+        updateCustomerEmail(
+          data.email,
+          data.version,
+          (getDataField(event, 'email') as string) ?? '',
+        ),
+    ],
+    [
+      'lastName',
+      event =>
+        updateCustomerEmail(
+          data.email,
+          data.version,
+          (getDataField(event, 'email') as string) ?? '',
+        ),
+    ],
+    [
+      'dateOfBirth',
+      event =>
+        updateCustomerEmail(
+          data.email,
+          data.version,
+          (getDataField(event, 'email') as string) ?? '',
+        ),
+    ],
+    [
+      'email',
+      event => {
+        const res = updateCustomerEmail(
+          data.id,
+          data.version,
+          (getDataField(event, 'email') as string) ?? '',
+        );
+        console.log(res, 'res');
+        return res;
+      },
+    ],
+    [
+      'password',
+      event =>
+        updateCustomerEmail(
+          data.email,
+          data.version,
+          (getDataField(event, 'email') as string) ?? '',
+        ),
+    ],
   ];
   return getLoopForObject(data, pagePersonalData);
 };
 
+const getDataField = (
+  event: FormEvent<HTMLFormElement>,
+  nameField: string,
+): FormDataEntryValue | null => {
+  event.preventDefault();
+  const data = new FormData(event.currentTarget);
+  return data.get(nameField);
+};
+
+let uniKey = Date.now();
+
 const getSettingsItem = (
   key: keyof Customer | keyof Address,
   value: ValueOfCustomer,
+  callback: (
+    event: FormEvent<HTMLFormElement>,
+  ) => Promise<ClientResponse<Customer>>,
 ): JSX.Element => {
+  uniKey += 0.6;
+  const mode = false;
   return (
-    <Box sx={{ width: '100%' }}>
+    <Box
+      component="form"
+      sx={{ width: '100%' }}
+      key={uniKey}
+      onSubmit={event => void callback(event)}
+    >
       <TextField
-        sx={{ width: '40%', marginLeft: '20%', marginRight: '10%' }}
-        disabled
+        sx={{
+          width: '40%',
+          marginLeft: '20%',
+          marginRight: '10%',
+          marginTop: '1%',
+        }}
+        name={key}
+        type={key === 'password' ? 'password' : 'text'}
+        disabled={mode}
         id={key}
         label={key}
         defaultValue={value}
       />
-      <EditIcon sx={{ margin: '1% 2%' }} />
-      <SaveIcon sx={{ margin: '1%' }} />
+      <IconButton color="primary" aria-label="edit-mode">
+        <EditIcon sx={{ margin: '1% 2%' }} />
+      </IconButton>
+      <IconButton color="primary" aria-label="edit-mode" type="submit">
+        <SaveIcon sx={{ margin: '1%' }} />
+      </IconButton>
     </Box>
   );
 };
 
-const getAddressBlock = (label: string, data: Address) => {
-  const pageOfAddresses: string[] = [
-    'country',
-    'city',
-    'streetName',
-    'postalCode',
+const getAddressBlock = (label: string, data: Address): JSX.Element => {
+  const pageOfAddresses: [
+    string,
+    (event: FormEvent<HTMLFormElement>) => Promise<ClientResponse<Customer>>,
+  ][] = [
+    [
+      'country',
+      event =>
+        updateCustomerEmail(
+          data.city ?? '',
+          1,
+          (getDataField(event, 'email') as string) ?? '',
+        ),
+    ],
+    [
+      'city',
+      event =>
+        updateCustomerEmail(
+          data.city ?? '',
+          1,
+          (getDataField(event, 'email') as string) ?? '',
+        ),
+    ],
+    [
+      'streetName',
+      event =>
+        updateCustomerEmail(
+          data.city ?? '',
+          1,
+          (getDataField(event, 'email') as string) ?? '',
+        ),
+    ],
+    [
+      'postalCode',
+      event =>
+        updateCustomerEmail(
+          data.city ?? '',
+          1,
+          (getDataField(event, 'email') as string) ?? '',
+        ),
+    ],
   ];
   return (
-    <Box>
-      <TextField
-        sx={{ width: '40%', marginLeft: '20%', marginRight: '10%' }}
-        disabled
-        id={label}
-        label={label}
-      />
+    <Box
+      sx={{
+        width: '100%',
+        marginLeft: '20%',
+        marginRight: '10%',
+        marginTop: '10%',
+      }}
+    >
+      <Divider>
+        <Chip label={label} size="small" />
+      </Divider>
       {getLoopForObject(data, pageOfAddresses)}
     </Box>
   );
 };
-export const getSettingsAddress = (data: Customer): JSX.Element | undefined => {
-  if (data.addresses.length === 1) {
-    getAddressBlock(SERVICE_MESSAGES.address, data.addresses[0]);
+const getSettingsAddress = (data: Customer): JSX.Element[] | undefined => {
+  const result: JSX.Element[] = [];
+  if (data.addresses.length) {
+    console.log('co');
+    data.addresses.forEach(item => {
+      result.push(getAddressBlock(SERVICE_MESSAGES.address, item));
+    });
   }
-  return getAddressBlock(SERVICE_MESSAGES.address, data.addresses[1]);
-  // const currentObject = addressesArray.filter(
-  //   address => address.id === addressID,
-  // );
+  if (data.defaultBillingAddressId) {
+    const biilData = data.addresses.filter(
+      address => address.id === data.defaultBillingAddressId,
+    );
+    console.log('cdef');
+    result.push(getAddressBlock(SERVICE_MESSAGES.address, biilData[0]));
+  }
+  if (data.defaultShippingAddressId) {
+    console.log('defShip');
+    const biilData = data.addresses.filter(
+      address => address.id === data.defaultShippingAddressId,
+    );
+    result.push(getAddressBlock(SERVICE_MESSAGES.address, biilData[0]));
+  }
+  if (data.billingAddressIds?.length) {
+    console.log('bill');
+    data.billingAddressIds.forEach(item => {
+      const biilData = data.addresses.filter(address => address.id === item);
+      result.push(getAddressBlock(SERVICE_MESSAGES.address, biilData[0]));
+    });
+  }
+  if (data.shippingAddressIds?.length) {
+    console.log('sh');
+    data.shippingAddressIds.forEach(item => {
+      const biilData = data.addresses.filter(address => address.id === item);
+      result.push(getAddressBlock(SERVICE_MESSAGES.address, biilData[0]));
+    });
+  }
+
+  return result;
 };
