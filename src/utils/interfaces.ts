@@ -3,16 +3,14 @@ import {
   CustomerSignInResult,
   ErrorObject,
   LocalizedString,
-} from '@commercetools/platform-sdk';
-import {
   CustomFields,
   CustomerGroupReference,
   LastModifiedBy,
   StoreKeyReference,
+  Address,
 } from '@commercetools/platform-sdk';
 import { ClientResponse } from '@commercetools/sdk-client-v2';
 import { ErrorResponse } from 'react-router-dom';
-import { Address } from '@commercetools/platform-sdk';
 
 export interface SettingsPersonalData {
   firstName: string;
@@ -29,14 +27,14 @@ export interface CustomerData {
   password: string;
   key: string;
   dateOfBirth: string;
-  addresses: CustomerAddress[];
+  addresses: Address[];
 }
 
 export interface CustomerAddress {
   country: string;
   city: string;
   postalCode: string;
-  streetName: string;
+  streetName: string[];
 }
 
 export interface SettingsAddress {

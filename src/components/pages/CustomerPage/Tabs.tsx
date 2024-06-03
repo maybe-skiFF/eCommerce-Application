@@ -7,6 +7,7 @@ export default function SettingsTabs() {
   const [value, setValue] = useState('data');
 
   const handleChange = (event: SyntheticEvent, newValue: string) => {
+    event.preventDefault();
     setValue(newValue);
   };
   return (

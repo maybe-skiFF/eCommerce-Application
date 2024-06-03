@@ -25,6 +25,8 @@ import { Address, ClientResponse, Customer } from '@commercetools/platform-sdk';
 import {
   updateCustomerEmail,
   updateCustomerFirstName,
+  updateCustomerLastName,
+  updateCustomerDataOfBirth,
 } from 'src/serverPart/ApiRoot';
 
 const createListItem = (item: string) => {
@@ -220,19 +222,19 @@ export const getSettingsList = (data: Customer): JSX.Element[] | undefined => {
     [
       'lastName',
       event =>
-        updateCustomerEmail(
-          data.email,
+        updateCustomerLastName(
+          data.id,
           data.version,
-          (getDataField(event, 'email') as string) ?? '',
+          (getDataField(event, 'lastName') as string) ?? '',
         ),
     ],
     [
       'dateOfBirth',
       event =>
-        updateCustomerEmail(
-          data.email,
+        updateCustomerDataOfBirth(
+          data.id,
           data.version,
-          (getDataField(event, 'email') as string) ?? '',
+          (getDataField(event, 'dateOfBirth') as string) ?? '',
         ),
     ],
     [

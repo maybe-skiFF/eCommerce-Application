@@ -153,6 +153,42 @@ const updateCustomerFirstName = async (
     .execute();
 };
 
+const updateCustomerDataOfBirth = async (
+  id: string,
+  version: number,
+  fieldName: FormDataEntryValue,
+): Promise<ClientResponse<Customer>> => {
+  return await apiRoot
+    .customers()
+    .withId({ ID: id })
+    .post({
+      body: {
+        version: version,
+        actions: [
+          { action: 'setDateOfBirth', dateOfBirth: fieldName as string },
+        ],
+      },
+    })
+    .execute();
+};
+
+const updateCustomerLastName = async (
+  id: string,
+  version: number,
+  fieldName: FormDataEntryValue,
+): Promise<ClientResponse<Customer>> => {
+  return await apiRoot
+    .customers()
+    .withId({ ID: id })
+    .post({
+      body: {
+        version: version,
+        actions: [{ action: 'setLastName', lastName: fieldName as string }],
+      },
+    })
+    .execute();
+};
+
 const deleteContact = async (id: string) => {
   return await apiRoot
     .customers()
@@ -172,6 +208,8 @@ export {
   checkCustomer,
   updateCustomerEmail,
   updateCustomerFirstName,
+  updateCustomerLastName,
+  updateCustomerDataOfBirth,
   deleteContact,
   getCategories,
   getProducts,

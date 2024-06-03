@@ -1,4 +1,4 @@
-import { Address } from 'src/utils/interfaces';
+import { CustomerAddress } from 'src/utils/interfaces';
 
 export const months: string[] = [
   'January 00',
@@ -15,7 +15,7 @@ export const months: string[] = [
   'December 11',
 ];
 
-export const listOfAddresses: Address[] = [
+export const listOfAddresses: CustomerAddress[] = [
   {
     country: '',
     city: '',
