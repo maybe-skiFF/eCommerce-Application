@@ -303,7 +303,22 @@ const getSettingsItem = (
         label={key}
         defaultValue={value}
       />
-      <IconButton color="primary" aria-label="edit-mode">
+      <IconButton
+        color="primary"
+        aria-label="edit-mode"
+        type="reset"
+        onClick={event => {
+          event.preventDefault();
+          getTextForm(
+            'firstName',
+            key,
+            (event: ChangeEvent<HTMLInputElement>) => {
+              console.log('firstName', event.target.value);
+            },
+            true,
+          );
+        }}
+      >
         <EditIcon sx={{ margin: '1% 2%' }} />
       </IconButton>
       <IconButton color="primary" aria-label="edit-mode" type="submit">
