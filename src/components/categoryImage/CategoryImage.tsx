@@ -46,7 +46,7 @@ export function CategoryImage({ selectedCategory }: CategoryImageProps) {
         backgroundRepeat: 'no-repeat',
         backgroundPosition: 'center',
         marginTop: '20px',
-        height: '500px',
+        height: '700px',
         width: '100%',
         alignContent: 'center',
       }}
