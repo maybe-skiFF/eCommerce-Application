@@ -9,21 +9,6 @@ import {
 } from '@mui/material';
 import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
 import { ProductPure, ShopCardProps } from 'src/utils/interfaces';
-import { useState } from 'react';
-
-export function ShopCard({ products, sortValue }: ShopCardProps) {
-  const [searchTerm, setSearchTerm] = useState('');
-
-  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(event.target.value);
-  };
-
-  const filteredProducts = products.filter(product => {
-    if (product.key) {
-      return product.key.toLowerCase().includes(searchTerm.toLowerCase());
-    }
-    return false;
-  });
 
   function sortProductsByKeyAscending(products: ProductPure[]) {
     return products.sort((a, b) => {

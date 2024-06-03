@@ -5,15 +5,18 @@ import { RouterProvider } from 'react-router-dom';
 import { CreateRouter } from './components/router/CreateRouter';
 
 import './App.css';
+import { ProductsProvider } from './context/ProductsProvider';
 
 const defaultTheme = createTheme();
 function App() {
   return (
     <IsAuthProvider>
       <CustomerProvider>
-        <ThemeProvider theme={defaultTheme}>
-          <RouterProvider router={CreateRouter()} />
-        </ThemeProvider>
+        <ProductsProvider>
+          <ThemeProvider theme={defaultTheme}>
+            <RouterProvider router={CreateRouter()} />
+          </ThemeProvider>
+        </ProductsProvider>
       </CustomerProvider>
     </IsAuthProvider>
   );
