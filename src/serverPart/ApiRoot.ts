@@ -68,7 +68,7 @@ const getProducts = () => {
 };
 
 const getProductById = (ID: string) => {
-  return myApiRoot.products().withId({ ID }).get().execute();
+  return apiRoot.products().withId({ ID }).get().execute();
 };
 
 const createCustomerDraft = (customerData: CustomerData) => {
@@ -135,6 +135,24 @@ const updateCustomerEmail = async (
     })
     .execute();
 };
+
+const updateCustomerFirstName = async (
+  id: string,
+  version: number,
+  fieldName: FormDataEntryValue,
+): Promise<ClientResponse<Customer>> => {
+  return await apiRoot
+    .customers()
+    .withId({ ID: id })
+    .post({
+      body: {
+        version: version,
+        actions: [{ action: 'setFirstName', firstName: fieldName as string }],
+      },
+    })
+    .execute();
+};
+
 const deleteContact = async (id: string) => {
   return await apiRoot
     .customers()
@@ -153,6 +171,7 @@ export {
   getMyCustomer,
   checkCustomer,
   updateCustomerEmail,
+  updateCustomerFirstName,
   deleteContact,
   getCategories,
   getProducts,

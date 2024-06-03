@@ -7,8 +7,6 @@ import {
 import {
   CustomFields,
   CustomerGroupReference,
-  CustomerSignInResult,
-  ErrorObject,
   LastModifiedBy,
   StoreKeyReference,
 } from '@commercetools/platform-sdk';

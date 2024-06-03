@@ -22,7 +22,10 @@ import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
 
 import { Address, ClientResponse, Customer } from '@commercetools/platform-sdk';
-import { updateCustomerEmail } from 'src/serverPart/ApiRoot';
+import {
+  updateCustomerEmail,
+  updateCustomerFirstName,
+} from 'src/serverPart/ApiRoot';
 
 const createListItem = (item: string) => {
   const sameValue = item.split(' ');
@@ -204,12 +207,15 @@ export const getSettingsList = (data: Customer): JSX.Element[] | undefined => {
   ][] = [
     [
       'firstName',
-      event =>
-        updateCustomerEmail(
-          data.email,
+      event => {
+        const res = updateCustomerFirstName(
+          data.id,
           data.version,
-          (getDataField(event, 'email') as string) ?? '',
-        ),
+          (getDataField(event, 'firstName') as string) ?? '',
+        );
+        console.log(res, 'firstName');
+        return res;
+      },
     ],
     [
       'lastName',

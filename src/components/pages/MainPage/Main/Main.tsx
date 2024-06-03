@@ -3,7 +3,7 @@ import { Container } from '@mui/material';
 
 export function Main() {
   return (
-    <Container maxWidth="sm">
+    <Container maxWidth="lg">
       <CategoryChoice />
     </Container>
   );
