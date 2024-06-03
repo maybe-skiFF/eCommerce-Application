@@ -3,15 +3,21 @@ import {
   CustomerSignInResult,
   ErrorObject,
   LocalizedString,
+  CustomFields,
+  CustomerGroupReference,
+  LastModifiedBy,
+  StoreKeyReference,
+  Address,
 } from '@commercetools/platform-sdk';
 import { ClientResponse } from '@commercetools/sdk-client-v2';
 import { ErrorResponse } from 'react-router-dom';
 
-export interface Address {
-  country: string;
-  city: string;
-  postalCode: string;
-  streetName: string[];
+export interface SettingsPersonalData {
+  firstName: string;
+  lastName: string;
+  dateOfBirth: string;
+  email: string;
+  password: string;
 }
 
 export interface CustomerData {
@@ -21,16 +27,23 @@ export interface CustomerData {
   password: string;
   key: string;
   dateOfBirth: string;
-  addresses: CustomerAddress[];
+  addresses: Address[];
 }
 
 export interface CustomerAddress {
   country: string;
   city: string;
   postalCode: string;
-  streetName: string;
+  streetName: string[];
 }
 
+export interface SettingsAddress {
+  addresses: Address[];
+  billingAddressIds?: string[];
+  shippingAddressIds?: string[];
+  defaultBillingAddressId?: string;
+  defaultShippingAddressId?: string;
+}
 export interface DataTime {
   day: string[];
   month: string[];
@@ -236,3 +249,24 @@ export interface ProductDataFromServer {
   createdAt: string;
   lastModifiedAt: string;
 }
+
+export interface AnswerAddress {
+  id: string;
+  country: string;
+  city: string;
+  streetName: string;
+  postalCode: string;
+}
+
+export type ValueOfCustomer =
+  | string
+  | number
+  | boolean
+  | string[]
+  | LastModifiedBy
+  | CreatedBy
+  | Address
+  | Address[]
+  | CustomerGroupReference
+  | CustomFields
+  | StoreKeyReference[];
