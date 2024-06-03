@@ -16,14 +16,6 @@ interface Context {
   setProductsData: Dispatch<SetStateAction<ProductData>>;
 }
 
-// const initialProductsData: ProductPure = {
-//   id: '',
-//   key: '' || undefined,
-//   description: '',
-//   image: '',
-//   price: 0,
-// };
-
 const initialProductsData: ProductData = {
   id: '',
   key: '' || undefined,

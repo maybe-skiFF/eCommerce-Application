@@ -1,0 +1,27 @@
+@media (max-width: 780px) {
+.popapSliderImg {
+  max-width: 600px;
+  max-height: 500px;
+}
+}
+
+@media (max-width: 670px) {
+  .popapSliderImg {
+    max-width: 500px;
+    max-height: 450px;
+  }
+  }
+
+  @media (max-width: 560px) {
+    .popapSliderImg {
+      max-width: 400px;
+      max-height: 600px;
+    }
+    }
+
+    @media (max-width: 450px) {
+      .popapSliderImg {
+        max-width: 300px;
+        max-height: 500px;
+      }
+      }
