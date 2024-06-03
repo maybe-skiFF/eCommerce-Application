@@ -94,8 +94,12 @@ export function CategoryChoice() {
             } else if (categories[0].key) {
               setSelectedCategory(categories[0].key ?? '');
               await getProductsByCategory(firstCategoryId ?? '');
+              navigate(`/${categories[0].key}`)
             }
           }
+          setSelectedCategory(categories[0].key ?? '');
+          await getProductsByCategory(firstCategoryId ?? '')
+          navigate(`/${categories[0].key}`)
         }
       } catch (error) {
         console.error(error);
