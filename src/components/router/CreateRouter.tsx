@@ -47,6 +47,22 @@ export const CreateRouter = () => {
       path: '*',
       element: <Page404 />,
     },
+    {
+      path: '/:key',
+      element: <MainPage />,
+    },
+    {
+      path: '/for-kids/:key',
+      element: <MainPage />,
+    },
+    {
+      path: '/for-men/:key',
+      element: <MainPage />,
+    },
+    {
+      path: '/for-women/:key',
+      element: <MainPage />,
+    },
   ];
   return createBrowserRouter(arrRouter);
 };
