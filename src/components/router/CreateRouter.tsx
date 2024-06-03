@@ -3,6 +3,7 @@ import { MainPage } from '../pages/MainPage/MainPage';
 import { LoginPage } from '../pages/LoginPage/LoginPage';
 import { RegistrationPage } from '../pages/RegistrationPage/RegistrationPage';
 import { Page404 } from '../pages/404Page/404Page';
+import { DetailedProductPage } from '../pages/DetailedProductPage/DetailedProductPage';
 import { CustomerPage } from '../pages/CustomerPage/CustomerPage';
 import { useIsAuth } from 'src/context/context';
 import { useEffect, useState } from 'react';
@@ -25,6 +26,10 @@ export const CreateRouter = () => {
     {
       path: '/',
       element: <MainPage />,
+    },
+    {
+      path: '/catalog/:key',
+      element: <DetailedProductPage />,
     },
     {
       path: '/login',

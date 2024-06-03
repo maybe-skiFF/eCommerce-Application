@@ -67,6 +67,10 @@ const getProducts = () => {
     .execute();
 };
 
+const getProductById = (ID: string) => {
+  return myApiRoot.products().withId({ ID }).get().execute();
+};
+
 const createCustomerDraft = (customerData: CustomerData) => {
   const { firstName, lastName, email, password, key, dateOfBirth, addresses } =
     customerData;
@@ -152,4 +156,5 @@ export {
   deleteContact,
   getCategories,
   getProducts,
+  getProductById,
 };

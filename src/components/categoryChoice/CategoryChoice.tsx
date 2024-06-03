@@ -65,7 +65,7 @@ export function CategoryChoice() {
       id: product.id,
       key: product.key,
       description: product.masterData.current.description['en-US'],
-      image: product.masterData.current.masterVariant.images[0]['url'],
+      image: product.masterData.current.masterVariant.images[0].url,
       price:
         product.masterData.current.masterVariant.prices[0].value.centAmount,
       discount:

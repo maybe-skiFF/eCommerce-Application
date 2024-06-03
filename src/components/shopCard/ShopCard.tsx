@@ -5,9 +5,11 @@ import {
   Card,
   CardContent,
   CardMedia,
+  Link,
 } from '@mui/material';
 import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
 import { ProductPure, ShopCardProps } from 'src/utils/interfaces';
+import { Link as ReactLink } from 'react-router-dom';
 
 function sortProductsByKeyAscending(products: ProductPure[]) {
   return products.sort((a, b) => {
@@ -92,58 +94,72 @@ export function ShopCard({ products, sortValue }: ShopCardProps) {
               cursor: 'pointer',
             }}
           >
-            <CardMedia
-              component="div"
-              image={product.image}
-              sx={{
-                width: '100%',
-                height: '300px',
-                boxSizing: 'border-box',
-                border: '1px solid #ebedf0',
-                padding: '0',
-                backgroundSize: 'contain',
-              }}
-            />
-            <CardContent>
-              <Typography
-                variant="h5"
-                component="h3"
-                sx={{ marginBottom: '10px', fontWeight: '500' }}
-              >
-                {product.key}
-              </Typography>
-              <Typography variant="body1" sx={{ height: '80px' }}>
-                {product.description.length > 100
-                  ? `${product.description.substring(0, 100)}...`
-                  : product.description}
-              </Typography>
-              {!isNaN(product.discount) ? (
-                <Box sx={{ height: '80px' }}>
-                  <Typography
-                    variant="h6"
-                    sx={{
-                      textDecoration: 'line-through',
-                      color: 'text.secondary',
-                    }}
-                  >
-                    {product.price / 100} EUR
-                  </Typography>
-                  <Typography
-                    sx={{ color: 'red', fontWeight: '700' }}
-                    variant="h6"
-                  >
-                    {product.discount / 100} EUR - with discount
-                  </Typography>
-                </Box>
-              ) : (
-                <Box sx={{ height: '80px' }}>
-                  <Typography variant="h6">
-                    {product.price / 100} EUR
-                  </Typography>
-                </Box>
-              )}
-              <Button variant="outlined">Add to Cart</Button>
-            </CardContent>
+            <Link
+              component={ReactLink}
+              to={`/catalog/${product.id}`}
+              color={'inherit'}
+              underline="none"
+            >
+              <CardMedia
+                component="div"
+                image={product.image}
+                sx={{
+                  width: '100%',
+                  height: '300px',
+                  boxSizing: 'border-box',
+                  border: '1px solid #ebedf0',
+                  padding: '0',
+                  backgroundSize: 'contain',
+                }}
+              />
+              <CardContent>
+                <Typography
+                  variant="h5"
+                  component="h3"
+                  sx={{ marginBottom: '10px', fontWeight: '500' }}
+                >
+                  {product.key}
+                </Typography>
+                <Typography variant="body1" sx={{ height: '80px' }}>
+                  {product.description.length > 100
+                    ? `${product.description.substring(0, 100)}...`
+                    : product.description}
+                </Typography>
+                {!isNaN(product.discount) ? (
+                  <Box sx={{ height: '80px' }}>
+                    <Typography
+                      variant="h6"
+                      sx={{
+                        textDecoration: 'line-through',
+                        color: 'text.secondary',
+                      }}
+                    >
+                      {product.price / 100} EUR
+                    </Typography>
+                    <Typography
+                      sx={{ color: 'red', fontWeight: '700' }}
+                      variant="h6"
+                    >
+                      {product.discount / 100} EUR - with discount
+                    </Typography>
+                  </Box>
+                ) : (
+                  <Box sx={{ height: '80px' }}>
+                    <Typography variant="h6">
+                      {product.price / 100} EUR
+                    </Typography>
+                  </Box>
+                )}
+                <Button
+                  onClick={e => {
+                    e.preventDefault();
+                  }}
+                  variant="outlined"
+                >
+                  Add to Cart
+                </Button>
+              </CardContent>
+            </Link>
           </Card>
         ))
       ) : (
