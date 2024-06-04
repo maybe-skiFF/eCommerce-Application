@@ -121,11 +121,10 @@ export const RegistrationBlock = () => {
           navigate('/');
           localStorage.setItem('isAuth', 'true');
           setIsAuth(true);
+          location.reload();
         }
       })
-      .then(async response => {
-        const res = response;
-        console.log(res, 'response');
+      .then(async () => {
         await getMyCustomer(
           myApi,
           data.get('email') as string,
