@@ -7,7 +7,6 @@ import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import LogoutIcon from '@mui/icons-material/Logout';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
-import { Search } from 'src/components/search/Search';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useCustomer } from 'src/context/context';
 import { deleteContact } from 'src/serverPart/ApiRoot';
@@ -107,8 +106,20 @@ export function Header() {
         position="static"
         elevation={0}
       >
-        <Toolbar style={{ flexWrap: 'wrap', justifyContent: 'center' }}>
-          <Box sx={{ flexGrow: 1 }}>
+        <Toolbar
+          sx={{
+            flexGrow: 1,
+            '@media (max-width: 767px)': {
+              display: 'flex',
+              flexDirection: 'column',
+            },
+          }}
+        >
+          <Box
+            sx={{
+              flexGrow: 1,
+            }}
+          >
             <Link
               sx={{
                 display: 'flex',
@@ -126,23 +137,24 @@ export function Header() {
                 component="div"
                 sx={{
                   flexGrow: 1,
+                  '@media (max-width: 767px)': {
+                    marginBottom: '10px',
+                  },
                 }}
               >
                 {SERVICE_MESSAGES.headerTitle}
               </Typography>
             </Link>
           </Box>
-          <Box className="search">
-            <Search />
-          </Box>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             {navigationLinks.map((item, index) => (
               <Box
                 key={index}
                 sx={{
-                  marginRight: index < 3 ? '20px' : '0',
+                  marginRight: '20px',
                   display: 'flex',
                   alignItems: 'center',
+                  width: '60px',
                 }}
               >
                 <Link
@@ -153,6 +165,7 @@ export function Header() {
                   underline="none"
                   ref={index === 3 ? refLogout : null}
                   onClick={item.onClick}
+                  sx={{ width: '100%' }}
                 >
                   {item.icon}
                   {item.label}

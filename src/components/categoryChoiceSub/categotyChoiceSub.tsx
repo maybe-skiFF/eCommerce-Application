@@ -10,8 +10,8 @@ export function CategoryChoiceSub({
     {
       key: 'for-kids',
       subcategories: [
-        { id: '92a4b7a0-4021-4357-b077-c5ce4cc2adbb', key: 'cloth' },
-        { id: '1722470f-e813-4434-aedc-a1e54c45e050', key: 'toys' },
+        { id: 'a89e12d1-c111-4d0b-a936-d91bae787c83', key: 'cloth' },
+        { id: '243f704c-009e-472a-aca6-4bcf66ea5475', key: 'toys' },
       ],
     },
     {

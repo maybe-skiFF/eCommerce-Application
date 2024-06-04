@@ -63,7 +63,7 @@ const getCategories = () => {
 const getProducts = () => {
   return apiRoot
     .products()
-    .get({ queryArgs: { limit: 20 } })
+    .get({ queryArgs: { limit: 100 } })
     .execute();
 };
 
