@@ -7,19 +7,20 @@ import {
   Divider,
   Chip,
 } from '@mui/material';
-import { FormEvent, SyntheticEvent, ChangeEvent } from 'react';
-import { SimpleSnackbar } from 'src/components/SimpleSnackbar/SimpleSnackbar';
+import { FormEvent } from 'react';
 import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
 import {
   updateCustomerFirstName,
   updateCustomerLastName,
   updateCustomerDataOfBirth,
   updateCustomerEmail,
+  checkCustomer,
+  updateCustomerPassword,
 } from 'src/serverPart/ApiRoot';
-import { getTextForm } from './createFormControl';
 import { ValueOfCustomer } from './interfaces';
 import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
+import { STYLE_FOR_HELPER } from 'src/constants/STYLES';
 
 const getLoopForObject = (
   data: Customer | Address,
@@ -30,7 +31,6 @@ const getLoopForObject = (
     ) => Promise<ClientResponse<Customer>> | Promise<void> | void,
   ][],
 ) => {
-  console.log(data, 'data');
   const result = [];
   for (const [key, value] of Object.entries(data)) {
     const neededData = array.filter(item => item[0] === key);
@@ -53,7 +53,6 @@ export const createSettingsField = (
   data: Customer | undefined,
   numberPage: 1 | 2,
 ) => {
-  console.log(uniKeyForStack, 'un');
   if (!data) {
     return;
   }
@@ -70,12 +69,8 @@ export const createSettingsField = (
     </Box>
   );
 };
-const handleClose = (event: SyntheticEvent | Event, reason?: string) => {
-  if (reason === 'clickaway') {
-    return event;
-  }
-};
-export const getSettingsList = (data: Customer): JSX.Element[] | undefined => {
+
+const getSettingsList = (data: Customer): JSX.Element[] | undefined => {
   const pagePersonalData: [
     string,
     (
@@ -84,58 +79,92 @@ export const getSettingsList = (data: Customer): JSX.Element[] | undefined => {
   ][] = [
     [
       'firstName',
-      async event =>
-        await updateCustomerFirstName(
-          data.id,
-          data.version,
-          (getDataField(event, 'firstName') as string) ?? '',
-        )
-          .then(() => {
-            SimpleSnackbar('The update was successful', true, handleClose);
-          })
-          .catch((error: Error) => {
-            console.log('no');
-            SimpleSnackbar(error.message, true, handleClose);
-          }),
+      async event => {
+        event.preventDefault();
+        try {
+          const newFirstName = getDataField(event, 'firstName') ?? '';
+          const currentCustomer = await checkCustomer(data.id);
+          const newCustomer = await updateCustomerFirstName(
+            data.id,
+            currentCustomer.body.version,
+            newFirstName ?? '',
+          );
+
+          getSettingsList(newCustomer.body);
+        } catch (error) {
+          console.error(error);
+
+          throw error;
+        }
+      },
     ],
     [
       'lastName',
-      event =>
-        updateCustomerLastName(
-          data.id,
-          data.version,
-          (getDataField(event, 'lastName') as string) ?? '',
-        ),
+      async event => {
+        event.preventDefault();
+        try {
+          const newLastName = getDataField(event, 'lastName') ?? '';
+          const currentCustomer = await checkCustomer(data.id);
+          await updateCustomerLastName(
+            data.id,
+            currentCustomer.body.version,
+            newLastName ?? '',
+          );
+        } catch (error) {
+          console.error(error);
+          throw error;
+        }
+      },
     ],
     [
       'dateOfBirth',
-      event =>
-        updateCustomerDataOfBirth(
-          data.id,
-          data.version,
-          (getDataField(event, 'dateOfBirth') as string) ?? '',
-        ),
+      async event => {
+        event.preventDefault();
+        try {
+          const newDay = getDataField(event, 'dateOfBirth') ?? '';
+          const currentCustomer = await checkCustomer(data.id);
+          await updateCustomerDataOfBirth(
+            data.id,
+            currentCustomer.body.version,
+            newDay ?? '',
+          );
+        } catch (error) {
+          console.error(error);
+          throw error;
+        }
+      },
     ],
     [
       'email',
-      event => {
-        const res = updateCustomerEmail(
-          data.id,
-          data.version,
-          (getDataField(event, 'email') as string) ?? '',
-        );
-        console.log(res, 'res');
-        return res;
+      async event => {
+        event.preventDefault();
+        try {
+          const newEmail = getDataField(event, 'email') ?? '';
+          const currentCustomer = await checkCustomer(data.id);
+          await updateCustomerEmail(
+            data.id,
+            currentCustomer.body.version,
+            newEmail ?? '',
+          );
+        } catch (error) {
+          console.error(error);
+          throw error;
+        }
       },
     ],
     [
       'password',
-      event =>
-        updateCustomerEmail(
-          data.id,
-          data.version,
-          (getDataField(event, 'password') as string) ?? '',
-        ),
+      async event => {
+        event.preventDefault();
+        try {
+          const currPassword = getDataField(event, `current-password`) ?? '';
+          const newPassword = getDataField(event, 'password') ?? '';
+          await updateCustomerPassword(data.email, currPassword, newPassword);
+        } catch (error) {
+          console.error(error);
+          throw error;
+        }
+      },
     ],
   ];
   return getLoopForObject(data, pagePersonalData);
@@ -145,14 +174,11 @@ const getDataField = (
   event: FormEvent<HTMLFormElement>,
   nameField: string,
 ): FormDataEntryValue | null => {
-  event.preventDefault();
   const dataField = new FormData(event.currentTarget);
-  console.log('yes');
   return dataField.get(nameField);
 };
 
 let uniKey = Date.now();
-
 const getSettingsItem = (
   key: keyof Customer,
   value: ValueOfCustomer,
@@ -161,53 +187,89 @@ const getSettingsItem = (
   ) => Promise<ClientResponse<Customer>> | Promise<void> | void,
 ): JSX.Element => {
   uniKey += 0.6;
-  let mode = false;
-  return (
-    <Box
-      component="form"
-      sx={{ width: '100%' }}
-      key={uniKey}
-      onSubmit={event => void callback(event)}
-    >
-      <TextField
-        sx={{
-          width: '40%',
-          marginLeft: '20%',
-          marginRight: '10%',
-          marginTop: '1%',
-        }}
-        name={key}
-        type={key === 'password' ? 'password' : 'text'}
-        disabled={mode}
-        id={key}
-        label={key}
-        defaultValue={value}
-      />
-      <IconButton
-        color="primary"
-        aria-label="edit-mode"
-        type="reset"
-        onClick={event => {
-          event.preventDefault();
-          console.log('change', mode, 'mode');
-          mode = true;
-          getTextForm(
-            'firstName',
-            key,
-            (event: ChangeEvent<HTMLInputElement>) => {
-              console.log('firstName', event.target.value);
-            },
-            true,
-          );
-        }}
+  if (key !== 'password') {
+    return (
+      <Box
+        component="form"
+        sx={{ width: '100%' }}
+        key={uniKey}
+        onSubmit={event => void callback(event)}
       >
-        <EditIcon sx={{ margin: '1% 2%' }} />
-      </IconButton>
-      <IconButton color="primary" aria-label="edit-mode" type="submit">
-        <SaveIcon sx={{ margin: '1%' }} />
-      </IconButton>
-    </Box>
-  );
+        <TextField
+          sx={{
+            width: '40%',
+            marginLeft: '20%',
+            marginRight: '10%',
+            marginTop: '1%',
+          }}
+          name={key}
+          type={'text'}
+          disabled={false}
+          id={key}
+          label={key}
+          autoComplete={`current-${key}`}
+          defaultValue={value}
+          FormHelperTextProps={{
+            sx: STYLE_FOR_HELPER,
+          }}
+        />
+        <IconButton color="primary" aria-label="edit-mode" type="reset">
+          <EditIcon sx={{ margin: '1% 2%' }} />
+        </IconButton>
+        <IconButton color="primary" aria-label="edit-mode" type="submit">
+          <SaveIcon sx={{ margin: '1%' }} />
+        </IconButton>
+      </Box>
+    );
+  } else {
+    return (
+      <Box
+        component="form"
+        sx={{ width: '100%' }}
+        key={uniKey}
+        onSubmit={event => void callback(event)}
+      >
+        <TextField
+          sx={{
+            width: '40%',
+            marginLeft: '20%',
+            marginRight: '10%',
+            marginTop: '1%',
+          }}
+          name={`current-${key}`}
+          type={'password'}
+          id={`current-${key}`}
+          label={`current-${key}`}
+          autoComplete={`current-${key}`}
+          defaultValue={value}
+          FormHelperTextProps={{
+            sx: STYLE_FOR_HELPER,
+          }}
+        />
+        <TextField
+          sx={{
+            width: '40%',
+            marginLeft: '20%',
+            marginRight: '10%',
+            marginTop: '1%',
+          }}
+          name={key}
+          type={'text'}
+          id={key}
+          label={`new-${key}`}
+          FormHelperTextProps={{
+            sx: STYLE_FOR_HELPER,
+          }}
+        />
+        <IconButton color="primary" aria-label="edit-mode" type="reset">
+          <EditIcon sx={{ margin: '1% 2%' }} />
+        </IconButton>
+        <IconButton color="primary" aria-label="edit-mode" type="submit">
+          <SaveIcon sx={{ margin: '1%' }} />
+        </IconButton>
+      </Box>
+    );
+  }
 };
 
 const getAddressBlock = (label: string, data: Address): JSX.Element => {
@@ -221,7 +283,7 @@ const getAddressBlock = (label: string, data: Address): JSX.Element => {
         updateCustomerEmail(
           data.city ?? '',
           1,
-          (getDataField(event, 'email') as string) ?? '',
+          getDataField(event, 'email') ?? '',
         ),
     ],
     [
@@ -230,7 +292,7 @@ const getAddressBlock = (label: string, data: Address): JSX.Element => {
         updateCustomerEmail(
           data.city ?? '',
           3,
-          (getDataField(event, 'email') as string) ?? '',
+          getDataField(event, 'email') ?? '',
         ),
     ],
     [
@@ -239,7 +301,7 @@ const getAddressBlock = (label: string, data: Address): JSX.Element => {
         updateCustomerEmail(
           data.city ?? '',
           4,
-          (getDataField(event, 'email') as string) ?? '',
+          getDataField(event, 'email') ?? '',
         ),
     ],
     [
@@ -248,7 +310,7 @@ const getAddressBlock = (label: string, data: Address): JSX.Element => {
         updateCustomerEmail(
           data.city ?? '',
           8,
-          (getDataField(event, 'email') as string) ?? '',
+          getDataField(event, 'email') ?? '',
         ),
     ],
   ];

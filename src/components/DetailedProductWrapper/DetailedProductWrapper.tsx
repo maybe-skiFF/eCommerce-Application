@@ -39,7 +39,7 @@ export function DetailedProductWrapper({ productDataById }: ProductObj) {
   }
 
   return (
-    <Box sx={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', }}>
+    <Box sx={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap' }}>
       <Box
         sx={{
           display: 'flex',
@@ -47,7 +47,7 @@ export function DetailedProductWrapper({ productDataById }: ProductObj) {
           justifyContent: 'center',
           alignItems: 'center',
           columnGap: '20px',
-          marginTop: '40px'
+          marginTop: '40px',
         }}
       >
         <Box>
