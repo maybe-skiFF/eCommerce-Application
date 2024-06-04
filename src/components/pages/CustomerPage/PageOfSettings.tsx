@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Box } from '@mui/material';
 import { checkCustomer } from 'src/serverPart/ApiRoot';
 import { getCookie } from 'src/utils/cookieWork';
-import { createSettingsField } from 'src/utils/createFormControl';
+import { createSettingsField } from 'src/utils/createSettingsFields';
 import { Customer } from '@commercetools/platform-sdk';
 import SettingsTabs from './Tabs';
 

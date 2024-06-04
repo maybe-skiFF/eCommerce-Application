@@ -42,6 +42,7 @@ export function Header() {
         localStorage.clear();
         setIsAuth(false);
         deleteCookie('myID');
+        location.reload();
       })
       .catch((error: ErrorObject) => {
         setServerMessage(error.message);

@@ -100,7 +100,7 @@ const getMyCustomer = async (
   api: ByProjectKeyRequestBuilder,
   name: string,
   password: string,
-): Promise<ClientResponse> => {
+): Promise<ClientResponse<CustomerSignInResult>> => {
   return await api
     .me()
     .login()

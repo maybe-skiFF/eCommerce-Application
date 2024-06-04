@@ -90,7 +90,7 @@ export const SubmitBlock = (): ReactNode => {
           localStorage.setItem('isAuth', 'true');
           setIsAuth(true);
           setCookie('myID', body.customer.id);
-          console.log(body.customer.id);
+          location.reload();
         }
       })
       .catch((error: ErrorObject) => {
