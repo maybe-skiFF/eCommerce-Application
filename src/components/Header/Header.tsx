@@ -146,7 +146,14 @@ export function Header() {
               </Typography>
             </Link>
           </Box>
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              flexWrap: 'wrap',
+              justifyContent: 'center',
+            }}
+          >
             {navigationLinks.map((item, index) => (
               <Box
                 key={index}
