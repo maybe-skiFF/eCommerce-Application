@@ -12,11 +12,9 @@ export const CreateRouter = () => {
   const { isAuth } = useIsAuth();
   const [authState, setAuthState] = useState<boolean>(false);
   const lS: boolean = localStorage.getItem('isAuth') === 'true';
-  console.log(localStorage.getItem('isAuth'), 'LS', isAuth, 'isAuth');
 
   useEffect(() => {
     function getPaths() {
-      console.log(lS, 'i see you');
       lS || isAuth ? setAuthState(true) : setAuthState(false);
     }
     getPaths();

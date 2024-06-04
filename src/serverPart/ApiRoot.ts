@@ -119,6 +119,33 @@ const checkCustomer = async (id: string): Promise<ClientResponse<Customer>> => {
   return await apiRoot.customers().withId({ ID: id }).get().execute();
 };
 
+const updateCustomerPassword = async (
+  email: string,
+  oldPassword: FormDataEntryValue,
+  newPassword: FormDataEntryValue,
+): Promise<ClientResponse<Customer>> => {
+  try {
+    const api = getApiWithCredentials(email, oldPassword as string);
+    const myCustomer = await getMyCustomer(api, email, oldPassword as string);
+    const customerUpdate = await api
+      .customers()
+      .password()
+      .post({
+        body: {
+          id: myCustomer.body.customer.id,
+          version: myCustomer.body.customer.version,
+          currentPassword: oldPassword as string,
+          newPassword: newPassword as string,
+        },
+      })
+      .execute();
+    return customerUpdate;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
 const updateCustomerEmail = async (
   id: string,
   version: number,
@@ -210,6 +237,7 @@ export {
   updateCustomerFirstName,
   updateCustomerLastName,
   updateCustomerDataOfBirth,
+  updateCustomerPassword,
   deleteContact,
   getCategories,
   getProducts,

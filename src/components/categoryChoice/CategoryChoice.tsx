@@ -15,7 +15,6 @@ export function CategoryChoice() {
   const createCategories = async (): Promise<Category[]> => {
     try {
       const response = await getCategories();
-      console.log(response);
       const categories: Category[] = response.body.results
         .filter(item => !item.parent)
         .map(item => ({
@@ -94,12 +93,12 @@ export function CategoryChoice() {
             } else if (categories[0].key) {
               setSelectedCategory(categories[0].key ?? '');
               await getProductsByCategory(firstCategoryId ?? '');
-              navigate(`/${categories[0].key}`)
+              navigate(`/${categories[0].key}`);
             }
           }
           setSelectedCategory(categories[0].key ?? '');
-          await getProductsByCategory(firstCategoryId ?? '')
-          navigate(`/${categories[0].key}`)
+          await getProductsByCategory(firstCategoryId ?? '');
+          navigate(`/${categories[0].key}`);
         }
       } catch (error) {
         console.error(error);
