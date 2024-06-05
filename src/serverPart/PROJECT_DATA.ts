@@ -1,0 +1,9 @@
+export const PROJECT_DATA = {
+  CTP_PROJECT_KEY: 'the-best-store0000',
+  CTP_CLIENT_SECRET: '7U6OLWqWOp35Sw7DX75D_JkaRksl9wHN',
+  CTP_CLIENT_ID: '9UPL95_tnM3XLsiDFYYrrsqU',
+  CTP_AUTH_URL: '	https://auth.europe-west1.gcp.commercetools.com/',
+  CTP_API_URL: 'https://api.europe-west1.gcp.commercetools.com',
+  CTP_SCOPES:
+    'manage_my_shopping_lists:the-best-store0000:the-good-store view_cart_discounts:the-best-store0000:the-good-store view_audit_log:the-best-store0000 view_shopping_lists:the-best-store0000:the-good-store view_api_clients:the-best-store0000 manage_orders:the-best-store0000:the-good-store manage_shopping_lists:the-best-store0000:the-good-store manage_api_clients:the-best-store0000 view_customers:the-best-store0000:the-good-store manage_customers:the-best-store0000:the-good-store manage_my_profile:the-best-store0000:the-good-store view_orders:the-best-store0000:the-good-store manage_project:the-best-store0000 manage_cart_discounts:the-best-store0000:the-good-store manage_my_orders:the-best-store0000:the-good-store',
+};
