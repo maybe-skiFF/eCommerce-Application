@@ -8,8 +8,10 @@ import {
   Radio,
   RadioGroup,
   Typography,
+  IconButton,
 } from '@mui/material';
 import { SwiperSlider } from '../SwiperSlider/SwiperSlider';
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 
 interface ProductObj {
   productDataById: Product | undefined;
@@ -45,7 +47,7 @@ export function DetailedProductWrapper({ productDataById }: ProductObj) {
           display: 'flex',
           flexWrap: 'wrap',
           justifyContent: 'center',
-          alignItems: 'center',
+          alignItems: 'flex-end',
           columnGap: '20px',
           marginTop: '40px',
         }}
@@ -102,6 +104,9 @@ export function DetailedProductWrapper({ productDataById }: ProductObj) {
               />
             </RadioGroup>
           </FormControl>
+          <IconButton sx={{ marginBottom: '0%' }}>
+            <AddShoppingCartIcon fontSize="large" />
+          </IconButton>
         </Box>
       </Box>
     </Box>
