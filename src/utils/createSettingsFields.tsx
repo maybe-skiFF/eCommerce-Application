@@ -16,11 +16,18 @@ import {
   updateCustomerEmail,
   checkCustomer,
   updateCustomerPassword,
+  deleteAddress,
+  createAddress,
 } from 'src/serverPart/ApiRoot';
 import { ValueOfCustomer } from './interfaces';
 import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
+import DeleteIcon from '@mui/icons-material/Delete';
+import AddIcon from '@mui/icons-material/Add';
 import { STYLE_FOR_HELPER } from 'src/constants/STYLES';
+import { getCookie } from './cookieWork';
+import { AddressBlock } from 'src/components/forms/AddressBlock';
+import { getAddressesArray } from './getAddressesArray';
 
 const getLoopForObject = (
   data: Customer | Address,
@@ -30,21 +37,55 @@ const getLoopForObject = (
       event: FormEvent<HTMLFormElement>,
     ) => Promise<ClientResponse<Customer>> | Promise<void> | void,
   ][],
+  id?: string,
+  version?: number,
 ) => {
   const result = [];
   for (const [key, value] of Object.entries(data)) {
     const neededData = array.filter(item => item[0] === key);
     if (neededData.length) {
-      result.push(
-        getSettingsItem(
-          key as keyof Customer,
-          value as ValueOfCustomer,
-          neededData[0][1],
-        ),
-      );
+      if (!id && !version) {
+        result.push(
+          getSettingsItem(
+            key as keyof Customer,
+            value as ValueOfCustomer,
+            neededData[0][1],
+          ),
+        );
+      } else {
+        result.push(
+          <Box>
+            {getAddressItem(key as keyof Customer, value as ValueOfCustomer)}
+          </Box>,
+        );
+      }
     }
   }
   return result;
+};
+const getAddressItem = (
+  key: keyof Customer,
+  value: ValueOfCustomer,
+): JSX.Element => {
+  uniKey += 0.6;
+  return (
+    <Box sx={{ width: '100%' }} key={uniKey}>
+      <TextField
+        sx={{
+          width: '80%',
+          marginLeft: '20%',
+          marginRight: '10%',
+          marginTop: '1%',
+        }}
+        name={key}
+        type={'text'}
+        disabled={false}
+        id={key}
+        label={key}
+        defaultValue={value}
+      />
+    </Box>
+  );
 };
 
 const uniKeyForStack = Math.random();
@@ -93,7 +134,6 @@ const getSettingsList = (data: Customer): JSX.Element[] | undefined => {
           getSettingsList(newCustomer.body);
         } catch (error) {
           console.error(error);
-
           throw error;
         }
       },
@@ -264,7 +304,7 @@ const getSettingsItem = (
         <IconButton color="primary" aria-label="edit-mode" type="reset">
           <EditIcon sx={{ margin: '1% 2%' }} />
         </IconButton>
-        <IconButton color="primary" aria-label="edit-mode" type="submit">
+        <IconButton color="primary" aria-label="save-mode" type="submit">
           <SaveIcon sx={{ margin: '1%' }} />
         </IconButton>
       </Box>
@@ -272,7 +312,12 @@ const getSettingsItem = (
   }
 };
 
-const getAddressBlock = (label: string, data: Address): JSX.Element => {
+const getAddressBlock = (
+  label: string,
+  data: Address,
+  id: string,
+  version: number,
+): JSX.Element => {
   const pageOfAddresses: [
     string,
     (event: FormEvent<HTMLFormElement>) => Promise<ClientResponse<Customer>>,
@@ -316,9 +361,10 @@ const getAddressBlock = (label: string, data: Address): JSX.Element => {
   ];
   return (
     <Box
+      key={uniKey}
       sx={{
-        width: '100%',
-        marginLeft: '20%',
+        width: '80%',
+        marginLeft: '10%',
         marginRight: '10%',
         marginTop: '10%',
       }}
@@ -326,46 +372,134 @@ const getAddressBlock = (label: string, data: Address): JSX.Element => {
       <Divider>
         <Chip label={label} size="small" />
       </Divider>
-      {getLoopForObject(data, pageOfAddresses)}
+      <Box sx={{ display: 'flex', marginTop: '3%' }}>
+        {getLoopForObject(data, pageOfAddresses, id, version)}
+        <IconButton
+          color="primary"
+          aria-label="edit-mode"
+          type="button"
+          onClick={() => void handleDeleteAddress(version, id)}
+        >
+          <DeleteIcon sx={{ margin: '1% 2%' }} />
+        </IconButton>
+        <IconButton color="primary" aria-label="edit-mode" type="submit">
+          <SaveIcon sx={{ margin: '1%' }} />
+        </IconButton>
+      </Box>
     </Box>
   );
 };
-const getSettingsAddress = (data: Customer): JSX.Element[] | undefined => {
+
+const getSettingsAddress = (
+  data: Customer,
+): JSX.Element[] | JSX.Element | undefined => {
   const result: JSX.Element[] = [];
   if (data.addresses.length) {
-    console.log('co');
     data.addresses.forEach(item => {
-      result.push(getAddressBlock(SERVICE_MESSAGES.address, item));
+      result.push(
+        getAddressBlock(
+          SERVICE_MESSAGES.address,
+          item,
+          item.id ?? '',
+          data.version,
+        ),
+      );
     });
   }
   if (data.defaultBillingAddressId) {
     const biilData = data.addresses.filter(
       address => address.id === data.defaultBillingAddressId,
     );
-    console.log('cdef');
-    result.push(getAddressBlock(SERVICE_MESSAGES.address, biilData[0]));
+    result.push(
+      getAddressBlock(
+        SERVICE_MESSAGES.address,
+        biilData[0],
+        biilData[0].id ?? '',
+        data.version,
+      ),
+    );
   }
   if (data.defaultShippingAddressId) {
-    console.log('defShip');
     const biilData = data.addresses.filter(
       address => address.id === data.defaultShippingAddressId,
     );
-    result.push(getAddressBlock(SERVICE_MESSAGES.address, biilData[0]));
+    result.push(
+      getAddressBlock(
+        SERVICE_MESSAGES.address,
+        biilData[0],
+        biilData[0].id ?? '',
+        data.version,
+      ),
+    );
   }
   if (data.billingAddressIds?.length) {
-    console.log('bill');
     data.billingAddressIds.forEach(item => {
       const biilData = data.addresses.filter(address => address.id === item);
-      result.push(getAddressBlock(SERVICE_MESSAGES.address, biilData[0]));
+      result.push(
+        getAddressBlock(
+          SERVICE_MESSAGES.address,
+          biilData[0],
+          biilData[0].id ?? '',
+          data.version,
+        ),
+      );
     });
   }
   if (data.shippingAddressIds?.length) {
-    console.log('sh');
     data.shippingAddressIds.forEach(item => {
       const biilData = data.addresses.filter(address => address.id === item);
-      result.push(getAddressBlock(SERVICE_MESSAGES.address, biilData[0]));
+      result.push(
+        getAddressBlock(
+          SERVICE_MESSAGES.address,
+          biilData[0],
+          biilData[0].id ?? '',
+          data.version,
+        ),
+      );
     });
   }
 
-  return result;
+  return (
+    <Box
+      component="form"
+      sx={{ margin: '0 auto' }}
+      onSubmit={(event: FormEvent<HTMLFormElement>) =>
+        void handleSubmitAddress(event, data)
+      }
+    >
+      {result}
+      <Box sx={{ display: 'flex', width: '100%' }}>
+        <AddressBlock text={SERVICE_MESSAGES.address} value={'default'} />
+        <IconButton type="submit">
+          <AddIcon />
+        </IconButton>
+      </Box>
+    </Box>
+  );
+};
+
+const createNewAddress = (event: FormEvent<HTMLFormElement>): Address[] => {
+  const data = new FormData(event.currentTarget);
+  const kindOfAddresses = ['default'];
+  const newAddress: Address[] = [];
+  getAddressesArray(kindOfAddresses, newAddress, data);
+  return newAddress;
+};
+
+const handleSubmitAddress = async (
+  event: FormEvent<HTMLFormElement>,
+  data: Customer,
+) => {
+  event.preventDefault();
+  await createAddress(
+    getCookie('myID') ?? '',
+    data.version,
+    createNewAddress(event)[0],
+  );
+  location.reload();
+};
+
+const handleDeleteAddress = async (version: number, id: string) => {
+  await deleteAddress(getCookie('myID') ?? '', version, id);
+  location.reload();
 };

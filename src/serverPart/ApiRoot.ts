@@ -11,6 +11,7 @@ import {
   ErrorObject,
   ByProjectKeyRequestBuilder,
   Customer,
+  Address,
 } from '@commercetools/platform-sdk';
 
 import { CustomerData } from 'src/utils/interfaces';
@@ -216,6 +217,40 @@ const updateCustomerLastName = async (
     .execute();
 };
 
+const createAddress = async (
+  id: string,
+  version: number,
+  data: Address,
+): Promise<ClientResponse<Customer>> => {
+  return await apiRoot
+    .customers()
+    .withId({ ID: id })
+    .post({
+      body: {
+        version: version,
+        actions: [{ action: 'addAddress', address: data }],
+      },
+    })
+    .execute();
+};
+
+const deleteAddress = async (
+  id: string,
+  version: number,
+  fieldName: string,
+): Promise<ClientResponse<Customer>> => {
+  return await apiRoot
+    .customers()
+    .withId({ ID: id })
+    .post({
+      body: {
+        version: version,
+        actions: [{ action: 'removeAddress', addressId: fieldName }],
+      },
+    })
+    .execute();
+};
+
 const deleteContact = async (id: string) => {
   return await apiRoot
     .customers()
@@ -239,6 +274,8 @@ export {
   updateCustomerDataOfBirth,
   updateCustomerPassword,
   deleteContact,
+  createAddress,
+  deleteAddress,
   getCategories,
   getProducts,
   getProductById,
