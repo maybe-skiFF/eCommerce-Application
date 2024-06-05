@@ -1,6 +1,6 @@
 import { ChangeEvent, FormEvent, SyntheticEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useCustomer } from 'src/context/context';
+import { useCustomer, useIsAuth } from 'src/context/context';
 import {
   Box,
   Grid,
@@ -14,8 +14,11 @@ import { getTextForm, getInputProps } from 'src/utils/createFormControl';
 import { AgeBlock } from './AgeBlock';
 import { AddressBlock } from './AddressBlock';
 import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
-import { createCustomer } from 'src/serverPart/ApiRoot';
-import { getAddressesArray } from 'src/utils/getAddressesArray';
+import {
+  createCustomer,
+  getApiWithCredentials,
+  getMyCustomer,
+} from 'src/serverPart/ApiRoot';
 import {
   checkValidationFieldPassword,
   checkValidationFieldEmail,
@@ -24,9 +27,14 @@ import {
 import { CustomerData } from 'src/utils/interfaces';
 import { SubmitButton } from '../SubmitButton/SubmitButton';
 import { SimpleSnackbar } from '../SimpleSnackbar/SimpleSnackbar';
-import { ErrorObject } from '@commercetools/platform-sdk';
-import { useIsAuth } from 'src/context/context';
+import {
+  ClientResponse,
+  CustomerSignInResult,
+  ErrorObject,
+} from '@commercetools/platform-sdk';
 import { checkFullData } from 'src/utils/CheckFullData';
+import { getAddressesArray } from 'src/utils/getAddressesArray';
+import { setCookie } from 'src/utils/cookieWork';
 
 export const RegistrationBlock = () => {
   const [formData, setFormData] = useState<string>(SERVICE_MESSAGES.startCheck);
@@ -101,13 +109,30 @@ export const RegistrationBlock = () => {
         (data.get('day ') as string),
       addresses: [],
     };
-
     getAddressesArray(kindOfAddresses, myCustomer.addresses, data);
 
+    const myApi = getApiWithCredentials(
+      data.get('email') as string,
+      data.get('password') as string,
+    );
     await createCustomer(myCustomer)
-      .then(() => {
-        navigate('/');
-        setIsAuth(true);
+      .then(data => {
+        if (data.statusCode === 201) {
+          navigate('/');
+          localStorage.setItem('isAuth', 'true');
+          setIsAuth(true);
+          location.reload();
+        }
+      })
+      .then(async () => {
+        await getMyCustomer(
+          myApi,
+          data.get('email') as string,
+          data.get('password') as string,
+        ).then(({ body }: ClientResponse<CustomerSignInResult>) => {
+          console.log(body, 'thisBody');
+          setCookie('myID', body.customer.id);
+        });
       })
       .catch((error: ErrorObject) => {
         setServerMessage(error.message);

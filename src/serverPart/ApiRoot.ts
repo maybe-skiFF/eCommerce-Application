@@ -1,33 +1,75 @@
-import { ctpClient, myClient } from './BuildClient';
+import {
+  authMiddlewareOptions,
+  ctpClient,
+  httpMiddlewareOptions,
+} from './BuildClient';
 import {
   ClientResponse,
   CustomerSignInResult,
   createApiBuilderFromCtpClient,
-  CustomerPagedQueryResponse,
   Project,
   ErrorObject,
-  // ApiRoot,
-  // CustomerToken,
+  ByProjectKeyRequestBuilder,
+  Customer,
+  Address,
 } from '@commercetools/platform-sdk';
 
 import { CustomerData } from 'src/utils/interfaces';
 import { PROJECT_DATA } from './PROJECT_DATA';
+import {
+  PasswordAuthMiddlewareOptions,
+  ClientBuilder,
+} from '@commercetools/sdk-client-v2';
 
 const apiRoot = createApiBuilderFromCtpClient(ctpClient).withProjectKey({
   projectKey: PROJECT_DATA.CTP_PROJECT_KEY,
 });
-const myApiRoot = createApiBuilderFromCtpClient(myClient).withProjectKey({
-  projectKey: PROJECT_DATA.CTP_PROJECT_KEY,
-});
+
 const getProject = (): Promise<ClientResponse<Project>> => {
   return apiRoot.get().execute();
 };
-const getToken = (): Promise<ClientResponse<CustomerPagedQueryResponse>> => {
-  return myApiRoot.customers().get().execute();
+
+const getApiWithCredentials = (
+  name: string,
+  password: string,
+): ByProjectKeyRequestBuilder => {
+  const options: PasswordAuthMiddlewareOptions = {
+    host: PROJECT_DATA.CTP_AUTH_URL ?? '',
+    projectKey: PROJECT_DATA.CTP_PROJECT_KEY,
+    credentials: {
+      clientId: PROJECT_DATA.CTP_CLIENT_ID,
+      clientSecret: PROJECT_DATA.CTP_CLIENT_SECRET,
+      user: {
+        username: name,
+        password: password,
+      },
+    },
+    scopes: [`manage_project:${PROJECT_DATA.CTP_PROJECT_KEY}`],
+    fetch,
+  };
+  const client = new ClientBuilder()
+    .withHttpMiddleware(httpMiddlewareOptions)
+    .withClientCredentialsFlow(authMiddlewareOptions)
+    .withLoggerMiddleware()
+    .withPasswordFlow(options)
+    .build();
+  return createApiBuilderFromCtpClient(client).withProjectKey({
+    projectKey: PROJECT_DATA.CTP_PROJECT_KEY,
+  });
+};
+const getCategories = () => {
+  return apiRoot.categories().get().execute();
 };
 
-const getCategories = () => {
-  return myApiRoot.categories().get().execute();
+const getProducts = () => {
+  return apiRoot
+    .products()
+    .get({ queryArgs: { limit: 100 } })
+    .execute();
+};
+
+const getProductById = (ID: string) => {
+  return apiRoot.products().withId({ ID }).get().execute();
 };
 
 const createCustomerDraft = (customerData: CustomerData) => {
@@ -54,42 +96,156 @@ const createCustomer = async (
     })
     .execute();
 };
-const createMyCustomer = async (
+
+const getMyCustomer = async (
+  api: ByProjectKeyRequestBuilder,
   name: string,
   password: string,
-): Promise<ClientResponse> => {
-  return await myApiRoot
-    .customers()
+): Promise<ClientResponse<CustomerSignInResult>> => {
+  return await api
+    .me()
+    .login()
     .post({
       body: {
         email: name,
         password: password,
+        updateProductData: true,
+        activeCartSignInMode: 'MergeWithExistingCustomerCart',
       },
     })
     .execute();
 };
-const getPasswordFlow = async (
-  // BEARER_TOKEN: string,
-  email: string,
-  password: string,
-) => {
-  await apiRoot
-    .customers()
-    .get({
-      queryArgs: {
-        where: [`email="${email}"`, `password="${password}"`],
-      },
-    })
-    .execute();
+
+const checkCustomer = async (id: string): Promise<ClientResponse<Customer>> => {
+  return await apiRoot.customers().withId({ ID: id }).get().execute();
 };
-const checkCustomer = async (
+
+const updateCustomerPassword = async (
   email: string,
-): Promise<ClientResponse<CustomerPagedQueryResponse>> => {
+  oldPassword: FormDataEntryValue,
+  newPassword: FormDataEntryValue,
+): Promise<ClientResponse<Customer>> => {
+  try {
+    const api = getApiWithCredentials(email, oldPassword as string);
+    const myCustomer = await getMyCustomer(api, email, oldPassword as string);
+    const customerUpdate = await api
+      .customers()
+      .password()
+      .post({
+        body: {
+          id: myCustomer.body.customer.id,
+          version: myCustomer.body.customer.version,
+          currentPassword: oldPassword as string,
+          newPassword: newPassword as string,
+        },
+      })
+      .execute();
+    return customerUpdate;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+const updateCustomerEmail = async (
+  id: string,
+  version: number,
+  email: FormDataEntryValue,
+): Promise<ClientResponse<Customer>> => {
   return await apiRoot
     .customers()
-    .get({
-      queryArgs: {
-        where: `email="${email}"`,
+    .withId({ ID: id })
+    .post({
+      body: {
+        version: version,
+        actions: [{ action: 'changeEmail', email: email as string }],
+      },
+    })
+    .execute();
+};
+
+const updateCustomerFirstName = async (
+  id: string,
+  version: number,
+  fieldName: FormDataEntryValue,
+): Promise<ClientResponse<Customer>> => {
+  return await apiRoot
+    .customers()
+    .withId({ ID: id })
+    .post({
+      body: {
+        version: version,
+        actions: [{ action: 'setFirstName', firstName: fieldName as string }],
+      },
+    })
+    .execute();
+};
+
+const updateCustomerDataOfBirth = async (
+  id: string,
+  version: number,
+  fieldName: FormDataEntryValue,
+): Promise<ClientResponse<Customer>> => {
+  return await apiRoot
+    .customers()
+    .withId({ ID: id })
+    .post({
+      body: {
+        version: version,
+        actions: [
+          { action: 'setDateOfBirth', dateOfBirth: fieldName as string },
+        ],
+      },
+    })
+    .execute();
+};
+
+const updateCustomerLastName = async (
+  id: string,
+  version: number,
+  fieldName: FormDataEntryValue,
+): Promise<ClientResponse<Customer>> => {
+  return await apiRoot
+    .customers()
+    .withId({ ID: id })
+    .post({
+      body: {
+        version: version,
+        actions: [{ action: 'setLastName', lastName: fieldName as string }],
+      },
+    })
+    .execute();
+};
+
+const createAddress = async (
+  id: string,
+  version: number,
+  data: Address,
+): Promise<ClientResponse<Customer>> => {
+  return await apiRoot
+    .customers()
+    .withId({ ID: id })
+    .post({
+      body: {
+        version: version,
+        actions: [{ action: 'addAddress', address: data }],
+      },
+    })
+    .execute();
+};
+
+const deleteAddress = async (
+  id: string,
+  version: number,
+  fieldName: string,
+): Promise<ClientResponse<Customer>> => {
+  return await apiRoot
+    .customers()
+    .withId({ ID: id })
+    .post({
+      body: {
+        version: version,
+        actions: [{ action: 'removeAddress', addressId: fieldName }],
       },
     })
     .execute();
@@ -106,34 +262,21 @@ const deleteContact = async (id: string) => {
     .execute();
 };
 
-interface Category {
-  id: string;
-  key: string | undefined;
-}
-const createCategories = async (): Promise<Category[]> => {
-  try {
-    const response = await myApiRoot.categories().get().execute();
-    const categories: Category[] = response.body.results
-      .filter(item => !item.parent)
-      .map(item => ({
-        id: item.id,
-        key: item.key
-      }));
-    return categories;
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
-};
-
 export {
   getProject,
   createCustomer,
+  getApiWithCredentials,
+  getMyCustomer,
   checkCustomer,
-  getToken,
-  getPasswordFlow,
-  createMyCustomer,
+  updateCustomerEmail,
+  updateCustomerFirstName,
+  updateCustomerLastName,
+  updateCustomerDataOfBirth,
+  updateCustomerPassword,
   deleteContact,
+  createAddress,
+  deleteAddress,
   getCategories,
-  createCategories,
+  getProducts,
+  getProductById,
 };

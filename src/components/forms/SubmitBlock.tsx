@@ -7,7 +7,7 @@ import {
 } from 'react';
 import { Box } from '@mui/material';
 
-import { getProject, checkCustomer } from 'src/serverPart/ApiRoot';
+import { getMyCustomer, getApiWithCredentials } from 'src/serverPart/ApiRoot';
 import { getTextForm, getInputProps } from 'src/utils/createFormControl';
 import { SubmitButton } from '../SubmitButton/SubmitButton';
 import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
@@ -15,10 +15,15 @@ import {
   checkValidationFieldEmail,
   checkValidationFieldPassword,
 } from 'src/utils/checkValidationField';
+import { setCookie } from 'src/utils/cookieWork';
 import { useNavigate } from 'react-router-dom';
-import { SimpleSnackbar } from '../SimpleSnackbar/SimpleSnackbar';
 import { useIsAuth } from 'src/context/context';
-import { ErrorObject } from '@commercetools/platform-sdk';
+import { SimpleSnackbar } from '../SimpleSnackbar/SimpleSnackbar';
+import {
+  ClientResponse,
+  CustomerSignInResult,
+  ErrorObject,
+} from '@commercetools/platform-sdk';
 
 export const SubmitBlock = (): ReactNode => {
   const [currentStatusEmail, setCurrentStatusEmail] = useState<string>(
@@ -30,6 +35,8 @@ export const SubmitBlock = (): ReactNode => {
   const [serverMessage, setServerMessage] = useState<string>('');
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
+  const { setIsAuth } = useIsAuth();
+
   const handleClose = (event: SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
       return event;
@@ -50,7 +57,6 @@ export const SubmitBlock = (): ReactNode => {
     }
   };
 
-  const { setIsAuth } = useIsAuth();
   const navigate = useNavigate();
 
   const handleClickShowPassword = () => setShowPassword(show => !show);
@@ -65,22 +71,32 @@ export const SubmitBlock = (): ReactNode => {
     if (data.get('password') === '') {
       setCurrentStatusPassword(SERVICE_MESSAGES.notEmpty);
     }
-    await getProject().then(() => {
-      checkCustomer(data.get('email') as string)
-        .then(({ body }) => {
-          if (body.results.length === 0) {
-            setOpen(true);
-            setServerMessage(SERVICE_MESSAGES.errorMail);
-          } else {
-            navigate('/');
-            setIsAuth(true);
-          }
-        })
-        .catch((error: ErrorObject) => {
-          setServerMessage(error.message);
+    const myApi = getApiWithCredentials(
+      data.get('email') as string,
+      data.get('password') as string,
+    );
+
+    await getMyCustomer(
+      myApi,
+      data.get('email') as string,
+      data.get('password') as string,
+    )
+      .then(({ body, statusCode }: ClientResponse<CustomerSignInResult>) => {
+        if (statusCode !== 200) {
           setOpen(true);
-        });
-    });
+          setServerMessage(SERVICE_MESSAGES.errorMail);
+        } else {
+          navigate('/');
+          localStorage.setItem('isAuth', 'true');
+          setIsAuth(true);
+          setCookie('myID', body.customer.id);
+          location.reload();
+        }
+      })
+      .catch((error: ErrorObject) => {
+        setServerMessage(error.message);
+        setOpen(true);
+      });
   };
 
   return (

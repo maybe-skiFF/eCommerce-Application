@@ -14,7 +14,7 @@ interface AuthContext {
   setIsAuth: Dispatch<SetStateAction<boolean>>;
 }
 const initialState = {
-  isAuth: false,
+  isAuth: localStorage.getItem('isAuth') ? true : false,
   setIsAuth: () => {},
 };
 export const IsAuthContext = createContext<AuthContext>(initialState);

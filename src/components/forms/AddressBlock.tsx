@@ -7,11 +7,12 @@ import { listOfAddresses } from 'src/constants/dataOfConstants';
 
 import { STYLE_FOR_ADDRESS } from 'src/constants/STYLES';
 import { getFormControl } from 'src/utils/createFormControl';
-import { Address, AddressProps } from 'src/utils/interfaces';
+import { AddressProps, CustomerAddress } from 'src/utils/interfaces';
 import { checkFullData } from 'src/utils/CheckFullData';
+import { Address } from '@commercetools/platform-sdk';
 
 export const AddressBlock = (props: AddressProps) => {
-  const [dateParts, setDateParts] = useState({
+  const [dateParts, setDateParts] = useState<Address>({
     country: '',
     city: '',
     streetName: '',
@@ -23,7 +24,7 @@ export const AddressBlock = (props: AddressProps) => {
     address => address.country,
   );
 
-  const getAddressItems = (country: string): Address =>
+  const getAddressItems = (country: string): CustomerAddress =>
     listOfAddresses.filter(
       address => address.country.slice(-2) === `${country}`,
     )[0];
@@ -39,7 +40,6 @@ export const AddressBlock = (props: AddressProps) => {
   const doRewriteCustomer = () => {
     if (checkFullData(dateParts)) {
       customer.addresses.push(dateParts);
-      console.log(customer);
     }
   };
 
@@ -69,7 +69,7 @@ export const AddressBlock = (props: AddressProps) => {
         )}
         {getFormControl(
           'city',
-          dateParts.city,
+          dateParts.city ?? '',
           getAddressItems(dateParts.country).city ?? '',
           STYLE_FOR_ADDRESS,
           props.value ?? '',
@@ -78,7 +78,7 @@ export const AddressBlock = (props: AddressProps) => {
         )}
         {getFormControl(
           'street',
-          dateParts.streetName,
+          dateParts.streetName ?? '',
           getAddressItems(dateParts.country).streetName ?? [''],
           STYLE_FOR_ADDRESS,
           props.value ?? '',
@@ -87,7 +87,7 @@ export const AddressBlock = (props: AddressProps) => {
         )}
         {getFormControl(
           'postalCode',
-          dateParts.postalCode,
+          dateParts.postalCode ?? '',
           getAddressItems(dateParts.country).postalCode ?? '',
           STYLE_FOR_ADDRESS,
           props.value ?? '',

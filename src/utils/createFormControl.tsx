@@ -10,7 +10,6 @@ import {
   SelectChangeEvent,
   TextField,
 } from '@mui/material';
-
 import { ChangeEvent } from 'react';
 import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
 import { STYLE_FOR_HELPER } from 'src/constants/STYLES';
@@ -34,6 +33,7 @@ const createListItem = (item: string) => {
     </MenuItem>
   );
 };
+
 const getListItems = (
   items: string[] | string,
 ): JSX.Element[] | JSX.Element => {
@@ -41,6 +41,7 @@ const getListItems = (
     ? items.map(item => createListItem(item))
     : createListItem(items);
 };
+
 export const getFormControl = (
   purpose: string,
   selectValue: string,
@@ -125,7 +126,8 @@ export const getTextForm = (
       autoComplete={`current-${purpose}`}
       error={
         Object.values(SERVICE_MESSAGES).some(value => value === state) &&
-        state !== SERVICE_MESSAGES.startCheck
+        state !== SERVICE_MESSAGES.startCheck &&
+        state !== SERVICE_MESSAGES.checkDone
       }
       helperText={state}
       sx={{ width: 'calc(90% - 15px)' }}

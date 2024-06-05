@@ -1,12 +1,23 @@
-import { CustomerSignInResult, ErrorObject } from '@commercetools/platform-sdk';
+import {
+  CategoryReference,
+  CustomerSignInResult,
+  ErrorObject,
+  LocalizedString,
+  CustomFields,
+  CustomerGroupReference,
+  LastModifiedBy,
+  StoreKeyReference,
+  Address,
+} from '@commercetools/platform-sdk';
 import { ClientResponse } from '@commercetools/sdk-client-v2';
 import { ErrorResponse } from 'react-router-dom';
 
-export interface Address {
-  country: string;
-  city: string;
-  postalCode: string;
-  streetName: string[];
+export interface SettingsPersonalData {
+  firstName: string;
+  lastName: string;
+  dateOfBirth: string;
+  email: string;
+  password: string;
 }
 
 export interface CustomerData {
@@ -16,16 +27,23 @@ export interface CustomerData {
   password: string;
   key: string;
   dateOfBirth: string;
-  addresses: CustomerAddress[];
+  addresses: Address[];
 }
 
 export interface CustomerAddress {
   country: string;
   city: string;
   postalCode: string;
-  streetName: string;
+  streetName: string[];
 }
 
+export interface SettingsAddress {
+  addresses: Address[];
+  billingAddressIds?: string[];
+  shippingAddressIds?: string[];
+  defaultBillingAddressId?: string;
+  defaultShippingAddressId?: string;
+}
 export interface DataTime {
   day: string[];
   month: string[];
@@ -71,3 +89,184 @@ export interface Response {
   error: ErrorObject | ErrorResponse;
   statusCode: number;
 }
+
+export interface Category {
+  id: string | undefined;
+  key: string | undefined;
+}
+
+export interface ProductData {
+  id: string;
+  key: string | undefined;
+  masterData: {
+    current: {
+      description: {
+        'en-US': string;
+      };
+      masterVariant: {
+        images: {
+          url: string;
+        }[];
+        prices: {
+          discounted: {
+            value: {
+              centAmount: number;
+            };
+          };
+          value: {
+            centAmount: number;
+          };
+        }[];
+      };
+    };
+  };
+}
+
+export interface ProductPure {
+  id: string;
+  key: string | undefined;
+  description: string;
+  image: string;
+  price: number;
+  discount: number;
+}
+
+export interface ShopCardProps {
+  products: ProductPure[];
+  sortValue: string;
+}
+
+export interface CategoryChoiceSubProps {
+  isVisible: boolean;
+  selectedKey: string | null;
+  handleChangeProp: (
+    event: React.MouseEvent<HTMLElement>,
+    newCategory: string | null,
+  ) => void;
+}
+
+export interface SortItemProps {
+  onValueChange: (newValue: string) => void;
+}
+
+export interface ProductDataFromServer {
+  id: string;
+  key?: string | undefined;
+  version: number;
+  masterData: {
+    current: {
+      categories?: CategoryReference[];
+      description: LocalizedString | undefined;
+      masterVariant: {
+        attributes: [];
+        id: number;
+        images: [
+          {
+            dimensions: {
+              h: number;
+              w: number;
+            };
+            url: string;
+          },
+        ];
+        prices: [
+          {
+            value: {
+              type: string;
+              fractionDigits: number;
+              centAmount: number;
+              currencyCode: string;
+            };
+            id: string;
+          },
+        ];
+        sku: string;
+      };
+      name: {
+        en: string;
+      };
+      slug: {
+        en: string;
+      };
+      variants: [];
+      searchKeywords: object;
+    };
+    hasStagedChanges: false;
+    published: true;
+    staged: {
+      categories: [
+        {
+          id: string;
+          typeId: string;
+        },
+      ];
+      description: {
+        en: string;
+      };
+      masterVariant: {
+        attributes: [];
+        id: number;
+        images: [
+          {
+            dimensions: {
+              h: number;
+              w: number;
+            };
+            url: string;
+          },
+        ];
+        prices: [
+          {
+            value: {
+              type: string;
+              fractionDigits: number;
+              centAmount: number;
+              currencyCode: string;
+            };
+            id: string;
+          },
+        ];
+        sku: string;
+      };
+      name: {
+        en: string;
+      };
+      slug: {
+        en: string;
+      };
+      variants: [];
+      searchKeywords: object;
+    };
+  };
+  productType: {
+    id: string;
+    typeId: string;
+  };
+  taxCategory: {
+    id: string | undefined;
+    typeId: string | undefined;
+  };
+  createdAt: string;
+  lastModifiedAt: string;
+}
+
+export interface AnswerAddress {
+  id: string;
+  country: string;
+  city: string;
+  streetName: string;
+  postalCode: string;
+}
+
+export type ValueOfCustomer =
+  | string
+  | number
+  | boolean
+  | string[]
+  | LastModifiedBy
+  | CreatedBy
+  | Address
+  | Address[]
+  | CustomerGroupReference
+  | CustomFields
+  | StoreKeyReference[];

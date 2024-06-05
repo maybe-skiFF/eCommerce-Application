@@ -20,6 +20,7 @@ export const SERVICE_MESSAGES = {
   isNoValid: 'Email address must be  formatted (e.g., user@example.com).',
   login: 'Login',
   logout: 'Logout',
+  manageAccounts: 'Your account',
   noAccount: `Don't have an account?`,
   notEmpty: 'The field cannot be empty',
   page404Text:
@@ -27,8 +28,10 @@ export const SERVICE_MESSAGES = {
   rememberMe: 'Remember me ',
   signIn: 'Sign in ',
   sort: 'sort items',
-  sortCategory_1: 'name',
-  sortCategory_2: 'cost',
+  sortCategory_1: 'name (ascending)',
+  sortCategory_2: 'name (descending)',
+  sortCategory_3: 'cost (ascending)',
+  sortCategory_4: 'cost (descending)',
   startCheck: 'start',
   useDogSign: 'The valid email must contain a symbol @',
   useDomainName: 'Email address must contain a domain name ',
@@ -44,4 +47,7 @@ export const SERVICE_MESSAGES = {
   page404BtnText: 'Back To MainPage',
   school: 'RSSchool',
   year: '2024',
+  yourAddress: 'Your address',
+  yourShippingAddress: 'Your shipping address',
+  yourBillingAddress: 'Your billing address',
 };

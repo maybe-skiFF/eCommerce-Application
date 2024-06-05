@@ -1,8 +1,8 @@
-import { CustomerAddress } from './interfaces';
+import { Address } from '@commercetools/platform-sdk';
 
 export const getAddressesArray = (
   nameForms: string[],
-  addresses: CustomerAddress[],
+  addresses: Address[],
   data: FormData,
 ): void => {
   nameForms.map(name => {
