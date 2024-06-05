@@ -12,6 +12,7 @@ import {
 } from '@mui/material';
 import { SwiperSlider } from '../SwiperSlider/SwiperSlider';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+import { getAnonimnusCart } from 'src/serverPart/BuildCart';
 
 interface ProductObj {
   productDataById: Product | undefined;
@@ -104,7 +105,11 @@ export function DetailedProductWrapper({ productDataById }: ProductObj) {
               />
             </RadioGroup>
           </FormControl>
-          <IconButton sx={{ marginBottom: '0%' }}>
+          <IconButton
+            sx={{ marginBottom: '0%' }}
+            type="button"
+            onClick={() => void getAnonimnusCart()}
+          >
             <AddShoppingCartIcon fontSize="large" />
           </IconButton>
         </Box>
