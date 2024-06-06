@@ -394,6 +394,24 @@ const getSettingsAddress = (
   data: Customer,
 ): JSX.Element[] | JSX.Element | undefined => {
   const result: JSX.Element[] = [];
+  console.log(data);
+  if (!data.addresses.length) {
+    return (
+      <Box
+        key={uniKey}
+        sx={{
+          width: '80%',
+          marginLeft: '10%',
+          marginRight: '10%',
+          marginTop: '10%',
+        }}
+      >
+        <Divider>
+          <Chip label="There is not any address" size="small" />
+        </Divider>
+      </Box>
+    );
+  }
   if (data.addresses.length) {
     data.addresses.forEach(item => {
       result.push(

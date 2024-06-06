@@ -35,6 +35,11 @@ import {
 import { checkFullData } from 'src/utils/CheckFullData';
 import { getAddressesArray } from 'src/utils/getAddressesArray';
 import { setCookie } from 'src/utils/cookieWork';
+import {
+  getAnonimnusCart,
+  getCustomerCart,
+  setCustomerIDByCart,
+} from 'src/serverPart/BuildCart';
 
 export const RegistrationBlock = () => {
   const [formData, setFormData] = useState<string>(SERVICE_MESSAGES.startCheck);
@@ -129,9 +134,19 @@ export const RegistrationBlock = () => {
           myApi,
           data.get('email') as string,
           data.get('password') as string,
-        ).then(({ body }: ClientResponse<CustomerSignInResult>) => {
+        ).then(async ({ body }: ClientResponse<CustomerSignInResult>) => {
           console.log(body, 'thisBody');
           setCookie('myID', body.customer.id);
+          const cart = await getCustomerCart(body.customer.id);
+          if (cart.statusCode !== 200) {
+            const newCart = await getAnonimnusCart();
+            await setCustomerIDByCart(
+              newCart.body.id,
+              newCart.body.version,
+              body.customer.id,
+            );
+          }
+          setCookie('myCart', cart.body.id);
         });
       })
       .catch((error: ErrorObject) => {

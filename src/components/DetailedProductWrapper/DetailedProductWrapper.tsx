@@ -14,8 +14,8 @@ import { SwiperSlider } from '../SwiperSlider/SwiperSlider';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import {
   getAnonimnusCart,
-  getAnonimnusCartByID,
-  updateAnonimnusCartByID,
+  getCartByID,
+  updateCartByID,
   setCountryForCart,
 } from 'src/serverPart/BuildCart';
 import { getCookie, setCookie } from 'src/utils/cookieWork';
@@ -48,9 +48,9 @@ export function DetailedProductWrapper({ productDataById }: ProductObj) {
   }
 
   const getMyAnonimnusCart = async (): Promise<ClientResponse<Cart>> => {
-    if (!getCookie('myAnonCart')) {
+    if (!getCookie('myCart')) {
       const cart = await getAnonimnusCart();
-      setCookie('myAnonCart', cart.body.id);
+      setCookie('myCart', cart.body.id);
       const myCartWithCountry = await setCountryForCart(
         cart.body.id,
         cart.body.version,
@@ -58,13 +58,13 @@ export function DetailedProductWrapper({ productDataById }: ProductObj) {
       );
       return myCartWithCountry;
     }
-    return await getAnonimnusCartByID(getCookie('myAnonCart') ?? '');
+    return await getCartByID(getCookie('myAnonCart') ?? '');
   };
 
   const handleClickForBuy = async () => {
     const cart = await getMyAnonimnusCart();
     const productID = productDataById.id;
-    await updateAnonimnusCartByID(cart.body.id, cart.body.version, productID);
+    await updateCartByID(cart.body.id, cart.body.version, productID);
   };
   return (
     <Box sx={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap' }}>

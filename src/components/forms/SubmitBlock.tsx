@@ -24,6 +24,12 @@ import {
   CustomerSignInResult,
   ErrorObject,
 } from '@commercetools/platform-sdk';
+import {
+  getAnonimnusCart,
+  getCustomerCart,
+  isCustomerExist,
+  setCustomerIDByCart,
+} from 'src/serverPart/BuildCart';
 
 export const SubmitBlock = (): ReactNode => {
   const [currentStatusEmail, setCurrentStatusEmail] = useState<string>(
@@ -81,18 +87,35 @@ export const SubmitBlock = (): ReactNode => {
       data.get('email') as string,
       data.get('password') as string,
     )
-      .then(({ body, statusCode }: ClientResponse<CustomerSignInResult>) => {
-        if (statusCode !== 200) {
-          setOpen(true);
-          setServerMessage(SERVICE_MESSAGES.errorMail);
-        } else {
-          navigate('/');
-          localStorage.setItem('isAuth', 'true');
-          setIsAuth(true);
-          setCookie('myID', body.customer.id);
-          location.reload();
-        }
-      })
+      .then(
+        async ({ body, statusCode }: ClientResponse<CustomerSignInResult>) => {
+          if (statusCode !== 200) {
+            setOpen(true);
+            setServerMessage(SERVICE_MESSAGES.errorMail);
+          } else {
+            navigate('/');
+            localStorage.setItem('isAuth', 'true');
+            setIsAuth(true);
+            setCookie('myID', body.customer.id);
+            console.log(body.customer.id);
+            const exist = await isCustomerExist(body.customer.id);
+            if (exist.statusCode === 200) {
+              const cart = await getCustomerCart(body.customer.id);
+              console.log('cart', cart);
+              if (cart.statusCode !== 200) {
+                const newCart = await getAnonimnusCart();
+                const withName = await setCustomerIDByCart(
+                  newCart.body.id,
+                  newCart.body.version,
+                  body.customer.id,
+                );
+                console.log(withName, 'w');
+              }
+              setCookie('myCart', cart.body.id);
+            }
+          }
+        },
+      )
       .catch((error: ErrorObject) => {
         setServerMessage(error.message);
         setOpen(true);
