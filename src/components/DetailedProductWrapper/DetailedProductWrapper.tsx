@@ -1,4 +1,4 @@
-import { Product } from '@commercetools/platform-sdk';
+import { Cart, ClientResponse, Product } from '@commercetools/platform-sdk';
 
 import {
   Box,
@@ -12,7 +12,12 @@ import {
 } from '@mui/material';
 import { SwiperSlider } from '../SwiperSlider/SwiperSlider';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
-import { getAnonimnusCart } from 'src/serverPart/BuildCart';
+import {
+  getAnonimnusCart,
+  getAnonimnusCartByID,
+  updateAnonimnusCartByID,
+} from 'src/serverPart/BuildCart';
+import { getCookie, setCookie } from 'src/utils/cookieWork';
 
 interface ProductObj {
   productDataById: Product | undefined;
@@ -41,6 +46,21 @@ export function DetailedProductWrapper({ productDataById }: ProductObj) {
     return false;
   }
 
+  const getMyAnonimnusCart = async (): Promise<ClientResponse<Cart>> => {
+    const cart = await getAnonimnusCart();
+    if (!getCookie('myAnonCart')) {
+      setCookie('myAnonCart', cart.body.id);
+      return cart;
+    }
+    const cartAnon = getAnonimnusCartByID(cart.body.id);
+    return cartAnon;
+  };
+
+  const handleClickForBuy = async () => {
+    const cart = await getMyAnonimnusCart();
+    const productID = productDataById.id;
+    await updateAnonimnusCartByID(cart.body.id, cart.body.version, productID);
+  };
   return (
     <Box sx={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap' }}>
       <Box
@@ -108,7 +128,7 @@ export function DetailedProductWrapper({ productDataById }: ProductObj) {
           <IconButton
             sx={{ marginBottom: '0%' }}
             type="button"
-            onClick={() => void getAnonimnusCart()}
+            onClick={() => void handleClickForBuy()}
           >
             <AddShoppingCartIcon fontSize="large" />
           </IconButton>

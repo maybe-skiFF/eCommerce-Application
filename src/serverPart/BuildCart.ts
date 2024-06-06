@@ -14,4 +14,26 @@ const getAnonimnusCart = (): Promise<ClientResponse<Cart>> => {
     .execute();
 };
 
-export { getAnonimnusCart };
+const getAnonimnusCartByID = (
+  IDCart: string,
+): Promise<ClientResponse<Cart>> => {
+  return apiRoot.carts().withId({ ID: IDCart }).get().execute();
+};
+
+const updateAnonimnusCartByID = (
+  IDCart: string,
+  version: number,
+  IDProduct: string,
+): Promise<ClientResponse<Cart>> => {
+  return apiRoot
+    .carts()
+    .withId({ ID: IDCart })
+    .post({
+      body: {
+        version: version,
+        actions: [{ action: 'addLineItem', productId: IDProduct }],
+      },
+    })
+    .execute();
+};
+export { getAnonimnusCart, getAnonimnusCartByID, updateAnonimnusCartByID };
