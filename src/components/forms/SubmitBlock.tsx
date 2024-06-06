@@ -27,9 +27,12 @@ import {
 import {
   getAnonimnusCart,
   getCustomerCart,
+  getMyCart,
   isCustomerExist,
+  setCountryForCart,
   setCustomerIDByCart,
 } from 'src/serverPart/BuildCart';
+import { selectionZone } from 'src/utils/selectionZone';
 
 export const SubmitBlock = (): ReactNode => {
   const [currentStatusEmail, setCurrentStatusEmail] = useState<string>(
@@ -100,17 +103,12 @@ export const SubmitBlock = (): ReactNode => {
             console.log(body.customer.id);
             const exist = await isCustomerExist(body.customer.id);
             if (exist.statusCode === 200) {
-              const cart = await getCustomerCart(body.customer.id);
-              console.log('cart', cart);
-              if (cart.statusCode !== 200) {
-                const newCart = await getAnonimnusCart();
-                const withName = await setCustomerIDByCart(
-                  newCart.body.id,
-                  newCart.body.version,
-                  body.customer.id,
-                );
-                console.log(withName, 'w');
-              }
+              const cart = await getMyCart(myApi);
+              await setCountryForCart(
+                cart.body.id,
+                cart.body.version,
+                selectionZone(body.customer),
+              );
               setCookie('myCart', cart.body.id);
             }
           }

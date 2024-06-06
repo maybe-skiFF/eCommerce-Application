@@ -58,7 +58,7 @@ export function DetailedProductWrapper({ productDataById }: ProductObj) {
       );
       return myCartWithCountry;
     }
-    return await getCartByID(getCookie('myAnonCart') ?? '');
+    return await getCartByID(getCookie('myCart') ?? '');
   };
 
   const handleClickForBuy = async () => {
@@ -66,6 +66,7 @@ export function DetailedProductWrapper({ productDataById }: ProductObj) {
     const productID = productDataById.id;
     await updateCartByID(cart.body.id, cart.body.version, productID);
   };
+
   return (
     <Box sx={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap' }}>
       <Box

@@ -5,7 +5,12 @@
 // } from './BuildClient';
 import { apiRoot } from './ApiRoot';
 // import { PROJECT_DATA } from './PROJECT_DATA';
-import { ClientResponse, Cart, Customer } from '@commercetools/platform-sdk';
+import {
+  ClientResponse,
+  Cart,
+  Customer,
+  ByProjectKeyRequestBuilder,
+} from '@commercetools/platform-sdk';
 
 const getAnonimnusCart = (): Promise<ClientResponse<Cart>> => {
   return apiRoot
@@ -16,6 +21,10 @@ const getAnonimnusCart = (): Promise<ClientResponse<Cart>> => {
 
 const getCartByID = (IDCart: string): Promise<ClientResponse<Cart>> => {
   return apiRoot.carts().withId({ ID: IDCart }).get().execute();
+};
+
+const getMyCart = (api: ByProjectKeyRequestBuilder) => {
+  return api.me().activeCart().get().execute();
 };
 
 const setCountryForCart = (
@@ -91,4 +100,5 @@ export {
   getCustomerCart,
   setCustomerIDByCart,
   isCustomerExist,
+  getMyCart,
 };
