@@ -258,6 +258,12 @@ export interface AnswerAddress {
   postalCode: string;
 }
 
+export interface PaginationComponentProps {
+  count: number;
+  page: number;
+  handlePageChange: (event: React.ChangeEvent<unknown>, value: number) => void;
+}
+
 export type ValueOfCustomer =
   | string
   | number

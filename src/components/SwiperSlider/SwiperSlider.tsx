@@ -36,7 +36,7 @@ export function SwiperSlider({ productImgArr }: IProductImgArr) {
             style={{ width: '100$', height: '500px' }}
             src={el.url}
             alt="image"
-            className='image'
+            className="image"
           />
           <Modal
             sx={{
