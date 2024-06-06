@@ -16,6 +16,7 @@ import {
   getAnonimnusCart,
   getAnonimnusCartByID,
   updateAnonimnusCartByID,
+  setCountryForCart,
 } from 'src/serverPart/BuildCart';
 import { getCookie, setCookie } from 'src/utils/cookieWork';
 
@@ -47,13 +48,17 @@ export function DetailedProductWrapper({ productDataById }: ProductObj) {
   }
 
   const getMyAnonimnusCart = async (): Promise<ClientResponse<Cart>> => {
-    const cart = await getAnonimnusCart();
     if (!getCookie('myAnonCart')) {
+      const cart = await getAnonimnusCart();
       setCookie('myAnonCart', cart.body.id);
-      return cart;
+      const myCartWithCountry = await setCountryForCart(
+        cart.body.id,
+        cart.body.version,
+        'US',
+      );
+      return myCartWithCountry;
     }
-    const cartAnon = getAnonimnusCartByID(cart.body.id);
-    return cartAnon;
+    return await getAnonimnusCartByID(getCookie('myAnonCart') ?? '');
   };
 
   const handleClickForBuy = async () => {

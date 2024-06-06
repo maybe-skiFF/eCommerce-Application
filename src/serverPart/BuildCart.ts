@@ -10,7 +10,7 @@ import { ClientResponse, Cart } from '@commercetools/platform-sdk';
 const getAnonimnusCart = (): Promise<ClientResponse<Cart>> => {
   return apiRoot
     .carts()
-    .post({ body: { currency: 'EUR' } })
+    .post({ body: { currency: 'USD' } })
     .execute();
 };
 
@@ -18,6 +18,23 @@ const getAnonimnusCartByID = (
   IDCart: string,
 ): Promise<ClientResponse<Cart>> => {
   return apiRoot.carts().withId({ ID: IDCart }).get().execute();
+};
+
+const setCountryForCart = (
+  IDCart: string,
+  version: number,
+  country: string,
+): Promise<ClientResponse<Cart>> => {
+  return apiRoot
+    .carts()
+    .withId({ ID: IDCart })
+    .post({
+      body: {
+        version: version,
+        actions: [{ action: 'setCountry', country: country }],
+      },
+    })
+    .execute();
 };
 
 const updateAnonimnusCartByID = (
@@ -36,4 +53,9 @@ const updateAnonimnusCartByID = (
     })
     .execute();
 };
-export { getAnonimnusCart, getAnonimnusCartByID, updateAnonimnusCartByID };
+export {
+  getAnonimnusCart,
+  getAnonimnusCartByID,
+  updateAnonimnusCartByID,
+  setCountryForCart,
+};
