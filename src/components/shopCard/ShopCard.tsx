@@ -10,14 +10,30 @@ import {
 } from '@mui/material';
 import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
 import { ProductPure, ShopCardProps } from 'src/utils/interfaces';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link as ReactLink } from 'react-router-dom';
+import { PaginationComponent } from '../pagination/PaginationComponent';
+import { SkeletonComponent } from '../skeleton/skeletonComponent';
 
 export function ShopCard({ products, sortValue }: ShopCardProps) {
   const [searchTerm, setSearchTerm] = useState('');
+  const [page, setPage] = useState(1);
+  const itemsPerPage = 8;
+
+  useEffect(() => {
+    setPage(1);
+  }, [products]);
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
+    setPage(1);
+  };
+
+  const handlePageChange = (
+    event: React.ChangeEvent<unknown>,
+    value: number,
+  ) => {
+    setPage(value);
   };
 
   const filteredProducts = products.filter(product => {
@@ -86,6 +102,13 @@ export function ShopCard({ products, sortValue }: ShopCardProps) {
     }
   };
 
+  const sortedProducts = sortProducts(filteredProducts);
+  const paginatedProducts = sortedProducts.slice(
+    (page - 1) * itemsPerPage,
+    page * itemsPerPage,
+  );
+  const count = Math.ceil(sortedProducts.length / itemsPerPage);
+
   return (
     <>
       <TextField
@@ -112,8 +135,8 @@ export function ShopCard({ products, sortValue }: ShopCardProps) {
           },
         }}
       >
-        {filteredProducts && filteredProducts.length > 0 ? (
-          sortProducts(filteredProducts).map(product => (
+        {paginatedProducts && paginatedProducts.length > 0 ? (
+          sortProducts(paginatedProducts).map(product => (
             <Card
               key={product.id}
               sx={{
@@ -208,9 +231,14 @@ export function ShopCard({ products, sortValue }: ShopCardProps) {
             </Card>
           ))
         ) : (
-          <Typography variant="h6">no products to display.</Typography>
+          <SkeletonComponent />
         )}
       </Box>
+      <PaginationComponent
+        count={count}
+        page={page}
+        handlePageChange={handlePageChange}
+      />
     </>
   );
 }
