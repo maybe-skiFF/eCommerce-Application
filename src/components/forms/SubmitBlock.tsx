@@ -24,15 +24,7 @@ import {
   CustomerSignInResult,
   ErrorObject,
 } from '@commercetools/platform-sdk';
-import {
-  getAnonimnusCart,
-  getCustomerCart,
-  getMyCart,
-  isCustomerExist,
-  setCountryForCart,
-  setCustomerIDByCart,
-} from 'src/serverPart/BuildCart';
-import { selectionZone } from 'src/utils/selectionZone';
+import { getMyCart, getMergeCart } from 'src/serverPart/BuildCart';
 
 export const SubmitBlock = (): ReactNode => {
   const [currentStatusEmail, setCurrentStatusEmail] = useState<string>(
@@ -101,16 +93,22 @@ export const SubmitBlock = (): ReactNode => {
             setIsAuth(true);
             setCookie('myID', body.customer.id);
             console.log(body.customer.id);
-            const exist = await isCustomerExist(body.customer.id);
-            if (exist.statusCode === 200) {
-              const cart = await getMyCart(myApi);
-              await setCountryForCart(
-                cart.body.id,
-                cart.body.version,
-                selectionZone(body.customer),
-              );
-              setCookie('myCart', cart.body.id);
-            }
+            // const exist = await isCustomerExist(body.customer.id);
+            // if (exist.statusCode === 200) {
+            const cart = await getMyCart(myApi);
+            //   await setCountryForCart(
+            //     cart.body.id,
+            //     cart.body.version,
+            //     selectionZone(body.customer),
+            //   );
+            const n = await getMergeCart(
+              myApi,
+              data.get('email') as string,
+              data.get('password') as string,
+              cart.body.id,
+            );
+            console.log(n, 'n');
+            setCookie('myCart', cart.body.id);
           }
         },
       )

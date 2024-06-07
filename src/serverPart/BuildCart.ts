@@ -10,6 +10,7 @@ import {
   Cart,
   Customer,
   ByProjectKeyRequestBuilder,
+  CustomerSignInResult,
 } from '@commercetools/platform-sdk';
 
 const getAnonimnusCart = (): Promise<ClientResponse<Cart>> => {
@@ -25,6 +26,28 @@ const getCartByID = (IDCart: string): Promise<ClientResponse<Cart>> => {
 
 const getMyCart = (api: ByProjectKeyRequestBuilder) => {
   return api.me().activeCart().get().execute();
+};
+
+const getMergeCart = async (
+  api: ByProjectKeyRequestBuilder,
+  name: string,
+  password: string,
+  idCard: string,
+): Promise<ClientResponse<CustomerSignInResult>> => {
+  return await api
+    .login()
+    .post({
+      body: {
+        email: name,
+        password: password,
+        updateProductData: true,
+        anonymousCart: {
+          id: idCard,
+          typeId: 'cart',
+        },
+      },
+    })
+    .execute();
 };
 
 const setCountryForCart = (
@@ -100,5 +123,6 @@ export {
   getCustomerCart,
   setCustomerIDByCart,
   isCustomerExist,
+  getMergeCart,
   getMyCart,
 };

@@ -7,6 +7,7 @@ import { DetailedProductPage } from '../pages/DetailedProductPage/DetailedProduc
 import { CustomerPage } from '../pages/CustomerPage/CustomerPage';
 import { useIsAuth } from 'src/context/context';
 import { useEffect, useState } from 'react';
+import { MyCart } from '../pages/Cart/MyCart';
 
 export const CreateRouter = () => {
   const { isAuth } = useIsAuth();
@@ -60,6 +61,10 @@ export const CreateRouter = () => {
     {
       path: '/for-women/:key',
       element: <MainPage />,
+    },
+    {
+      path: '/cart',
+      element: <MyCart />,
     },
   ];
   return createBrowserRouter(arrRouter);

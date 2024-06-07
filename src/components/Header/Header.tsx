@@ -77,7 +77,7 @@ export function Header() {
     {
       icon: <ShoppingCartIcon />,
       label: SERVICE_MESSAGES.cart,
-      to: '/',
+      to: '/cart',
       className: 'login__link login',
     },
     {

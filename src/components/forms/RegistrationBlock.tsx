@@ -28,6 +28,7 @@ import { CustomerData } from 'src/utils/interfaces';
 import { SubmitButton } from '../SubmitButton/SubmitButton';
 import { SimpleSnackbar } from '../SimpleSnackbar/SimpleSnackbar';
 import {
+  // ByProjectKeyRequestBuilder,
   ClientResponse,
   CustomerSignInResult,
   ErrorObject,
@@ -35,7 +36,11 @@ import {
 import { checkFullData } from 'src/utils/CheckFullData';
 import { getAddressesArray } from 'src/utils/getAddressesArray';
 import { setCookie } from 'src/utils/cookieWork';
-import { getMyCart, setCountryForCart } from 'src/serverPart/BuildCart';
+import {
+  getMergeCart,
+  getMyCart,
+  setCountryForCart,
+} from 'src/serverPart/BuildCart';
 import { selectionZone } from 'src/utils/selectionZone';
 
 export const RegistrationBlock = () => {
@@ -135,6 +140,13 @@ export const RegistrationBlock = () => {
           console.log(body, 'thisBody');
           setCookie('myID', body.customer.id);
           const cart = await getMyCart(myApi);
+          const n = await getMergeCart(
+            myApi,
+            data.get('email') as string,
+            data.get('password') as string,
+            cart.body.id,
+          );
+          console.log(n, 'n');
           await setCountryForCart(
             cart.body.id,
             cart.body.version,

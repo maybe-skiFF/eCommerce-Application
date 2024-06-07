@@ -1,4 +1,4 @@
-import { Cart, ClientResponse, Product } from '@commercetools/platform-sdk';
+import { Cart, ClientResponse } from '@commercetools/platform-sdk';
 
 import {
   Box,
@@ -19,10 +19,7 @@ import {
   setCountryForCart,
 } from 'src/serverPart/BuildCart';
 import { getCookie, setCookie } from 'src/utils/cookieWork';
-
-interface ProductObj {
-  productDataById: Product | undefined;
-}
+import { ProductObj } from 'src/utils/interfaces';
 
 export function DetailedProductWrapper({ productDataById }: ProductObj) {
   if (!productDataById) return;
