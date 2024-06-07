@@ -67,7 +67,7 @@ const setCountryForCart = (
     .execute();
 };
 
-const updateCartByID = (
+const addProductToCartByID = (
   IDCart: string,
   version: number,
   IDProduct: string,
@@ -79,6 +79,54 @@ const updateCartByID = (
       body: {
         version: version,
         actions: [{ action: 'addLineItem', productId: IDProduct }],
+      },
+    })
+    .execute();
+};
+
+const changeProductQuantityToCartByID = (
+  IDCart: string,
+  version: number,
+  IDProduct: string,
+  quantytyProduct: number,
+): Promise<ClientResponse<Cart>> => {
+  return apiRoot
+    .carts()
+    .withId({ ID: IDCart })
+    .post({
+      body: {
+        version: version,
+        actions: [
+          {
+            action: 'changeLineItemQuantity',
+            lineItemId: IDProduct,
+            quantity: quantytyProduct,
+          },
+        ],
+      },
+    })
+    .execute();
+};
+
+const removeProductToCartByID = (
+  IDCart: string,
+  version: number,
+  IDProduct: string,
+  quantytyProduct: number,
+): Promise<ClientResponse<Cart>> => {
+  return apiRoot
+    .carts()
+    .withId({ ID: IDCart })
+    .post({
+      body: {
+        version: version,
+        actions: [
+          {
+            action: 'removeLineItem',
+            lineItemId: IDProduct,
+            quantity: quantytyProduct,
+          },
+        ],
       },
     })
     .execute();
@@ -118,7 +166,9 @@ const getCustomerCart = (customerID: string): Promise<ClientResponse<Cart>> => {
 export {
   getAnonimnusCart,
   getCartByID,
-  updateCartByID,
+  addProductToCartByID,
+  changeProductQuantityToCartByID,
+  removeProductToCartByID,
   setCountryForCart,
   getCustomerCart,
   setCustomerIDByCart,

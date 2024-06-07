@@ -15,7 +15,7 @@ import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import {
   getAnonimnusCart,
   getCartByID,
-  updateCartByID,
+  addProductToCartByID,
   setCountryForCart,
 } from 'src/serverPart/BuildCart';
 import { getCookie, setCookie } from 'src/utils/cookieWork';
@@ -61,7 +61,7 @@ export function DetailedProductWrapper({ productDataById }: ProductObj) {
   const handleClickForBuy = async () => {
     const cart = await getMyAnonimnusCart();
     const productID = productDataById.id;
-    await updateCartByID(cart.body.id, cart.body.version, productID);
+    await addProductToCartByID(cart.body.id, cart.body.version, productID);
   };
 
   return (
