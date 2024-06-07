@@ -1,4 +1,4 @@
-import { Product } from '@commercetools/platform-sdk';
+import { Cart, ClientResponse, Product } from '@commercetools/platform-sdk';
 
 import {
   Box,
@@ -12,6 +12,13 @@ import {
 } from '@mui/material';
 import { SwiperSlider } from '../SwiperSlider/SwiperSlider';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+import {
+  getAnonimnusCart,
+  getCartByID,
+  updateCartByID,
+  setCountryForCart,
+} from 'src/serverPart/BuildCart';
+import { getCookie, setCookie } from 'src/utils/cookieWork';
 
 interface ProductObj {
   productDataById: Product | undefined;
@@ -39,6 +46,26 @@ export function DetailedProductWrapper({ productDataById }: ProductObj) {
     }
     return false;
   }
+
+  const getMyAnonimnusCart = async (): Promise<ClientResponse<Cart>> => {
+    if (!getCookie('myCart')) {
+      const cart = await getAnonimnusCart();
+      setCookie('myCart', cart.body.id);
+      const myCartWithCountry = await setCountryForCart(
+        cart.body.id,
+        cart.body.version,
+        'US',
+      );
+      return myCartWithCountry;
+    }
+    return await getCartByID(getCookie('myCart') ?? '');
+  };
+
+  const handleClickForBuy = async () => {
+    const cart = await getMyAnonimnusCart();
+    const productID = productDataById.id;
+    await updateCartByID(cart.body.id, cart.body.version, productID);
+  };
 
   return (
     <Box sx={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap' }}>
@@ -104,7 +131,11 @@ export function DetailedProductWrapper({ productDataById }: ProductObj) {
               />
             </RadioGroup>
           </FormControl>
-          <IconButton sx={{ marginBottom: '0%' }}>
+          <IconButton
+            sx={{ marginBottom: '0%' }}
+            type="button"
+            onClick={() => void handleClickForBuy()}
+          >
             <AddShoppingCartIcon fontSize="large" />
           </IconButton>
         </Box>

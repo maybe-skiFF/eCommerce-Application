@@ -31,11 +31,5 @@ export const getCookie = (cookieName: string) => {
 };
 
 export const deleteCookie = (cookieName: string) => {
-  // const updatedCookie =
-  //   encodeURIComponent(cookieName) +
-  //   encodeURIComponent('max-age') +
-  //   '=' +
-  //   encodeURIComponent('-1');
-  // document.cookie = updatedCookie;
-  document.cookie = cookieName + '=; Max-Age=-99999999;';
+  document.cookie = cookieName + '=; max-age=-1;';
 };

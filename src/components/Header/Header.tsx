@@ -42,6 +42,7 @@ export function Header() {
         localStorage.clear();
         setIsAuth(false);
         deleteCookie('myID');
+        deleteCookie('myCart');
         location.reload();
       })
       .catch((error: ErrorObject) => {
@@ -54,11 +55,9 @@ export function Header() {
     {
       icon: <ManageAccountsIcon />,
       label: SERVICE_MESSAGES.manageAccounts,
-      to: '/customer',
-      className:
-        localStorage.getItem('isAuth') === 'true' || isAuth
-          ? 'login login__link'
-          : 'logout__btn',
+      to:
+        localStorage.getItem('isAuth') === 'true' || isAuth ? '/customer' : '/',
+      className: 'login login__link',
     },
     {
       icon: <LoginIcon />,

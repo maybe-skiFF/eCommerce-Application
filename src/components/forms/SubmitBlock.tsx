@@ -24,6 +24,15 @@ import {
   CustomerSignInResult,
   ErrorObject,
 } from '@commercetools/platform-sdk';
+import {
+  getAnonimnusCart,
+  getCustomerCart,
+  getMyCart,
+  isCustomerExist,
+  setCountryForCart,
+  setCustomerIDByCart,
+} from 'src/serverPart/BuildCart';
+import { selectionZone } from 'src/utils/selectionZone';
 
 export const SubmitBlock = (): ReactNode => {
   const [currentStatusEmail, setCurrentStatusEmail] = useState<string>(
@@ -81,18 +90,30 @@ export const SubmitBlock = (): ReactNode => {
       data.get('email') as string,
       data.get('password') as string,
     )
-      .then(({ body, statusCode }: ClientResponse<CustomerSignInResult>) => {
-        if (statusCode !== 200) {
-          setOpen(true);
-          setServerMessage(SERVICE_MESSAGES.errorMail);
-        } else {
-          navigate('/');
-          localStorage.setItem('isAuth', 'true');
-          setIsAuth(true);
-          setCookie('myID', body.customer.id);
-          location.reload();
-        }
-      })
+      .then(
+        async ({ body, statusCode }: ClientResponse<CustomerSignInResult>) => {
+          if (statusCode !== 200) {
+            setOpen(true);
+            setServerMessage(SERVICE_MESSAGES.errorMail);
+          } else {
+            navigate('/');
+            localStorage.setItem('isAuth', 'true');
+            setIsAuth(true);
+            setCookie('myID', body.customer.id);
+            console.log(body.customer.id);
+            const exist = await isCustomerExist(body.customer.id);
+            if (exist.statusCode === 200) {
+              const cart = await getMyCart(myApi);
+              await setCountryForCart(
+                cart.body.id,
+                cart.body.version,
+                selectionZone(body.customer),
+              );
+              setCookie('myCart', cart.body.id);
+            }
+          }
+        },
+      )
       .catch((error: ErrorObject) => {
         setServerMessage(error.message);
         setOpen(true);
