@@ -50,4 +50,5 @@ export const SERVICE_MESSAGES = {
   yourAddress: 'Your address',
   yourShippingAddress: 'Your shipping address',
   yourBillingAddress: 'Your billing address',
+  about: 'About',
 };

@@ -15,6 +15,7 @@ import { SimpleSnackbar } from 'src/components/SimpleSnackbar/SimpleSnackbar';
 import { SyntheticEvent, useState, useRef } from 'react';
 import { useIsAuth } from 'src/context/context';
 import { deleteCookie } from 'src/utils/cookieWork';
+import InfoIcon from '@mui/icons-material/Info';
 
 export function Header() {
   const { isAuth, setIsAuth } = useIsAuth();
@@ -78,6 +79,12 @@ export function Header() {
       icon: <ShoppingCartIcon />,
       label: SERVICE_MESSAGES.cart,
       to: '/',
+      className: 'login__link login',
+    },
+    {
+      icon: <InfoIcon />,
+      label: SERVICE_MESSAGES.about,
+      to: '/about',
       className: 'login__link login',
     },
     {
