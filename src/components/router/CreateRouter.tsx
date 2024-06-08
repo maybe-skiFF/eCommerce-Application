@@ -7,6 +7,7 @@ import { DetailedProductPage } from '../pages/DetailedProductPage/DetailedProduc
 import { CustomerPage } from '../pages/CustomerPage/CustomerPage';
 import { useIsAuth } from 'src/context/context';
 import { useEffect, useState } from 'react';
+import { AboutPage } from '../pages/AboutPage/AboutPage';
 import { MyCart } from '../pages/Cart/MyCart';
 
 export const CreateRouter = () => {
@@ -25,6 +26,10 @@ export const CreateRouter = () => {
     {
       path: '/',
       element: <MainPage />,
+    },
+    {
+      path: '/about',
+      element: <AboutPage />,
     },
     {
       path: '/catalog/:key',
