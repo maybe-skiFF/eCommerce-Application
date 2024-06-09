@@ -33,14 +33,15 @@ export const MyCart = () => {
 
   const LoopProductCard = (): JSX.Element[] | JSX.Element => {
     const arrCards: JSX.Element[] = [];
-    if (cart) {
-      console.log(cart.version, 'myCart');
-      cart.lineItems.forEach((item: LineItem) =>
-        arrCards.push(InfoProductCard(item)),
-      );
-      return arrCards;
+    if (!getCookie('myCart')) {
+      return <Box> No Product</Box>;
     }
-    return EmptyCart();
+
+    console.log(cart!.version, 'myCart');
+    cart!.lineItems.forEach((item: LineItem) =>
+      arrCards.push(InfoProductCard(item)),
+    );
+    return arrCards;
   };
 
   return typeof cart === 'undefined' ? (

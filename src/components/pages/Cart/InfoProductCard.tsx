@@ -40,27 +40,28 @@ export const InfoProductCard = (product: LineItem): JSX.Element => {
     const cart = !getCookie('myID')
       ? await getCartByID(getCookie('myCart') ?? '')
       : await getCustomerCart(getCookie('myID') ?? '');
-    console.log(cart);
-    const newCart = await changeProductQuantityToCartByID(
+    await changeProductQuantityToCartByID(
       getCookie('myCart') ?? '',
       cart.body.version,
       product.id,
       operation === 'plus' ? quantity + 1 : quantity - 1,
     );
-    console.log(newCart.body, 'new');
+
+    location.reload();
   };
   const handleDelete = async (event: SyntheticEvent): Promise<void> => {
     event.persist();
     const cart = !getCookie('myID')
       ? await getCartByID(getCookie('myCart') ?? '')
       : await getCustomerCart(getCookie('myID') ?? '');
-    console.log(cart);
+
     await removeProductToCartByID(
       getCookie('myCart') ?? '',
       cart.body.version,
       product.id,
       quantity,
     );
+    location.reload();
   };
 
   keyOfItem += 1;

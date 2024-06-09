@@ -16,7 +16,7 @@ export const setCookie = (cookieName: string, cookieValue: string) => {
     ';' +
     encodeURIComponent('samesite') +
     '=' +
-    encodeURIComponent('Strict');
+    encodeURIComponent('Lack');
 
   document.cookie = updatedCookie;
 };

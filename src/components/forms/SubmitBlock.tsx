@@ -15,7 +15,7 @@ import {
   checkValidationFieldEmail,
   checkValidationFieldPassword,
 } from 'src/utils/checkValidationField';
-import { setCookie } from 'src/utils/cookieWork';
+import { getCookie, setCookie } from 'src/utils/cookieWork';
 import { useNavigate } from 'react-router-dom';
 import { useIsAuth } from 'src/context/context';
 import { SimpleSnackbar } from '../SimpleSnackbar/SimpleSnackbar';
@@ -24,12 +24,7 @@ import {
   CustomerSignInResult,
   ErrorObject,
 } from '@commercetools/platform-sdk';
-import {
-  getMergeCart,
-  setCustomerIDByCart,
-  getCartByID,
-  createCustomerCart,
-} from 'src/serverPart/BuildCart';
+import { getMergeCart } from 'src/serverPart/BuildCart';
 
 export const SubmitBlock = (): ReactNode => {
   const [currentStatusEmail, setCurrentStatusEmail] = useState<string>(
@@ -97,23 +92,20 @@ export const SubmitBlock = (): ReactNode => {
             localStorage.setItem('isAuth', 'true');
             setIsAuth(true);
             setCookie('myID', body.customer.id);
-            console.log(body.customer.id);
-            const cart = await getCartByID(body.customer.id).catch(() =>
-              createCustomerCart(myApi),
-            );
+            const oldCart = body.cart;
+            const cartId = getCookie('myCart')
+              ? getCookie('myCart')
+              : oldCart
+                ? oldCart.id
+                : '';
             const customer = await getMergeCart(
               myApi,
               data.get('email') as string,
               data.get('password') as string,
-              cart.body.id,
+              cartId ?? '',
             );
-            const updatedCart = await setCustomerIDByCart(
-              cart.body.id,
-              cart.body.version,
-              customer.body.customer.id,
-            );
-            console.log(updatedCart, 'n');
-            setCookie('myCart', cart.body.id);
+            if (customer.body.cart)
+              setCookie('myCart', customer.body.cart.id ?? '');
           }
         },
       )

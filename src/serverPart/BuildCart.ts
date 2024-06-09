@@ -19,7 +19,7 @@ const createCustomerCart = (api: ByProjectKeyRequestBuilder) => {
   return api
     .me()
     .carts()
-    .post({ body: { currency: 'USD' } })
+    .post({ body: { currency: 'USD', country: 'US' } })
     .execute();
 };
 
@@ -43,11 +43,11 @@ const getMergeCart = async (
       body: {
         email: name,
         password: password,
-        updateProductData: true,
         anonymousCart: {
           id: idCard,
           typeId: 'cart',
         },
+        updateProductData: true,
       },
     })
     .execute();
