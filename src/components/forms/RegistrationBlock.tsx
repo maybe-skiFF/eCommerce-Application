@@ -28,20 +28,14 @@ import { CustomerData } from 'src/utils/interfaces';
 import { SubmitButton } from '../SubmitButton/SubmitButton';
 import { SimpleSnackbar } from '../SimpleSnackbar/SimpleSnackbar';
 import {
-  // ByProjectKeyRequestBuilder,
   ClientResponse,
   CustomerSignInResult,
   ErrorObject,
 } from '@commercetools/platform-sdk';
 import { checkFullData } from 'src/utils/CheckFullData';
 import { getAddressesArray } from 'src/utils/getAddressesArray';
-import { setCookie } from 'src/utils/cookieWork';
-import {
-  getMergeCart,
-  getMyCart,
-  setCountryForCart,
-} from 'src/serverPart/BuildCart';
-import { selectionZone } from 'src/utils/selectionZone';
+import { getCookie, setCookie } from 'src/utils/cookieWork';
+import { getMergeCart } from 'src/serverPart/BuildCart';
 
 export const RegistrationBlock = () => {
   const [formData, setFormData] = useState<string>(SERVICE_MESSAGES.startCheck);
@@ -137,22 +131,21 @@ export const RegistrationBlock = () => {
           data.get('email') as string,
           data.get('password') as string,
         ).then(async ({ body }: ClientResponse<CustomerSignInResult>) => {
-          console.log(body, 'thisBody');
           setCookie('myID', body.customer.id);
-          const cart = await getMyCart(myApi);
-          const n = await getMergeCart(
+          const oldCart = body.cart;
+          const cartId = getCookie('myCart')
+            ? getCookie('myCart')
+            : oldCart
+              ? oldCart.id
+              : '';
+          const customer = await getMergeCart(
             myApi,
             data.get('email') as string,
             data.get('password') as string,
-            cart.body.id,
+            cartId ?? '',
           );
-          console.log(n, 'n');
-          await setCountryForCart(
-            cart.body.id,
-            cart.body.version,
-            selectionZone(body.customer),
-          );
-          setCookie('myCart', cart.body.id);
+          if (customer.body.cart)
+            setCookie('myCart', customer.body.cart.id ?? '');
         });
       })
       .catch((error: ErrorObject) => {
