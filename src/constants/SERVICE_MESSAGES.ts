@@ -52,4 +52,5 @@ export const SERVICE_MESSAGES = {
   yourBillingAddress: 'Your billing address',
   about: 'About',
   yourCart: 'Your cart',
+  countQuantity: 'Quantity cannot be less 0',
 };

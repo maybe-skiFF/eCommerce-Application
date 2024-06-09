@@ -1,10 +1,5 @@
-// import {
-//   authMiddlewareOptions,
-//   ctpClient,
-//   httpMiddlewareOptions,
-// } from './BuildClient';
 import { apiRoot } from './ApiRoot';
-// import { PROJECT_DATA } from './PROJECT_DATA';
+
 import {
   ClientResponse,
   Cart,
@@ -13,8 +8,16 @@ import {
   CustomerSignInResult,
 } from '@commercetools/platform-sdk';
 
-const getAnonimnusCart = (): Promise<ClientResponse<Cart>> => {
+const getAnonymnusCart = (): Promise<ClientResponse<Cart>> => {
   return apiRoot
+    .carts()
+    .post({ body: { currency: 'USD' } })
+    .execute();
+};
+
+const createCustomerCart = (api: ByProjectKeyRequestBuilder) => {
+  return api
+    .me()
     .carts()
     .post({ body: { currency: 'USD' } })
     .execute();
@@ -164,7 +167,8 @@ const getCustomerCart = (customerID: string): Promise<ClientResponse<Cart>> => {
 };
 
 export {
-  getAnonimnusCart,
+  getAnonymnusCart,
+  createCustomerCart,
   getCartByID,
   addProductToCartByID,
   changeProductQuantityToCartByID,

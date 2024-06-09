@@ -1,8 +1,11 @@
 import { Cart } from '@commercetools/platform-sdk';
 import { Box, Paper, Typography } from '@mui/material';
+import { EmptyCart } from './EmptyCart';
 
 export const InfoSummaryCart = (cart: Cart) => {
-  return (
+  return typeof cart.totalPrice === 'undefined' ? (
+    EmptyCart()
+  ) : (
     <Box
       sx={{
         p: 2,
@@ -18,7 +21,7 @@ export const InfoSummaryCart = (cart: Cart) => {
           Number of items in cart: {cart.totalLineItemQuantity}
         </Typography>
         <Typography variant={'h6'}>
-          Total amount of goods for: {cart.totalPrice.centAmount}
+          Total amount of goods for: {cart.totalPrice.centAmount ?? ''}
         </Typography>
       </Paper>
     </Box>

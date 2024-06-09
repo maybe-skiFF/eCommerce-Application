@@ -1,49 +1,60 @@
 import { Box, Typography, IconButton, CardMedia } from '@mui/material';
 import { LineItem } from '@commercetools/platform-sdk';
-import { useState } from 'react';
+import { SyntheticEvent, useState } from 'react';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import {
   getCustomerCart,
+  getCartByID,
   changeProductQuantityToCartByID,
   removeProductToCartByID,
 } from 'src/serverPart/BuildCart';
 import { getCookie } from 'src/utils/cookieWork';
+import { SimpleSnackbar } from 'src/components/SimpleSnackbar/SimpleSnackbar';
+import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
+
+let keyOfItem = 0;
 
 export const InfoProductCard = (product: LineItem): JSX.Element => {
   const [quantity, setQuantity] = useState<number>(product.quantity);
+  const [open, setOpen] = useState<boolean>(false);
 
-  const handleIncrease = async () => {
-    const quantityCurrent = quantity + 1;
-    const cart = await getCustomerCart(getCookie('myID') ?? '');
-    setQuantity(quantityCurrent);
-    await changeProductQuantityToCartByID(
+  const handleClose = (event: SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return event;
+    }
+    setOpen(false);
+  };
+
+  const handleChangeQuantity = async (
+    event: SyntheticEvent,
+    operation: 'plus' | 'minus',
+  ) => {
+    event.persist();
+    if (operation === 'plus') {
+      setQuantity(quantity => quantity + 1);
+    } else {
+      setQuantity(quantity => quantity - 1);
+    }
+    const cart = !getCookie('myID')
+      ? await getCartByID(getCookie('myCart') ?? '')
+      : await getCustomerCart(getCookie('myID') ?? '');
+    console.log(cart);
+    const newCart = await changeProductQuantityToCartByID(
       getCookie('myCart') ?? '',
       cart.body.version,
       product.id,
-      quantity,
+      operation === 'plus' ? quantity + 1 : quantity - 1,
     );
+    console.log(newCart.body, 'new');
   };
-
-  const handleDecrease = async () => {
-    if (quantity > 0) {
-      const quantityCurrent = quantity + 1;
-      const cart = await getCustomerCart(getCookie('myID') ?? '');
-      setQuantity(quantityCurrent);
-      await changeProductQuantityToCartByID(
-        getCookie('myCart') ?? '',
-        cart.body.version,
-        product.id,
-        quantity,
-      );
-    }
-  };
-
-  const handleDelete = async () => {
-    const quantityCurrent = quantity + 1;
-    const cart = await getCustomerCart(getCookie('myID') ?? '');
-    setQuantity(quantityCurrent);
+  const handleDelete = async (event: SyntheticEvent): Promise<void> => {
+    event.persist();
+    const cart = !getCookie('myID')
+      ? await getCartByID(getCookie('myCart') ?? '')
+      : await getCustomerCart(getCookie('myID') ?? '');
+    console.log(cart);
     await removeProductToCartByID(
       getCookie('myCart') ?? '',
       cart.body.version,
@@ -52,6 +63,7 @@ export const InfoProductCard = (product: LineItem): JSX.Element => {
     );
   };
 
+  keyOfItem += 1;
   if (!product) {
     return (
       <Box>
@@ -60,7 +72,10 @@ export const InfoProductCard = (product: LineItem): JSX.Element => {
     );
   }
   return (
-    <Box sx={{ display: 'flex', width: '100%', marginBottom: '2%' }}>
+    <Box
+      sx={{ display: 'flex', width: '100%', marginBottom: '2%' }}
+      key={keyOfItem}
+    >
       <CardMedia
         component="img"
         height="194"
@@ -83,21 +98,27 @@ export const InfoProductCard = (product: LineItem): JSX.Element => {
         <IconButton
           sx={{ padding: '0', marginBottom: '3%' }}
           type="button"
-          onClick={() => void handleDelete}
+          onClick={event => void handleDelete(event)}
         >
           <DeleteIcon />
         </IconButton>
         <Typography
           sx={{ width: '100%', textAlign: 'center' }}
         >{`description`}</Typography>
-
+        {SimpleSnackbar(SERVICE_MESSAGES.countQuantity, open, handleClose)}
         <Typography>
           Quantity:
-          <IconButton type="button" onClick={() => void handleDecrease}>
+          <IconButton
+            type="button"
+            onClick={event => void handleChangeQuantity(event, 'minus')}
+          >
             <RemoveIcon />
           </IconButton>
           {quantity}
-          <IconButton type="button" onClick={() => void handleIncrease}>
+          <IconButton
+            type="button"
+            onClick={event => void handleChangeQuantity(event, 'plus')}
+          >
             <AddIcon />
           </IconButton>
         </Typography>

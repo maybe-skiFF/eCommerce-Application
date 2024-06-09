@@ -24,7 +24,12 @@ import {
   CustomerSignInResult,
   ErrorObject,
 } from '@commercetools/platform-sdk';
-import { getMyCart, getMergeCart } from 'src/serverPart/BuildCart';
+import {
+  getMergeCart,
+  setCustomerIDByCart,
+  getCartByID,
+  createCustomerCart,
+} from 'src/serverPart/BuildCart';
 
 export const SubmitBlock = (): ReactNode => {
   const [currentStatusEmail, setCurrentStatusEmail] = useState<string>(
@@ -93,21 +98,21 @@ export const SubmitBlock = (): ReactNode => {
             setIsAuth(true);
             setCookie('myID', body.customer.id);
             console.log(body.customer.id);
-            // const exist = await isCustomerExist(body.customer.id);
-            // if (exist.statusCode === 200) {
-            const cart = await getMyCart(myApi);
-            //   await setCountryForCart(
-            //     cart.body.id,
-            //     cart.body.version,
-            //     selectionZone(body.customer),
-            //   );
-            const n = await getMergeCart(
+            const cart = await getCartByID(body.customer.id).catch(() =>
+              createCustomerCart(myApi),
+            );
+            const customer = await getMergeCart(
               myApi,
               data.get('email') as string,
               data.get('password') as string,
               cart.body.id,
             );
-            console.log(n, 'n');
+            const updatedCart = await setCustomerIDByCart(
+              cart.body.id,
+              cart.body.version,
+              customer.body.customer.id,
+            );
+            console.log(updatedCart, 'n');
             setCookie('myCart', cart.body.id);
           }
         },

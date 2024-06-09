@@ -9,6 +9,8 @@ import { useIsAuth } from 'src/context/context';
 import { useEffect, useState } from 'react';
 import { AboutPage } from '../pages/AboutPage/AboutPage';
 import { MyCart } from '../pages/Cart/MyCart';
+import { EmptyCart } from '../pages/Cart/EmptyCart';
+import { getCookie } from 'src/utils/cookieWork';
 
 export const CreateRouter = () => {
   const { isAuth } = useIsAuth();
@@ -69,7 +71,7 @@ export const CreateRouter = () => {
     },
     {
       path: '/cart',
-      element: <MyCart />,
+      element: getCookie('myCart') ? <MyCart /> : <EmptyCart />,
     },
   ];
   return createBrowserRouter(arrRouter);

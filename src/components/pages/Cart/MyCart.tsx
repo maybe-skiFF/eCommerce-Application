@@ -5,14 +5,15 @@ import { getCookie } from 'src/utils/cookieWork';
 import { InfoProductCard } from './InfoProductCard';
 import { Cart } from '@commercetools/platform-sdk';
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
 import { LineItem } from '@commercetools/platform-sdk';
 import { HeaderWrapper } from 'src/components/HeaderWrapper/HeaderWrapper';
 import { InfoSummaryCart } from './InfoSymmaryCart';
+import { EmptyCart } from './EmptyCart';
+import { useParams } from 'react-router-dom';
 
 export const MyCart = () => {
-  const { key } = useParams();
   const [cart, setCart] = useState<Cart | undefined>();
+  const { key } = useParams();
 
   useEffect(() => {
     async function cartByIdData(): Promise<Cart> {
@@ -22,38 +23,28 @@ export const MyCart = () => {
         setCart(data);
         return data;
       } catch (error) {
+        EmptyCart();
         console.log(error);
         throw error;
       }
     }
     void cartByIdData();
   }, [key]);
-  const LoopProductCard = (): JSX.Element[] => {
+
+  const LoopProductCard = (): JSX.Element[] | JSX.Element => {
     const arrCards: JSX.Element[] = [];
     if (cart) {
+      console.log(cart.version, 'myCart');
       cart.lineItems.forEach((item: LineItem) =>
         arrCards.push(InfoProductCard(item)),
       );
       return arrCards;
     }
-    return arrCards;
+    return EmptyCart();
   };
-  return !cart ? (
-    <HeaderWrapper>
-      <Box
-        sx={{
-          width: '100%',
-          display: 'flex',
-          justifyContent: 'column',
-          flexWrap: 'wrap',
-          alignItems: 'center',
-        }}
-      >
-        <Typography sx={{ width: '100%', textAlign: 'center' }}>
-          {SERVICE_MESSAGES.yourCart}
-        </Typography>
-      </Box>
-    </HeaderWrapper>
+
+  return typeof cart === 'undefined' ? (
+    EmptyCart()
   ) : (
     <HeaderWrapper>
       <Box
@@ -81,7 +72,6 @@ export const MyCart = () => {
         >
           <LoopProductCard />
         </Box>
-
         {InfoSummaryCart(cart)}
       </Box>
     </HeaderWrapper>

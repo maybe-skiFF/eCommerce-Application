@@ -13,7 +13,7 @@ import {
 import { SwiperSlider } from '../SwiperSlider/SwiperSlider';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import {
-  getAnonimnusCart,
+  getAnonymnusCart,
   getCartByID,
   addProductToCartByID,
   setCountryForCart,
@@ -46,7 +46,7 @@ export function DetailedProductWrapper({ productDataById }: ProductObj) {
 
   const getMyAnonimnusCart = async (): Promise<ClientResponse<Cart>> => {
     if (!getCookie('myCart')) {
-      const cart = await getAnonimnusCart();
+      const cart = await getAnonymnusCart();
       setCookie('myCart', cart.body.id);
       const myCartWithCountry = await setCountryForCart(
         cart.body.id,
