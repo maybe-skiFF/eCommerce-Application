@@ -1,4 +1,4 @@
-import { Cart, ClientResponse } from '@commercetools/platform-sdk';
+import { Cart, ClientResponse, ErrorObject } from '@commercetools/platform-sdk';
 
 import {
   Box,
@@ -12,16 +12,53 @@ import {
 } from '@mui/material';
 import { SwiperSlider } from '../SwiperSlider/SwiperSlider';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+import DeleteIcon from '@mui/icons-material/Delete';
 import {
   getAnonymnusCart,
   getCartByID,
   addProductToCartByID,
   setCountryForCart,
+  removeProductToCartByID,
 } from 'src/serverPart/BuildCart';
 import { getCookie, setCookie } from 'src/utils/cookieWork';
 import { ProductObj } from 'src/utils/interfaces';
+import { SyntheticEvent, useEffect, useState } from 'react';
+import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
+import { SimpleSnackbar } from '../SimpleSnackbar/SimpleSnackbar';
 
 export function DetailedProductWrapper({ productDataById }: ProductObj) {
+  const [isInCart, setIsInCart] = useState<boolean>(false);
+  const [open, setOpen] = useState<string>('');
+
+  const handleClose = (event: SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return event;
+    }
+    setOpen('');
+  };
+
+  useEffect(() => {
+    async function checkExistFronCart(): Promise<void> {
+      try {
+        if (!productDataById) return;
+        if (getCookie('myCart')) {
+          const myCart = await getCartByID(getCookie('myCart') ?? '');
+          if (
+            myCart.body.lineItems.some(
+              line => line.productId === productDataById.id,
+            )
+          ) {
+            setIsInCart(true);
+          }
+        }
+      } catch (error) {
+        console.log(error);
+        throw error;
+      }
+    }
+    void checkExistFronCart();
+  }, [productDataById]);
+
   if (!productDataById) return;
 
   const productDiscountPrice =
@@ -61,7 +98,27 @@ export function DetailedProductWrapper({ productDataById }: ProductObj) {
   const handleClickForBuy = async () => {
     const cart = await getMyAnonimnusCart();
     const productID = productDataById.id;
-    await addProductToCartByID(cart.body.id, cart.body.version, productID);
+    await addProductToCartByID(cart.body.id, cart.body.version, productID)
+      .then(() => setOpen(SERVICE_MESSAGES.added))
+      .catch((error: ErrorObject) => setOpen(error.message));
+  };
+
+  const handleClickForDelete = async () => {
+    const cart = await getCartByID(getCookie('myCart') ?? '');
+    const productID = productDataById.id;
+    const productInCart = cart.body.lineItems.filter(
+      line => productID === line.productId,
+    );
+    if (productInCart.length > 0) {
+      await removeProductToCartByID(
+        cart.body.id,
+        cart.body.version,
+        productInCart[0].id,
+        productInCart[0].quantity,
+      )
+        .then(() => setOpen(SERVICE_MESSAGES.deleted))
+        .catch((error: ErrorObject) => setOpen(error.message));
+    }
   };
 
   return (
@@ -130,11 +187,21 @@ export function DetailedProductWrapper({ productDataById }: ProductObj) {
           </FormControl>
           <IconButton
             sx={{ marginBottom: '0%' }}
+            disabled={isInCart}
             type="button"
             onClick={() => void handleClickForBuy()}
           >
             <AddShoppingCartIcon fontSize="large" />
           </IconButton>
+          <IconButton
+            sx={{ marginBottom: '0%' }}
+            disabled={!isInCart}
+            type="button"
+            onClick={() => void handleClickForDelete()}
+          >
+            <DeleteIcon fontSize="large" />
+          </IconButton>
+          {SimpleSnackbar(open, open !== '', handleClose)}
         </Box>
       </Box>
     </Box>
