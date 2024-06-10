@@ -1,4 +1,4 @@
-import { Cart, ClientResponse } from '@commercetools/platform-sdk';
+import { Cart, ClientResponse, ErrorObject } from '@commercetools/platform-sdk';
 
 import {
   Box,
@@ -22,10 +22,20 @@ import {
 } from 'src/serverPart/BuildCart';
 import { getCookie, setCookie } from 'src/utils/cookieWork';
 import { ProductObj } from 'src/utils/interfaces';
-import { useEffect, useState } from 'react';
+import { SyntheticEvent, useEffect, useState } from 'react';
+import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
+import { SimpleSnackbar } from '../SimpleSnackbar/SimpleSnackbar';
 
 export function DetailedProductWrapper({ productDataById }: ProductObj) {
   const [isInCart, setIsInCart] = useState<boolean>(false);
+  const [open, setOpen] = useState<string>('');
+
+  const handleClose = (event: SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return event;
+    }
+    setOpen('');
+  };
 
   useEffect(() => {
     async function checkExistFronCart(): Promise<void> {
@@ -88,7 +98,9 @@ export function DetailedProductWrapper({ productDataById }: ProductObj) {
   const handleClickForBuy = async () => {
     const cart = await getMyAnonimnusCart();
     const productID = productDataById.id;
-    await addProductToCartByID(cart.body.id, cart.body.version, productID);
+    await addProductToCartByID(cart.body.id, cart.body.version, productID)
+      .then(() => setOpen(SERVICE_MESSAGES.added))
+      .catch((error: ErrorObject) => setOpen(error.message));
   };
 
   const handleClickForDelete = async () => {
@@ -103,7 +115,9 @@ export function DetailedProductWrapper({ productDataById }: ProductObj) {
         cart.body.version,
         productInCart[0].id,
         productInCart[0].quantity,
-      );
+      )
+        .then(() => setOpen(SERVICE_MESSAGES.deleted))
+        .catch((error: ErrorObject) => setOpen(error.message));
     }
   };
 
@@ -187,6 +201,7 @@ export function DetailedProductWrapper({ productDataById }: ProductObj) {
           >
             <DeleteIcon fontSize="large" />
           </IconButton>
+          {SimpleSnackbar(open, open !== '', handleClose)}
         </Box>
       </Box>
     </Box>

@@ -53,4 +53,6 @@ export const SERVICE_MESSAGES = {
   about: 'About',
   yourCart: 'Your cart',
   countQuantity: 'Quantity cannot be less 0',
+  deleted: 'Product has been removed from your car',
+  added: 'Product has been added to your car',
 };
