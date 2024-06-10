@@ -123,6 +123,9 @@ export const InfoProductCard = (product: LineItem): JSX.Element => {
             <AddIcon />
           </IconButton>
         </Typography>
+        <Typography sx={{ width: '90%', textAlign: 'center' }}>
+          Price of this item :{product.price.value.centAmount}
+        </Typography>
       </Box>
     </Box>
   );
