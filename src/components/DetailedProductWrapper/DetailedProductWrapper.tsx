@@ -12,11 +12,13 @@ import {
 } from '@mui/material';
 import { SwiperSlider } from '../SwiperSlider/SwiperSlider';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+import DeleteIcon from '@mui/icons-material/Delete';
 import {
   getAnonymnusCart,
   getCartByID,
   addProductToCartByID,
   setCountryForCart,
+  removeProductToCartByID,
 } from 'src/serverPart/BuildCart';
 import { getCookie, setCookie } from 'src/utils/cookieWork';
 import { ProductObj } from 'src/utils/interfaces';
@@ -28,11 +30,12 @@ export function DetailedProductWrapper({ productDataById }: ProductObj) {
   useEffect(() => {
     async function checkExistFronCart(): Promise<void> {
       try {
+        if (!productDataById) return;
         if (getCookie('myCart')) {
           const myCart = await getCartByID(getCookie('myCart') ?? '');
           if (
             myCart.body.lineItems.some(
-              line => line.productId === productDataById!.id,
+              line => line.productId === productDataById.id,
             )
           ) {
             setIsInCart(true);
@@ -86,6 +89,22 @@ export function DetailedProductWrapper({ productDataById }: ProductObj) {
     const cart = await getMyAnonimnusCart();
     const productID = productDataById.id;
     await addProductToCartByID(cart.body.id, cart.body.version, productID);
+  };
+
+  const handleClickForDelete = async () => {
+    const cart = await getCartByID(getCookie('myCart') ?? '');
+    const productID = productDataById.id;
+    const productInCart = cart.body.lineItems.filter(
+      line => productID === line.productId,
+    );
+    if (productInCart.length > 0) {
+      await removeProductToCartByID(
+        cart.body.id,
+        cart.body.version,
+        productInCart[0].id,
+        productInCart[0].quantity,
+      );
+    }
   };
 
   return (
@@ -159,6 +178,14 @@ export function DetailedProductWrapper({ productDataById }: ProductObj) {
             onClick={() => void handleClickForBuy()}
           >
             <AddShoppingCartIcon fontSize="large" />
+          </IconButton>
+          <IconButton
+            sx={{ marginBottom: '0%' }}
+            disabled={!isInCart}
+            type="button"
+            onClick={() => void handleClickForDelete()}
+          >
+            <DeleteIcon fontSize="large" />
           </IconButton>
         </Box>
       </Box>
