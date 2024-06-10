@@ -15,7 +15,7 @@ import {
   checkValidationFieldEmail,
   checkValidationFieldPassword,
 } from 'src/utils/checkValidationField';
-import { setCookie } from 'src/utils/cookieWork';
+import { getCookie, setCookie } from 'src/utils/cookieWork';
 import { useNavigate } from 'react-router-dom';
 import { useIsAuth } from 'src/context/context';
 import { SimpleSnackbar } from '../SimpleSnackbar/SimpleSnackbar';
@@ -24,15 +24,7 @@ import {
   CustomerSignInResult,
   ErrorObject,
 } from '@commercetools/platform-sdk';
-import {
-  getAnonimnusCart,
-  getCustomerCart,
-  getMyCart,
-  isCustomerExist,
-  setCountryForCart,
-  setCustomerIDByCart,
-} from 'src/serverPart/BuildCart';
-import { selectionZone } from 'src/utils/selectionZone';
+import { getMergeCart } from 'src/serverPart/BuildCart';
 
 export const SubmitBlock = (): ReactNode => {
   const [currentStatusEmail, setCurrentStatusEmail] = useState<string>(
@@ -100,17 +92,20 @@ export const SubmitBlock = (): ReactNode => {
             localStorage.setItem('isAuth', 'true');
             setIsAuth(true);
             setCookie('myID', body.customer.id);
-            console.log(body.customer.id);
-            const exist = await isCustomerExist(body.customer.id);
-            if (exist.statusCode === 200) {
-              const cart = await getMyCart(myApi);
-              await setCountryForCart(
-                cart.body.id,
-                cart.body.version,
-                selectionZone(body.customer),
-              );
-              setCookie('myCart', cart.body.id);
-            }
+            const oldCart = body.cart;
+            const cartId = getCookie('myCart')
+              ? getCookie('myCart')
+              : oldCart
+                ? oldCart.id
+                : '';
+            const customer = await getMergeCart(
+              myApi,
+              data.get('email') as string,
+              data.get('password') as string,
+              cartId ?? '',
+            );
+            if (customer.body.cart)
+              setCookie('myCart', customer.body.cart.id ?? '');
           }
         },
       )

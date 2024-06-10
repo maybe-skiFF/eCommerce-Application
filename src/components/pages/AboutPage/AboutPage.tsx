@@ -28,12 +28,12 @@ export function AboutPage() {
       github: 'https://github.com/xsoularisx',
     },
     {
-      name: 'Name2',
-      lastName: 'LastName2',
+      name: 'Aleksandra',
+      lastName: 'Ilchenko',
       role: 'Front-end developer',
-      bio: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident.',
-      photo: 'src/assets/image/albert.JPG',
-      github: 'https://github.com/xsoularisx',
+      bio: 'Previous jobs are indirectly related to the IT field, but having worked in different directions, I understand that you can always try something new, gaining experience and skills. I consider patience and discipline to be one of my main qualities. After all, having them you can learn anything. Therefore, I know that I can become an experienced web developer. I am attracted to this area by the large IT community and the need for constant development.',
+      photo: 'src/assets/image/Aleksandra.JPG',
+      github: 'https://github.com/Aleksa013',
     },
   ];
   return (
@@ -98,7 +98,7 @@ export function AboutPage() {
             </Typography>
 
             <Typography variant="h6" sx={{ color: 'hsl(210, 100%, 42%)' }}>
-              Alexandra:
+              Aleksandra:
             </Typography>
             <Typography variant="body1">
               Responsible for implementing the user registration and

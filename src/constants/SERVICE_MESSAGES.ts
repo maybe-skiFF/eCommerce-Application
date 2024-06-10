@@ -51,4 +51,6 @@ export const SERVICE_MESSAGES = {
   yourShippingAddress: 'Your shipping address',
   yourBillingAddress: 'Your billing address',
   about: 'About',
+  yourCart: 'Your cart',
+  countQuantity: 'Quantity cannot be less 0',
 };
