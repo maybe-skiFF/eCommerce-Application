@@ -20,8 +20,32 @@ import {
 } from 'src/serverPart/BuildCart';
 import { getCookie, setCookie } from 'src/utils/cookieWork';
 import { ProductObj } from 'src/utils/interfaces';
+import { useEffect, useState } from 'react';
 
 export function DetailedProductWrapper({ productDataById }: ProductObj) {
+  const [isInCart, setIsInCart] = useState<boolean>(false);
+
+  useEffect(() => {
+    async function checkExistFronCart(): Promise<void> {
+      try {
+        if (getCookie('myCart')) {
+          const myCart = await getCartByID(getCookie('myCart') ?? '');
+          if (
+            myCart.body.lineItems.some(
+              line => line.productId === productDataById!.id,
+            )
+          ) {
+            setIsInCart(true);
+          }
+        }
+      } catch (error) {
+        console.log(error);
+        throw error;
+      }
+    }
+    void checkExistFronCart();
+  }, [productDataById]);
+
   if (!productDataById) return;
 
   const productDiscountPrice =
@@ -130,6 +154,7 @@ export function DetailedProductWrapper({ productDataById }: ProductObj) {
           </FormControl>
           <IconButton
             sx={{ marginBottom: '0%' }}
+            disabled={isInCart}
             type="button"
             onClick={() => void handleClickForBuy()}
           >

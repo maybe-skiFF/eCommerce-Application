@@ -16,7 +16,7 @@ import { PaginationComponent } from '../pagination/PaginationComponent';
 import { SkeletonComponent } from '../skeleton/skeletonComponent';
 
 export function ShopCard({ products, sortValue }: ShopCardProps) {
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState<string>('');
   const [page, setPage] = useState(1);
   const itemsPerPage = 8;
 
