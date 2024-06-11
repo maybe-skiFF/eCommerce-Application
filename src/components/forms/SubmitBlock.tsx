@@ -17,7 +17,7 @@ import {
 } from 'src/utils/checkValidationField';
 import { getCookie, setCookie } from 'src/utils/cookieWork';
 import { useNavigate } from 'react-router-dom';
-import { useIsAuth } from 'src/context/context';
+import { useCart, useIsAuth } from 'src/context/context';
 import { SimpleSnackbar } from '../SimpleSnackbar/SimpleSnackbar';
 import {
   ClientResponse,
@@ -37,6 +37,7 @@ export const SubmitBlock = (): ReactNode => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
   const { setIsAuth } = useIsAuth();
+  const { cart, setCart } = useCart();
 
   const handleClose = (event: SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
@@ -103,7 +104,11 @@ export const SubmitBlock = (): ReactNode => {
               data.get('email') as string,
               data.get('password') as string,
               cartId ?? '',
-            );
+            ).then(newCart => {
+              const newCartData = newCart.body;
+              setCart({ ...cart, ...newCartData });
+              return newCart;
+            });
             if (customer.body.cart)
               setCookie('myCart', customer.body.cart.id ?? '');
           }

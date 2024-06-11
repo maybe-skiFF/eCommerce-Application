@@ -22,13 +22,14 @@ import {
 } from 'src/serverPart/BuildCart';
 import { getCookie, setCookie } from 'src/utils/cookieWork';
 import { ProductObj } from 'src/utils/interfaces';
-import { SyntheticEvent, useEffect, useState } from 'react';
+import { SyntheticEvent,  useState } from 'react';
 import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
 import { SimpleSnackbar } from '../SimpleSnackbar/SimpleSnackbar';
+import { useCart } from 'src/context/context';
 
 export function DetailedProductWrapper({ productDataById }: ProductObj) {
-  const [isInCart, setIsInCart] = useState<boolean>(false);
   const [open, setOpen] = useState<string>('');
+  const { cart, setCart } = useCart();
 
   const handleClose = (event: SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
@@ -36,28 +37,6 @@ export function DetailedProductWrapper({ productDataById }: ProductObj) {
     }
     setOpen('');
   };
-
-  useEffect(() => {
-    async function checkExistFronCart(): Promise<void> {
-      try {
-        if (!productDataById) return;
-        if (getCookie('myCart')) {
-          const myCart = await getCartByID(getCookie('myCart') ?? '');
-          if (
-            myCart.body.lineItems.some(
-              line => line.productId === productDataById.id,
-            )
-          ) {
-            setIsInCart(true);
-          }
-        }
-      } catch (error) {
-        console.log(error);
-        throw error;
-      }
-    }
-    void checkExistFronCart();
-  }, [productDataById]);
 
   if (!productDataById) return;
 
@@ -81,42 +60,62 @@ export function DetailedProductWrapper({ productDataById }: ProductObj) {
     return false;
   }
 
+  const isExistToCart = cart.lineItems.some(
+    line => line.productId === productDataById.id,
+  )
+
   const getMyAnonimnusCart = async (): Promise<ClientResponse<Cart>> => {
     if (!getCookie('myCart')) {
-      const cart = await getAnonymnusCart();
-      setCookie('myCart', cart.body.id);
-      const myCartWithCountry = await setCountryForCart(
-        cart.body.id,
-        cart.body.version,
+      const cartAnon = await getAnonymnusCart();
+      setCookie('myCart', cartAnon.body.id);
+      const cartFromServer = await setCountryForCart(
+        cartAnon.body.id,
+        cartAnon.body.version,
         'US',
-      );
-      return myCartWithCountry;
+      ).then(data => {
+        console.log(data, 'cartAnan');
+        setCart({ ...cart, ...data.body });
+        return data;
+      });
+      return cartFromServer;
     }
-    return await getCartByID(getCookie('myCart') ?? '');
+    return await getCartByID(getCookie('myCart') ?? '').then(data => {
+      setCart({ ...cart, ...data.body });
+      return data;
+    });
   };
 
-  const handleClickForBuy = async () => {
-    const cart = await getMyAnonimnusCart();
+  const handleClickForAddToCart = async () => {
+    const cartFromServer = await getMyAnonimnusCart();
     const productID = productDataById.id;
-    await addProductToCartByID(cart.body.id, cart.body.version, productID)
-      .then(() => setOpen(SERVICE_MESSAGES.added))
+    await addProductToCartByID(
+      cartFromServer.body.id,
+      cartFromServer.body.version,
+      productID,
+    )
+      .then(({ body }) => {
+        setCart({ ...cart, ...body });
+        setOpen(SERVICE_MESSAGES.added);
+      })
       .catch((error: ErrorObject) => setOpen(error.message));
   };
 
   const handleClickForDelete = async () => {
-    const cart = await getCartByID(getCookie('myCart') ?? '');
     const productID = productDataById.id;
-    const productInCart = cart.body.lineItems.filter(
+    const productInCart = cart.lineItems.filter(
       line => productID === line.productId,
     );
     if (productInCart.length > 0) {
       await removeProductToCartByID(
-        cart.body.id,
-        cart.body.version,
+        cart.id,
+        cart.version,
         productInCart[0].id,
         productInCart[0].quantity,
       )
-        .then(() => setOpen(SERVICE_MESSAGES.deleted))
+        .then(({ body }) => {
+          setCart({ ...cart, ...body });
+          setOpen(SERVICE_MESSAGES.deleted);
+        })
         .catch((error: ErrorObject) => setOpen(error.message));
     }
   };
@@ -186,16 +185,16 @@ export function DetailedProductWrapper({ productDataById }: ProductObj) {
             </RadioGroup>
           </FormControl>
           <IconButton
-            sx={{ marginBottom: '0%' }}
-            disabled={isInCart}
+            sx={{ marginBottom: '0%', borderRadius: 0 }}
+            disabled={ isExistToCart}
             type="button"
-            onClick={() => void handleClickForBuy()}
+            onClick={() => void handleClickForAddToCart()}
           >
             <AddShoppingCartIcon fontSize="large" />
           </IconButton>
           <IconButton
-            sx={{ marginBottom: '0%' }}
-            disabled={!isInCart}
+            sx={{ marginBottom: '0%', borderRadius: 0 }}
+            disabled={! isExistToCart}
             type="button"
             onClick={() => void handleClickForDelete()}
           >
