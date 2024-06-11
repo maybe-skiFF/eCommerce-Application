@@ -13,12 +13,14 @@ import {
 import { getCookie } from 'src/utils/cookieWork';
 import { SimpleSnackbar } from 'src/components/SimpleSnackbar/SimpleSnackbar';
 import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
+import { useCart } from 'src/context/context';
 
 let keyOfItem = 0;
 
 export const InfoProductCard = (product: LineItem): JSX.Element => {
   const [quantity, setQuantity] = useState<number>(product.quantity);
   const [open, setOpen] = useState<boolean>(false);
+  const { cart, setCart } = useCart();
 
   const handleClose = (event: SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
@@ -45,23 +47,26 @@ export const InfoProductCard = (product: LineItem): JSX.Element => {
       cart.body.version,
       product.id,
       operation === 'plus' ? quantity + 1 : quantity - 1,
-    );
-
-    location.reload();
+    ).then(newCart => {
+      const newCartData = newCart.body;
+      setCart({ ...cart, ...newCartData });
+    });
   };
   const handleDelete = async (event: SyntheticEvent): Promise<void> => {
     event.persist();
-    const cart = !getCookie('myID')
-      ? await getCartByID(getCookie('myCart') ?? '')
-      : await getCustomerCart(getCookie('myID') ?? '');
+    // const cart = !getCookie('myID')
+    //   ? await getCartByID(getCookie('myCart') ?? '')
+    //   : await getCustomerCart(getCookie('myID') ?? '');
 
     await removeProductToCartByID(
       getCookie('myCart') ?? '',
-      cart.body.version,
+      cart.version,
       product.id,
       quantity,
-    );
-    location.reload();
+    ).then(newCart => {
+      const newCartData = newCart.body;
+      setCart({ ...cart, ...newCartData });
+    });
   };
 
   keyOfItem += 1;
@@ -97,7 +102,7 @@ export const InfoProductCard = (product: LineItem): JSX.Element => {
           {product.name['en-US']}
         </Typography>
         <IconButton
-          sx={{ padding: '0', marginBottom: '3%' }}
+          sx={{ padding: '0', marginBottom: '3%', borderRadius: 0 }}
           type="button"
           onClick={event => void handleDelete(event)}
         >
