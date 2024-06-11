@@ -5,7 +5,8 @@ import PersonIcon from '@mui/icons-material/Person';
 import LoginIcon from '@mui/icons-material/Login';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import LogoutIcon from '@mui/icons-material/Logout';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+// import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import { IconCart } from '../IconCart/IconCart';
 import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useCustomer } from 'src/context/context';
@@ -76,7 +77,7 @@ export function Header() {
       className: 'login__link login',
     },
     {
-      icon: <ShoppingCartIcon />,
+      icon: <IconCart />,
       label: SERVICE_MESSAGES.cart,
       to: '/cart',
       className: 'login__link login',
