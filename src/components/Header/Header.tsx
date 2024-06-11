@@ -5,7 +5,6 @@ import PersonIcon from '@mui/icons-material/Person';
 import LoginIcon from '@mui/icons-material/Login';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import LogoutIcon from '@mui/icons-material/Logout';
-// import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { IconCart } from '../IconCart/IconCart';
 import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';

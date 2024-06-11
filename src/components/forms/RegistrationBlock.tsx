@@ -123,7 +123,6 @@ export const RegistrationBlock = () => {
           navigate('/');
           localStorage.setItem('isAuth', 'true');
           setIsAuth(true);
-          location.reload();
         }
       })
       .then(async () => {
