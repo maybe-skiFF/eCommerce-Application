@@ -22,13 +22,12 @@ import {
 } from 'src/serverPart/BuildCart';
 import { getCookie, setCookie } from 'src/utils/cookieWork';
 import { ProductObj } from 'src/utils/interfaces';
-import { SyntheticEvent, useEffect, useState } from 'react';
+import { SyntheticEvent,  useState } from 'react';
 import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
 import { SimpleSnackbar } from '../SimpleSnackbar/SimpleSnackbar';
 import { useCart } from 'src/context/context';
 
 export function DetailedProductWrapper({ productDataById }: ProductObj) {
-  const [isInCart, setIsInCart] = useState<boolean>(false);
   const [open, setOpen] = useState<string>('');
   const { cart, setCart } = useCart();
 
@@ -38,28 +37,6 @@ export function DetailedProductWrapper({ productDataById }: ProductObj) {
     }
     setOpen('');
   };
-
-  useEffect(() => {
-    async function checkExistFromCart(): Promise<void> {
-      try {
-        if (!productDataById) return;
-        if (getCookie('myCart')) {
-          const myCart = await getCartByID(getCookie('myCart') ?? '');
-          if (
-            myCart.body.lineItems.some(
-              line => line.productId === productDataById.id,
-            )
-          ) {
-            setIsInCart(true);
-          }
-        }
-      } catch (error) {
-        console.log(error);
-        throw error;
-      }
-    }
-    void checkExistFromCart();
-  }, [productDataById]);
 
   if (!productDataById) return;
 
@@ -83,6 +60,10 @@ export function DetailedProductWrapper({ productDataById }: ProductObj) {
     return false;
   }
 
+  const isExistToCart = cart.lineItems.some(
+    line => line.productId === productDataById.id,
+  )
+
   const getMyAnonimnusCart = async (): Promise<ClientResponse<Cart>> => {
     if (!getCookie('myCart')) {
       const cartAnon = await getAnonymnusCart();
@@ -104,9 +85,8 @@ export function DetailedProductWrapper({ productDataById }: ProductObj) {
     });
   };
 
-  const handleClickForBuy = async () => {
+  const handleClickForAddToCart = async () => {
     const cartFromServer = await getMyAnonimnusCart();
-    console.log(cartFromServer, 'from');
     const productID = productDataById.id;
     await addProductToCartByID(
       cartFromServer.body.id,
@@ -206,15 +186,15 @@ export function DetailedProductWrapper({ productDataById }: ProductObj) {
           </FormControl>
           <IconButton
             sx={{ marginBottom: '0%', borderRadius: 0 }}
-            disabled={isInCart}
+            disabled={ isExistToCart}
             type="button"
-            onClick={() => void handleClickForBuy()}
+            onClick={() => void handleClickForAddToCart()}
           >
             <AddShoppingCartIcon fontSize="large" />
           </IconButton>
           <IconButton
             sx={{ marginBottom: '0%', borderRadius: 0 }}
-            disabled={!isInCart}
+            disabled={! isExistToCart}
             type="button"
             onClick={() => void handleClickForDelete()}
           >
