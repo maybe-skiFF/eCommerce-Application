@@ -87,6 +87,7 @@ export const InfoProductCard = (product: LineItem): JSX.Element => {
         alt="picture"
         sx={{ width: '35%', objectFit: 'contain' }}
       />
+      {SimpleSnackbar(SERVICE_MESSAGES.countQuantity, open, handleClose) }
       <Box
         sx={{
           display: 'flex',
@@ -109,7 +110,6 @@ export const InfoProductCard = (product: LineItem): JSX.Element => {
         <Typography
           sx={{ width: '100%', textAlign: 'center' }}
         >{`description`}</Typography>
-        {SimpleSnackbar(SERVICE_MESSAGES.countQuantity, open, handleClose)}
         <Typography>
           Quantity:
           <IconButton
