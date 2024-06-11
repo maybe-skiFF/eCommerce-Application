@@ -1,42 +1,18 @@
 import { Box, Button, Typography } from '@mui/material';
 import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
-import {
-  getCartByID,
-  removeAllFromCart,
-  removeProductToCartByID,
-  // removeProductToCartByID,
-} from 'src/serverPart/BuildCart';
-import { deleteCookie, getCookie } from 'src/utils/cookieWork';
+import { removeAllFromCart } from 'src/serverPart/BuildCart';
+import { getCookie } from 'src/utils/cookieWork';
 import { InfoProductCard } from './InfoProductCard';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-// import { Cart } from '@commercetools/platform-sdk';
 import { SyntheticEvent } from 'react';
-import { Cart, LineItem } from '@commercetools/platform-sdk';
+import { LineItem } from '@commercetools/platform-sdk';
 import { HeaderWrapper } from 'src/components/HeaderWrapper/HeaderWrapper';
 import { InfoSummaryCart } from './InfoSymmaryCart';
 import { EmptyCart } from './EmptyCart';
 import { useCart } from 'src/context/context';
 
 export const MyCart = () => {
-  // const [currCart, setCurrCart] = useState<Cart | undefined>();
   const { cart, setCart } = useCart();
-  // useEffect(() => {
-  //   async function cartByIdData(): Promise<Cart> {
-  //     try {
-  //       const response = await getCartByID(getCookie('myCart') ?? '');
-  //       const data = response.body;
-  //       for (const [key, value] of Object.entries(data)) {
-  //         setCart({ ...cart, [key]: value });
-  //       }
-  //       return data;
-  //     } catch (error) {
-  //       EmptyCart();
-  //       console.log(error);
-  //       throw error;
-  //     }
-  //   }
-  //   void cartByIdData();
-  // }, [setCart]);
 
   const LoopProductCard = (): JSX.Element[] | JSX.Element => {
     if (!getCookie('myCart')) {
@@ -46,32 +22,6 @@ export const MyCart = () => {
     const arr = cart.lineItems.map((item: LineItem) => InfoProductCard(item));
     return arr;
   };
-
-  // const createChain = async (data: Cart) => {
-  //   if (data.lineItems.length > 0) {
-  //     await removeProductToCartByID(
-  //       data.id,
-  //       data.version,
-  //       data.lineItems[0].id,
-  //       data.lineItems[0].quantity,
-  //     ).then(newCart => {
-  //       const newCartData = newCart.body;
-  //       setCart({ ...cart, ...newCartData });
-  //     });
-  //   } else {
-  //     await removeProductToCartByID(
-  //       data.id,
-  //       data.version,
-  //       data.lineItems[0].id,
-  //       data.lineItems[0].quantity,
-  //     )
-  //       .then(newCart => {
-  //         const newCartData = newCart.body;
-  //         setCart({ ...cart, ...newCartData });
-  //       })
-  //       .then(() => createChain(cart));
-  //   }
-  // };
 
   const handleAllDelete = async (event: SyntheticEvent): Promise<void> => {
     event.persist();
