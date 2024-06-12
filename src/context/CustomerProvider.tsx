@@ -49,8 +49,4 @@ export const CustomerProvider = ({ children }: Props) => {
     </CustomerContext.Provider>
   );
 };
-// usage example
-// const { customer, setCustomer } = useCustomer();
-// const handleOnInputName = (event: ChangeEvent<HTMLInputElement>): void => {
-//   setCustomer({ ...customer, firstName: event.target.value });
-// };
+

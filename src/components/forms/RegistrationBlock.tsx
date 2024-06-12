@@ -1,6 +1,6 @@
 import { ChangeEvent, FormEvent, SyntheticEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useCustomer, useIsAuth } from 'src/context/context';
+import { useCart, useCustomer, useIsAuth } from 'src/context/context';
 import {
   Box,
   Grid,
@@ -41,6 +41,7 @@ export const RegistrationBlock = () => {
   const [formData, setFormData] = useState<string>(SERVICE_MESSAGES.startCheck);
 
   const { customer, setCustomer } = useCustomer();
+  const { cart, setCart } = useCart();
 
   const [openDefaultAddress, setOpenDefaultAddress] = useState<boolean>(false);
 
@@ -122,7 +123,6 @@ export const RegistrationBlock = () => {
           navigate('/');
           localStorage.setItem('isAuth', 'true');
           setIsAuth(true);
-          location.reload();
         }
       })
       .then(async () => {
@@ -143,7 +143,11 @@ export const RegistrationBlock = () => {
             data.get('email') as string,
             data.get('password') as string,
             cartId ?? '',
-          );
+          ).then(newCart => {
+            const newCartData = newCart.body;
+            setCart({ ...cart, ...newCartData });
+            return newCart;
+          });
           if (customer.body.cart)
             setCookie('myCart', customer.body.cart.id ?? '');
         });

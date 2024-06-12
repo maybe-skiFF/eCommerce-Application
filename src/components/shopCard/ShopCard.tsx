@@ -10,29 +10,27 @@ import {
 } from '@mui/material';
 import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
 import { ProductPure, ShopCardProps } from 'src/utils/interfaces';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, ChangeEvent } from 'react';
 import { Link as ReactLink } from 'react-router-dom';
 import { PaginationComponent } from '../pagination/PaginationComponent';
 import { SkeletonComponent } from '../skeleton/skeletonComponent';
 
 export function ShopCard({ products, sortValue }: ShopCardProps) {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [page, setPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [page, setPage] = useState<number>(1);
   const itemsPerPage = 8;
 
   useEffect(() => {
     setPage(1);
   }, [products]);
 
-  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
     setPage(1);
   };
 
-  const handlePageChange = (
-    event: React.ChangeEvent<unknown>,
-    value: number,
-  ) => {
+  const handlePageChange = (event: ChangeEvent<unknown>, value: number) => {
+    event.preventDefault();
     setPage(value);
   };
 

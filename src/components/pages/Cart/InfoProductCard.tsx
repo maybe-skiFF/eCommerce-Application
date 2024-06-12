@@ -13,12 +13,14 @@ import {
 import { getCookie } from 'src/utils/cookieWork';
 import { SimpleSnackbar } from 'src/components/SimpleSnackbar/SimpleSnackbar';
 import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
+import { useCart } from 'src/context/context';
 
 let keyOfItem = 0;
 
 export const InfoProductCard = (product: LineItem): JSX.Element => {
   const [quantity, setQuantity] = useState<number>(product.quantity);
   const [open, setOpen] = useState<boolean>(false);
+  const { cart, setCart } = useCart();
 
   const handleClose = (event: SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
@@ -27,6 +29,7 @@ export const InfoProductCard = (product: LineItem): JSX.Element => {
     setOpen(false);
   };
 
+  
   const handleChangeQuantity = async (
     event: SyntheticEvent,
     operation: 'plus' | 'minus',
@@ -45,23 +48,23 @@ export const InfoProductCard = (product: LineItem): JSX.Element => {
       cart.body.version,
       product.id,
       operation === 'plus' ? quantity + 1 : quantity - 1,
-    );
-
-    location.reload();
+    ).then(newCart => {
+      const newCartData = newCart.body;
+      setCart({ ...cart, ...newCartData });
+    });
   };
   const handleDelete = async (event: SyntheticEvent): Promise<void> => {
     event.persist();
-    const cart = !getCookie('myID')
-      ? await getCartByID(getCookie('myCart') ?? '')
-      : await getCustomerCart(getCookie('myID') ?? '');
 
     await removeProductToCartByID(
       getCookie('myCart') ?? '',
-      cart.body.version,
+      cart.version,
       product.id,
       quantity,
-    );
-    location.reload();
+    ).then(newCart => {
+      const newCartData = newCart.body;
+      setCart({ ...cart, ...newCartData });
+    });
   };
 
   keyOfItem += 1;
@@ -84,6 +87,7 @@ export const InfoProductCard = (product: LineItem): JSX.Element => {
         alt="picture"
         sx={{ width: '35%', objectFit: 'contain' }}
       />
+      {SimpleSnackbar(SERVICE_MESSAGES.countQuantity, open, handleClose) }
       <Box
         sx={{
           display: 'flex',
@@ -97,7 +101,7 @@ export const InfoProductCard = (product: LineItem): JSX.Element => {
           {product.name['en-US']}
         </Typography>
         <IconButton
-          sx={{ padding: '0', marginBottom: '3%' }}
+          sx={{ padding: '0', marginBottom: '3%', borderRadius: 0 }}
           type="button"
           onClick={event => void handleDelete(event)}
         >
@@ -106,7 +110,6 @@ export const InfoProductCard = (product: LineItem): JSX.Element => {
         <Typography
           sx={{ width: '100%', textAlign: 'center' }}
         >{`description`}</Typography>
-        {SimpleSnackbar(SERVICE_MESSAGES.countQuantity, open, handleClose)}
         <Typography>
           Quantity:
           <IconButton
@@ -123,6 +126,20 @@ export const InfoProductCard = (product: LineItem): JSX.Element => {
             <AddIcon />
           </IconButton>
         </Typography>
+        {product.price.discounted ? (
+          <Box sx={{width:"100%"}}>
+            <Typography sx={{ width: '90%', textAlign: 'center' }}>
+              Price of this item :{product.price.value.centAmount}
+            </Typography>                
+            <Typography sx={{ width: '90%', textAlign: 'center', color:'red' }}>
+              Price of this item with discount :{product.price.discounted.value.centAmount}
+            </Typography>
+          </Box>
+          ) : (
+            <Typography sx={{ width: '90%', textAlign: 'center' }}>
+              Price of this item :{product.price.value.centAmount}
+            </Typography>
+          )}       
       </Box>
     </Box>
   );

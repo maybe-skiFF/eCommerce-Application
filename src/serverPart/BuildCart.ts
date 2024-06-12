@@ -166,6 +166,27 @@ const getCustomerCart = (customerID: string): Promise<ClientResponse<Cart>> => {
     .execute();
 };
 
+const removeAllFromCart = (
+  IDCart: string,
+  version: number,
+  arr: {
+    action: 'removeLineItem';
+    lineItemId: string;
+    quantity: number;
+  }[],
+): Promise<ClientResponse<Cart>> => {
+  return apiRoot
+    .carts()
+    .withId({ ID: IDCart })
+    .post({
+      body: {
+        version: version,
+        actions: arr,
+      },
+    })
+    .execute();
+};
+
 const createDiscount = (code: string, cartDiscountId: string) => {
   return apiRoot.discountCodes().post({
     body: {
@@ -219,6 +240,7 @@ export {
   isCustomerExist,
   getMergeCart,
   getMyCart,
+  removeAllFromCart,
   createDiscount,
   checkDiscount,
   addDiscountToCart,

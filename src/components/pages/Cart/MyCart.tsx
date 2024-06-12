@@ -1,47 +1,46 @@
-import { Box, Typography } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
 import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
-import { getCartByID } from 'src/serverPart/BuildCart';
+import { removeAllFromCart } from 'src/serverPart/BuildCart';
 import { getCookie } from 'src/utils/cookieWork';
 import { InfoProductCard } from './InfoProductCard';
-import { Cart } from '@commercetools/platform-sdk';
-import { useState, useEffect } from 'react';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import { SyntheticEvent } from 'react';
 import { LineItem } from '@commercetools/platform-sdk';
 import { HeaderWrapper } from 'src/components/HeaderWrapper/HeaderWrapper';
 import { InfoSummaryCart } from './InfoSymmaryCart';
 import { EmptyCart } from './EmptyCart';
-import { useParams } from 'react-router-dom';
+import { useCart } from 'src/context/context';
 
 export const MyCart = () => {
-  const [cart, setCart] = useState<Cart | undefined>();
-  const { key } = useParams();
-
-  useEffect(() => {
-    async function cartByIdData(): Promise<Cart> {
-      try {
-        const response = await getCartByID(getCookie('myCart') ?? '');
-        const data = response.body;
-        setCart(data);
-        return data;
-      } catch (error) {
-        EmptyCart();
-        console.log(error);
-        throw error;
-      }
-    }
-    void cartByIdData();
-  }, [key]);
+  const { cart, setCart } = useCart();
 
   const LoopProductCard = (): JSX.Element[] | JSX.Element => {
-    const arrCards: JSX.Element[] = [];
     if (!getCookie('myCart')) {
       return <Box> No Product</Box>;
     }
+    const arr = cart.lineItems.map((item: LineItem) => InfoProductCard(item));
+    return arr;
+  };
 
-    console.log(cart!.version, 'myCart');
-    cart!.lineItems.forEach((item: LineItem) =>
-      arrCards.push(InfoProductCard(item)),
-    );
-    return arrCards;
+  const handleAllDelete = async (event: SyntheticEvent): Promise<void> => {
+    event.persist();
+    console.log(cart, 'me');
+    const arrLines: {
+      action: 'removeLineItem';
+      lineItemId: string;
+      quantity: number;
+    }[] = [];
+    cart.lineItems.forEach(line => {
+      arrLines.push({
+        action: 'removeLineItem',
+        lineItemId: line.id,
+        quantity: line.quantity,
+      });
+    });
+    await removeAllFromCart(cart.id, cart.version, arrLines).then(newCart => {
+      const newCartData = newCart.body;
+      setCart({ ...cart, ...newCartData });
+    });
   };
 
   return typeof cart === 'undefined' ? (
@@ -75,6 +74,14 @@ export const MyCart = () => {
         </Box>
         {InfoSummaryCart(cart)}
       </Box>
+      <Button
+        variant="contained"
+        sx={{ backgroundColor: 'grey' }}
+        startIcon={<DeleteForeverIcon />}
+        onClick={event => void handleAllDelete(event)}
+      >
+        Clear the cart
+      </Button>
     </HeaderWrapper>
   );
 };
