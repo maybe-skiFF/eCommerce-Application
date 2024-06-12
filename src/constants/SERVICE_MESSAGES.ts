@@ -53,4 +53,6 @@ export const SERVICE_MESSAGES = {
   about: 'About',
   yourCart: 'Your cart',
   countQuantity: 'Quantity cannot be less 0',
+  send: 'Send Your code',
+  discountOn: 'Discount successfully applied',
 };

@@ -166,6 +166,46 @@ const getCustomerCart = (customerID: string): Promise<ClientResponse<Cart>> => {
     .execute();
 };
 
+const createDiscount = (code: string, cartDiscountId: string) => {
+  return apiRoot.discountCodes().post({
+    body: {
+      code: code,
+      name: {
+        en: 'RSS',
+      },
+      cartDiscounts: [
+        {
+          typeId: 'cart-discount',
+          id: cartDiscountId,
+        },
+      ],
+      isActive: true,
+    },
+  });
+};
+
+const checkDiscount = (code: string) => {
+  return apiRoot.discountCodes().withKey({ key: code }).get().execute();
+};
+
+const addDiscountToCart = (
+  IDCart: string,
+  version: number,
+
+  code: string,
+): Promise<ClientResponse<Cart>> => {
+  return apiRoot
+    .carts()
+    .withId({ ID: IDCart })
+    .post({
+      body: {
+        version: version,
+        actions: [{ action: 'addDiscountCode', code: code }],
+      },
+    })
+    .execute();
+};
+
 export {
   getAnonymnusCart,
   createCustomerCart,
@@ -179,4 +219,7 @@ export {
   isCustomerExist,
   getMergeCart,
   getMyCart,
+  createDiscount,
+  checkDiscount,
+  addDiscountToCart,
 };

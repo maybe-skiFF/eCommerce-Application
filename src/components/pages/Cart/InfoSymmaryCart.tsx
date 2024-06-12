@@ -1,8 +1,59 @@
-import { Cart } from '@commercetools/platform-sdk';
+import { Cart, ErrorObject } from '@commercetools/platform-sdk';
 import { Box, Paper, Typography } from '@mui/material';
 import { EmptyCart } from './EmptyCart';
+import { getTextForm } from 'src/utils/createFormControl';
+import { ChangeEvent, FormEvent, SyntheticEvent } from 'react';
+import { SubmitButton } from 'src/components/SubmitButton/SubmitButton';
+import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
+import {
+  addDiscountToCart,
+  checkDiscount,
+  createDiscount,
+} from 'src/serverPart/BuildCart';
+import { SimpleSnackbar } from 'src/components/SimpleSnackbar/SimpleSnackbar';
 
 export const InfoSummaryCart = (cart: Cart) => {
+  let open = '';
+  const handleOnInputDiscount = (
+    event: ChangeEvent<HTMLInputElement>,
+  ): void => {
+    if (event.target.value !== '') {
+      console.log(event.target.value);
+    }
+  };
+
+  const handleClose = (event: SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return event;
+    }
+    open = '';
+  };
+
+  const handleOnSubmitDiscount = async (
+    event: FormEvent<HTMLFormElement>,
+  ): Promise<void> => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    const code = (data.get('discount') as string) ?? '';
+    await checkDiscount(code)
+      .then(response => {
+        console.log(response);
+        createDiscount(code, response.body.cartDiscounts[0].id);
+      })
+      .then(() =>
+        addDiscountToCart(
+          cart.id,
+          cart.version,
+          (data.get('discount') as string) ?? '',
+        ),
+      )
+      .then(res => {
+        console.log(res);
+        open = SERVICE_MESSAGES.discountOn;
+      })
+      .catch((error: ErrorObject) => (open = error.message));
+  };
+
   return typeof cart.totalPrice === 'undefined' ? (
     EmptyCart()
   ) : (
@@ -12,8 +63,8 @@ export const InfoSummaryCart = (cart: Cart) => {
         borderRadius: 2,
         bgcolor: 'background.default',
         display: 'grid',
-        gridTemplateColumns: { md: '3fr 0.9fr' },
-        gap: 2,
+        gridTemplateColumns: { md: '1fr' },
+        gap: 1.8,
       }}
     >
       <Paper elevation={3} sx={{ padding: '5% 7%', width: '100%' }}>
@@ -23,6 +74,14 @@ export const InfoSummaryCart = (cart: Cart) => {
         <Typography variant={'h6'}>
           Total amount of goods for: {cart.totalPrice.centAmount ?? ''}
         </Typography>
+        <Box
+          component="form"
+          onSubmit={event => void handleOnSubmitDiscount(event)}
+        >
+          {getTextForm('discount', '', handleOnInputDiscount, true)}
+          {SubmitButton([SERVICE_MESSAGES.checkDone], SERVICE_MESSAGES.send)}
+        </Box>
+        {SimpleSnackbar(open, open !== '', handleClose)}
       </Paper>
     </Box>
   );
