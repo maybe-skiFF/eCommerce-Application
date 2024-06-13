@@ -22,7 +22,7 @@ import {
 } from 'src/serverPart/BuildCart';
 import { getCookie, setCookie } from 'src/utils/cookieWork';
 import { ProductObj } from 'src/utils/interfaces';
-import { SyntheticEvent,  useState } from 'react';
+import { SyntheticEvent, useState } from 'react';
 import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
 import { SimpleSnackbar } from '../SimpleSnackbar/SimpleSnackbar';
 import { useCart } from 'src/context/context';
@@ -62,7 +62,7 @@ export function DetailedProductWrapper({ productDataById }: ProductObj) {
 
   const isExistToCart = cart.lineItems.some(
     line => line.productId === productDataById.id,
-  )
+  );
 
   const getMyAnonimnusCart = async (): Promise<ClientResponse<Cart>> => {
     if (!getCookie('myCart')) {
@@ -186,7 +186,7 @@ export function DetailedProductWrapper({ productDataById }: ProductObj) {
           </FormControl>
           <IconButton
             sx={{ marginBottom: '0%', borderRadius: 0 }}
-            disabled={ isExistToCart}
+            disabled={isExistToCart}
             type="button"
             onClick={() => void handleClickForAddToCart()}
           >
@@ -194,7 +194,7 @@ export function DetailedProductWrapper({ productDataById }: ProductObj) {
           </IconButton>
           <IconButton
             sx={{ marginBottom: '0%', borderRadius: 0 }}
-            disabled={! isExistToCart}
+            disabled={!isExistToCart}
             type="button"
             onClick={() => void handleClickForDelete()}
           >
