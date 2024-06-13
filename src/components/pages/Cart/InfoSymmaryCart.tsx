@@ -1,19 +1,23 @@
-import { Cart, ErrorObject } from '@commercetools/platform-sdk';
+import { ErrorObject } from '@commercetools/platform-sdk';
 import { Box, Paper, Typography } from '@mui/material';
 import { EmptyCart } from './EmptyCart';
 import { getTextForm } from 'src/utils/createFormControl';
-import { ChangeEvent, FormEvent, SyntheticEvent } from 'react';
+import { ChangeEvent, FormEvent, SyntheticEvent, useState } from 'react';
 import { SubmitButton } from 'src/components/SubmitButton/SubmitButton';
 import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
 import {
   addDiscountToCart,
   checkDiscount,
   createDiscount,
+  getCartDiscount,
 } from 'src/serverPart/BuildCart';
+import { useCart } from 'src/context/context';
 import { SimpleSnackbar } from 'src/components/SimpleSnackbar/SimpleSnackbar';
 
-export const InfoSummaryCart = (cart: Cart) => {
-  let open = '';
+export const InfoSummaryCart = () => {
+  const { cart, setCart } = useCart();
+  const [open, setOpen] = useState<string>('');
+
   const handleOnInputDiscount = (
     event: ChangeEvent<HTMLInputElement>,
   ): void => {
@@ -26,7 +30,7 @@ export const InfoSummaryCart = (cart: Cart) => {
     if (reason === 'clickaway') {
       return event;
     }
-    open = '';
+    setOpen('');
   };
 
   const handleOnSubmitDiscount = async (
@@ -37,21 +41,30 @@ export const InfoSummaryCart = (cart: Cart) => {
     const code = (data.get('discount') as string) ?? '';
     await checkDiscount(code)
       .then(response => {
-        console.log(response);
-        createDiscount(code, response.body.cartDiscounts[0].id);
+        const res = getCartDiscount(response.body.cartDiscounts[0].id);
+        console.log(res, 'res');
+        return res;
       })
-      .then(() =>
-        addDiscountToCart(
+      .then(response => {
+        console.log(response);
+        const n = createDiscount(code, response.body.id);
+        console.log(n, 'n');
+      })
+      .then(() => {
+        const t = addDiscountToCart(
           cart.id,
           cart.version,
-          (data.get('discount') as string) ?? '',
-        ),
-      )
+          data.get('discount') as string,
+        );
+        console.log(t);
+        return t;
+      })
       .then(res => {
         console.log(res);
-        open = SERVICE_MESSAGES.discountOn;
+        setCart({ ...cart, ...res.body });
+        setOpen(SERVICE_MESSAGES.discountOn);
       })
-      .catch((error: ErrorObject) => (open = error.message));
+      .catch((error: ErrorObject) => setOpen(error.message));
   };
 
   return typeof cart.totalPrice === 'undefined' ? (

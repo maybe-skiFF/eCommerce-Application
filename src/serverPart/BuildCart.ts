@@ -188,31 +188,37 @@ const removeAllFromCart = (
 };
 
 const createDiscount = (code: string, cartDiscountId: string) => {
-  return apiRoot.discountCodes().post({
-    body: {
-      code: code,
-      name: {
-        en: 'RSS',
-      },
-      cartDiscounts: [
-        {
-          typeId: 'cart-discount',
-          id: cartDiscountId,
+  return apiRoot
+    .discountCodes()
+    .post({
+      body: {
+        code: code,
+        name: {
+          en: 'SALE',
         },
-      ],
-      isActive: true,
-    },
-  });
+        cartDiscounts: [
+          {
+            typeId: 'cart-discount',
+            id: cartDiscountId,
+          },
+        ],
+        isActive: true,
+      },
+    })
+    .execute();
 };
 
 const checkDiscount = (code: string) => {
   return apiRoot.discountCodes().withKey({ key: code }).get().execute();
 };
 
+const getCartDiscount = (IDCart: string) => {
+  return apiRoot.cartDiscounts().withId({ ID: IDCart }).get().execute();
+};
+
 const addDiscountToCart = (
   IDCart: string,
   version: number,
-
   code: string,
 ): Promise<ClientResponse<Cart>> => {
   return apiRoot
@@ -244,4 +250,5 @@ export {
   createDiscount,
   checkDiscount,
   addDiscountToCart,
+  getCartDiscount,
 };

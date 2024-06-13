@@ -19,7 +19,6 @@ export function ShopCard({ products, sortValue }: ShopCardProps) {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [page, setPage] = useState<number>(1);
   const itemsPerPage = 8;
-
   useEffect(() => {
     setPage(1);
   }, [products]);

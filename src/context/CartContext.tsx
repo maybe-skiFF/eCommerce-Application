@@ -6,8 +6,8 @@ import {
   useState,
 } from 'react';
 import { Cart } from '@commercetools/platform-sdk';
-import { getCookie } from 'src/utils/cookieWork';
 import { getCartByID } from 'src/serverPart/BuildCart';
+import { getCookie } from 'src/utils/cookieWork';
 
 interface Props {
   children: ReactElement;
@@ -18,13 +18,13 @@ interface Context {
   setCart: Dispatch<SetStateAction<Cart>>;
 }
 
-const mayBeCart = await getCartByID(getCookie('myCart') ?? '');
+const myCart = await getCartByID(getCookie('myCart') ?? '');
 
 const intialDataCart: Cart = getCookie('myCart')
-  ? mayBeCart.body
+  ? myCart.body
   : {
       cartState: '',
-      country: 'US',
+      country: '',
       createdAt: '',
       createdBy: {
         anonymousId: '',
