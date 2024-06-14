@@ -8,6 +8,7 @@ import {
   LastModifiedBy,
   StoreKeyReference,
   Address,
+  Product,
 } from '@commercetools/platform-sdk';
 import { ClientResponse } from '@commercetools/sdk-client-v2';
 import { ErrorResponse } from 'react-router-dom';
@@ -276,3 +277,7 @@ export type ValueOfCustomer =
   | CustomerGroupReference
   | CustomFields
   | StoreKeyReference[];
+
+export interface ProductObj {
+  productDataById: Product | undefined;
+}
