@@ -9,6 +9,7 @@ import {
   RadioGroup,
   Typography,
   IconButton,
+  CircularProgress,
 } from '@mui/material';
 import { SwiperSlider } from '../SwiperSlider/SwiperSlider';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
@@ -30,6 +31,7 @@ import { useCart } from 'src/context/context';
 export function DetailedProductWrapper({ productDataById }: ProductObj) {
   const [open, setOpen] = useState<string>('');
   const { cart, setCart } = useCart();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleClose = (event: SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
@@ -86,6 +88,7 @@ export function DetailedProductWrapper({ productDataById }: ProductObj) {
   };
 
   const handleClickForAddToCart = async () => {
+    setIsLoading(true);
     const cartFromServer = await getMyAnonimnusCart();
     const productID = productDataById.id;
     await addProductToCartByID(
@@ -96,11 +99,13 @@ export function DetailedProductWrapper({ productDataById }: ProductObj) {
       .then(({ body }) => {
         setCart({ ...cart, ...body });
         setOpen(SERVICE_MESSAGES.added);
+        setIsLoading(false);
       })
       .catch((error: ErrorObject) => setOpen(error.message));
   };
 
   const handleClickForDelete = async () => {
+    setIsLoading(true);
     const productID = productDataById.id;
     const productInCart = cart.lineItems.filter(
       line => productID === line.productId,
@@ -115,6 +120,7 @@ export function DetailedProductWrapper({ productDataById }: ProductObj) {
         .then(({ body }) => {
           setCart({ ...cart, ...body });
           setOpen(SERVICE_MESSAGES.deleted);
+          setIsLoading(false);
         })
         .catch((error: ErrorObject) => setOpen(error.message));
     }
@@ -123,14 +129,17 @@ export function DetailedProductWrapper({ productDataById }: ProductObj) {
   return (
     <Box sx={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap' }}>
       <Box
-        sx={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          justifyContent: 'center',
-          alignItems: 'flex-end',
-          columnGap: '20px',
-          marginTop: '40px',
-        }}
+        sx={[
+          {
+            display: 'flex',
+            flexWrap: 'wrap',
+            justifyContent: 'center',
+            alignItems: 'flex-end',
+            columnGap: '20px',
+            marginTop: '40px',
+          },
+          isLoading ? { opacity: 0.5 } : { opacity: 1 },
+        ]}
       >
         <Box>
           <SwiperSlider productImgArr={productImgArr} />
@@ -203,6 +212,13 @@ export function DetailedProductWrapper({ productDataById }: ProductObj) {
           {SimpleSnackbar(open, open !== '', handleClose)}
         </Box>
       </Box>
+      {isLoading ? (
+        <CircularProgress
+          style={{ position: 'absolute', zIndex: 2, top: '50%', left: '50%' }}
+        />
+      ) : (
+        ''
+      )}
     </Box>
   );
 }
