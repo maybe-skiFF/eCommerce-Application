@@ -22,9 +22,6 @@ export const InfoProductCard = (product: LineItem): JSX.Element => {
   const [open, setOpen] = useState<boolean>(false);
   const { cart, setCart } = useCart();
 
-  const currency =
-    cart.country === 'US' ? SERVICE_MESSAGES.USD : SERVICE_MESSAGES.EUR;
-
   const handleClose = (event: SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
       return event;
@@ -110,9 +107,6 @@ export const InfoProductCard = (product: LineItem): JSX.Element => {
         >
           <DeleteIcon />
         </IconButton>
-        <Typography
-          sx={{ width: '100%', textAlign: 'center' }}
-        >{`description`}</Typography>
         <Typography>
           Quantity:
           <IconButton
@@ -133,20 +127,20 @@ export const InfoProductCard = (product: LineItem): JSX.Element => {
           <Box sx={{ width: '100%' }}>
             <Typography sx={{ width: '90%', textAlign: 'center' }}>
               {SERVICE_MESSAGES.withoutDiscount} :
-              {product.price.value.centAmount / 100} {currency}
+              {product.price.value.centAmount / 100} {SERVICE_MESSAGES.USD}
             </Typography>
             <Typography
               sx={{ width: '90%', textAlign: 'center', color: 'red' }}
             >
               {SERVICE_MESSAGES.withDiscount}:
               {product.price.discounted.value.centAmount / 100}
-              {currency}
+              {SERVICE_MESSAGES.USD}
             </Typography>
           </Box>
         ) : (
           <Typography sx={{ width: '90%', textAlign: 'center' }}>
             {SERVICE_MESSAGES.totalAmount}:
-            {product.price.value.centAmount / 100} {currency}
+            {product.price.value.centAmount / 100} {SERVICE_MESSAGES.USD}
           </Typography>
         )}
       </Box>

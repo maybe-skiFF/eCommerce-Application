@@ -17,9 +17,6 @@ export const InfoSummaryCart = () => {
   const { cart, setCart } = useCart();
   const [open, setOpen] = useState<string>('');
 
-  const currency =
-    cart.country === 'US' ? SERVICE_MESSAGES.USD : SERVICE_MESSAGES.EUR;
-
   const handleOnInputDiscount = (
     event: ChangeEvent<HTMLInputElement>,
   ): void => {
@@ -84,7 +81,8 @@ export const InfoSummaryCart = () => {
               sx={{ width: '100%', textAlign: 'center', marginBottom: '1.5%' }}
             >
               {SERVICE_MESSAGES.withoutDiscount} :
-              {calculateTotalPriceWithoutDiscount(cart) / 100} {currency}
+              {calculateTotalPriceWithoutDiscount(cart) / 100}{' '}
+              {SERVICE_MESSAGES.USD}
             </Typography>
             <Typography
               sx={{
@@ -95,13 +93,13 @@ export const InfoSummaryCart = () => {
               }}
             >
               {SERVICE_MESSAGES.withDiscount}:{cart.totalPrice.centAmount / 100}
-              {currency}
+              {SERVICE_MESSAGES.USD}
             </Typography>
           </Box>
         ) : (
           <Typography sx={{ width: '90%', textAlign: 'center' }}>
             {SERVICE_MESSAGES.totalAmount}:{cart.totalPrice.centAmount / 100}{' '}
-            {currency}
+            {SERVICE_MESSAGES.USD}
           </Typography>
         )}
         <Box

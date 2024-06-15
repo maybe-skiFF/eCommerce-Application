@@ -11,15 +11,23 @@ import {
 const getAnonymnusCart = (): Promise<ClientResponse<Cart>> => {
   return apiRoot
     .carts()
-    .post({ body: { currency: 'USD' } })
+    .post({ body: { currency: 'USD', country: 'US' } })
     .execute();
 };
 
-const createCustomerCart = (api: ByProjectKeyRequestBuilder) => {
+const createCustomerCart = (
+  api: ByProjectKeyRequestBuilder,
+  myCountry: string,
+) => {
   return api
     .me()
     .carts()
-    .post({ body: { currency: 'USD', country: 'US' } })
+    .post({
+      body: {
+        currency: 'USD',
+        country: myCountry,
+      },
+    })
     .execute();
 };
 

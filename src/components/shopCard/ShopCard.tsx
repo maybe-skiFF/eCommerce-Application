@@ -26,6 +26,7 @@ import { useCart } from 'src/context/context';
 import { Cart, ClientResponse, ErrorObject } from '@commercetools/platform-sdk';
 import {
   addProductToCartByID,
+  // createCustomerCart,
   getAnonymnusCart,
   getCartByID,
   removeProductToCartByID,
@@ -79,12 +80,14 @@ export function ShopCard({ products, sortValue }: ShopCardProps) {
   ) => {
     event.preventDefault();
     setIsLoading(true);
-    const cartFromServer = await getMyAnonimnusCart();
-    await addProductToCartByID(
-      cartFromServer.body.id,
-      cartFromServer.body.version,
-      productID,
-    )
+    let curCart: Cart;
+    if (!getCookie('myCart')) {
+      const cartFromServer = await getMyAnonimnusCart();
+      curCart = cartFromServer.body;
+    } else {
+      curCart = cart;
+    }
+    await addProductToCartByID(curCart.id, curCart.version, productID)
       .then(({ body }) => {
         setCart({ ...cart, ...body });
         setOpen(SERVICE_MESSAGES.added);
@@ -121,9 +124,6 @@ export function ShopCard({ products, sortValue }: ShopCardProps) {
   const isExistToCart = (id: string): boolean => {
     return cart.lineItems.some(line => line.productId === id);
   };
-
-  const currency =
-    cart.country === 'US' ? SERVICE_MESSAGES.USD : SERVICE_MESSAGES.EUR;
 
   const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
@@ -300,19 +300,20 @@ export function ShopCard({ products, sortValue }: ShopCardProps) {
                           color: 'text.secondary',
                         }}
                       >
-                        {product.price / 100} {currency}
+                        {product.price / 100} {SERVICE_MESSAGES.USD}
                       </Typography>
                       <Typography
                         sx={{ color: 'red', fontWeight: '700' }}
                         variant="h6"
                       >
-                        {product.discount / 100} {currency} - discount
+                        {product.discount / 100} {SERVICE_MESSAGES.USD} -
+                        discount
                       </Typography>
                     </Box>
                   ) : (
                     <Box sx={{ height: '60px' }}>
                       <Typography variant="h6">
-                        {product.price / 100} {currency}
+                        {product.price / 100} {SERVICE_MESSAGES.USD}
                       </Typography>
                     </Box>
                   )}
