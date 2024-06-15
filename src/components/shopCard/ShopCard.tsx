@@ -122,6 +122,9 @@ export function ShopCard({ products, sortValue }: ShopCardProps) {
     return cart.lineItems.some(line => line.productId === id);
   };
 
+  const currency =
+    cart.country === 'US' ? SERVICE_MESSAGES.USD : SERVICE_MESSAGES.EUR;
+
   const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
     setPage(1);
@@ -297,19 +300,19 @@ export function ShopCard({ products, sortValue }: ShopCardProps) {
                           color: 'text.secondary',
                         }}
                       >
-                        {product.price / 100} EUR
+                        {product.price / 100} {currency}
                       </Typography>
                       <Typography
                         sx={{ color: 'red', fontWeight: '700' }}
                         variant="h6"
                       >
-                        {product.discount / 100} EUR - discount
+                        {product.discount / 100} {currency} - discount
                       </Typography>
                     </Box>
                   ) : (
                     <Box sx={{ height: '60px' }}>
                       <Typography variant="h6">
-                        {product.price / 100} EUR
+                        {product.price / 100} {currency}
                       </Typography>
                     </Box>
                   )}

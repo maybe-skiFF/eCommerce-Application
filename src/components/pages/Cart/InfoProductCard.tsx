@@ -22,6 +22,9 @@ export const InfoProductCard = (product: LineItem): JSX.Element => {
   const [open, setOpen] = useState<boolean>(false);
   const { cart, setCart } = useCart();
 
+  const currency =
+    cart.country === 'US' ? SERVICE_MESSAGES.USD : SERVICE_MESSAGES.EUR;
+
   const handleClose = (event: SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
       return event;
@@ -129,19 +132,21 @@ export const InfoProductCard = (product: LineItem): JSX.Element => {
         {product.price.discounted ? (
           <Box sx={{ width: '100%' }}>
             <Typography sx={{ width: '90%', textAlign: 'center' }}>
-              Price of this item :{product.price.value.centAmount / 100} EUR
+              {SERVICE_MESSAGES.withoutDiscount} :
+              {product.price.value.centAmount / 100} {currency}
             </Typography>
             <Typography
               sx={{ width: '90%', textAlign: 'center', color: 'red' }}
             >
-              Price of this item with discount :
+              {SERVICE_MESSAGES.withDiscount}:
               {product.price.discounted.value.centAmount / 100}
-              EUR
+              {currency}
             </Typography>
           </Box>
         ) : (
           <Typography sx={{ width: '90%', textAlign: 'center' }}>
-            Price of this item :{product.price.value.centAmount / 100} EUR
+            {SERVICE_MESSAGES.totalAmount}:
+            {product.price.value.centAmount / 100} {currency}
           </Typography>
         )}
       </Box>

@@ -62,4 +62,9 @@ export const SERVICE_MESSAGES = {
   discountOn: 'Discount successfully applied',
   returnCatalog: 'return to catalog',
   deleteFromCart: 'Delete from Cart',
+  totalAmount: 'Total amount of your items',
+  withoutDiscount: 'Total amount excluding discount',
+  withDiscount: 'Total amount including discount',
+  USD: 'USD',
+  EUR: 'EUR',
 };

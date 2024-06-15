@@ -11,10 +11,14 @@ import {
 } from 'src/serverPart/BuildCart';
 import { useCart } from 'src/context/context';
 import { SimpleSnackbar } from 'src/components/SimpleSnackbar/SimpleSnackbar';
+import { calculateTotalPriceWithoutDiscount } from 'src/utils/calculateTotalPriceWithoutDiscounts';
 
 export const InfoSummaryCart = () => {
   const { cart, setCart } = useCart();
   const [open, setOpen] = useState<string>('');
+
+  const currency =
+    cart.country === 'US' ? SERVICE_MESSAGES.USD : SERVICE_MESSAGES.EUR;
 
   const handleOnInputDiscount = (
     event: ChangeEvent<HTMLInputElement>,
@@ -70,14 +74,36 @@ export const InfoSummaryCart = () => {
       }}
     >
       <Paper elevation={3} sx={{ padding: '5% 7%', width: '100%' }}>
-        <Typography variant={'h6'}>
-          Number of items in cart:{' '}
+        <Typography variant={'h6'} sx={{ width: '100%', marginBottom: '1.5%' }}>
+          Number of items in cart:
           {cart.lineItems.length > 0 ? cart.totalLineItemQuantity : 0}
         </Typography>
-        <Typography variant={'h6'}>
-          Total amount of goods for: {(cart.totalPrice.centAmount ?? 0) / 100}{' '}
-          EUR
-        </Typography>
+        {cart.discountCodes.length ? (
+          <Box sx={{ width: '100%' }}>
+            <Typography
+              sx={{ width: '100%', textAlign: 'center', marginBottom: '1.5%' }}
+            >
+              {SERVICE_MESSAGES.withoutDiscount} :
+              {calculateTotalPriceWithoutDiscount(cart) / 100} {currency}
+            </Typography>
+            <Typography
+              sx={{
+                width: '100%',
+                textAlign: 'center',
+                color: 'red',
+                marginBottom: '1.5%',
+              }}
+            >
+              {SERVICE_MESSAGES.withDiscount}:{cart.totalPrice.centAmount / 100}
+              {currency}
+            </Typography>
+          </Box>
+        ) : (
+          <Typography sx={{ width: '90%', textAlign: 'center' }}>
+            {SERVICE_MESSAGES.totalAmount}:{cart.totalPrice.centAmount / 100}{' '}
+            {currency}
+          </Typography>
+        )}
         <Box
           component="form"
           onSubmit={event => void handleOnSubmitDiscount(event)}
