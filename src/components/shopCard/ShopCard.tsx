@@ -28,9 +28,8 @@ export function ShopCard({ products, sortValue }: ShopCardProps) {
     setPage(1);
   };
 
-  const handlePageChange = (event: ChangeEvent<unknown>, value: number) => {
-    event.preventDefault();
-    setPage(value);
+  const handlePageChange = (_event: ChangeEvent<unknown>, page: number) => {
+    setPage(page);
   };
 
   const filteredProducts = products.filter(product => {
@@ -100,6 +99,7 @@ export function ShopCard({ products, sortValue }: ShopCardProps) {
   };
 
   const sortedProducts = sortProducts(filteredProducts);
+  
   const paginatedProducts = sortedProducts.slice(
     (page - 1) * itemsPerPage,
     page * itemsPerPage,
