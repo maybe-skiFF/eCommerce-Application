@@ -14,19 +14,6 @@ import { useCart } from 'src/context/context';
 export const MyCart = () => {
   const { cart, setCart } = useCart();
 
-  // if (getCookie('myCart')) {
-  //   async () => {
-  //     const cartNew = await getCartByID(getCookie('myCart') ?? '');
-  //     setCart({ ...cart, ...cartNew.body });
-  //   };
-  // } else {
-  //   async () => {
-  //     const cartNew = await getAnonymnusCart();
-  //     setCookie('myCart', cartNew.body.id);
-  //     setCart({ ...cart, ...cartNew.body });
-  //   };
-  // }
-
   const LoopProductCard = (): JSX.Element[] | JSX.Element => {
     if (!getCookie('myCart')) {
       return <Box> No Product</Box>;

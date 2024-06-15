@@ -12,6 +12,46 @@ import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 
 export function CategoryChoice() {
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [products, setProducts] = useState([]);
+  const [isSubCategoryVisible, setIsSubCategoryVisible] = useState(false);
+  const [selectedKey, setSelectedKey] = useState<string | null>(null);
+  const [sortValue, setSortValue] = useState<string>('');
+  const navigate = useNavigate();
+  const { key } = useParams();
+
+  useEffect(() => {
+    const fetchCategoryKeys = async () => {
+      try {
+        const categories = await createCategories();
+        setCategories(categories);
+
+        if (categories.length > 0) {
+          const firstCategoryId = categories[0].id;
+          if (key) {
+            const matchingCategory = categories.find(c => c.key === key);
+            if (matchingCategory) {
+              setSelectedCategory(matchingCategory.key ?? '');
+              await getProductsByCategory(matchingCategory.id ?? '');
+            } else if (categories[0].key) {
+              setSelectedCategory(categories[0].key ?? '');
+              await getProductsByCategory(firstCategoryId ?? '');
+              navigate(`/${categories[0].key}`);
+            }
+          } else {
+            setSelectedCategory(categories[0].key ?? '');
+            await getProductsByCategory(firstCategoryId ?? '');
+            navigate(`/${categories[0].key}`);
+          }
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    void fetchCategoryKeys();
+  }, []);
+
   const createCategories = async (): Promise<Category[]> => {
     try {
       const response = await getCategories();
@@ -45,13 +85,6 @@ export function CategoryChoice() {
     }
   };
 
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [products, setProducts] = useState([]);
-  const [isSubCategoryVisible, setIsSubCategoryVisible] = useState(false);
-  const [selectedKey, setSelectedKey] = useState<string | null>(null);
-  const [sortValue, setSortValue] = useState<string>('');
-
   async function getProductsByCategory(categoryId: string) {
     try {
       const serverProducts = await createProducts(categoryId);
@@ -76,39 +109,7 @@ export function CategoryChoice() {
           ?.centAmount,
     }));
   }
-  const { key } = useParams();
-  useEffect(() => {
-    const fetchCategoryKeys = async () => {
-      try {
-        const categories = await createCategories();
-        setCategories(categories);
 
-        if (categories.length > 0) {
-          const firstCategoryId = categories[0].id;
-          if (key) {
-            const matchingCategory = categories.find(c => c.key === key);
-            if (matchingCategory) {
-              setSelectedCategory(matchingCategory.key ?? '');
-              await getProductsByCategory(matchingCategory.id ?? '');
-            } else if (categories[0].key) {
-              setSelectedCategory(categories[0].key ?? '');
-              await getProductsByCategory(firstCategoryId ?? '');
-              navigate(`/${categories[0].key}`);
-            }
-          } else {
-            setSelectedCategory(categories[0].key ?? '');
-            await getProductsByCategory(firstCategoryId ?? '');
-            navigate(`/${categories[0].key}`);
-          }
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    void fetchCategoryKeys();
-  }, []);
-
-  const navigate = useNavigate();
   const handleChange = (
     event: MouseEvent<HTMLElement>,
     newCategory: string | null,

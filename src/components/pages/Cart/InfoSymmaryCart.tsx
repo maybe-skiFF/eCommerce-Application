@@ -8,7 +8,6 @@ import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
 import {
   addDiscountToCart,
   checkDiscount,
-  createDiscount,
   getCartDiscount,
 } from 'src/serverPart/BuildCart';
 import { useCart } from 'src/context/context';
@@ -42,13 +41,7 @@ export const InfoSummaryCart = () => {
     await checkDiscount(code)
       .then(response => {
         const res = getCartDiscount(response.body.cartDiscounts[0].id);
-        console.log(res, 'res');
         return res;
-      })
-      .then(response => {
-        console.log(response);
-        const n = createDiscount(code, response.body.id);
-        console.log(n, 'n');
       })
       .then(() => {
         const t = addDiscountToCart(
@@ -56,7 +49,6 @@ export const InfoSummaryCart = () => {
           cart.version,
           data.get('discount') as string,
         );
-        console.log(t);
         return t;
       })
       .then(res => {
@@ -86,7 +78,8 @@ export const InfoSummaryCart = () => {
           {cart.lineItems.length > 0 ? cart.totalLineItemQuantity : 0}
         </Typography>
         <Typography variant={'h6'}>
-          Total amount of goods for: {cart.totalPrice.centAmount ?? ''}
+          Total amount of goods for: {(cart.totalPrice.centAmount ?? 0) / 100}{' '}
+          EUR
         </Typography>
         <Box
           component="form"

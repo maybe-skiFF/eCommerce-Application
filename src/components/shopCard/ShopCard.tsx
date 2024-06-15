@@ -10,10 +10,11 @@ import {
 } from '@mui/material';
 import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
 import { ProductPure, ShopCardProps } from 'src/utils/interfaces';
-import { useState, useEffect, ChangeEvent } from 'react';
+import { useState, useEffect, ChangeEvent, MouseEvent } from 'react';
 import { Link as ReactLink } from 'react-router-dom';
 import { PaginationComponent } from '../pagination/PaginationComponent';
 import { SkeletonComponent } from '../skeleton/skeletonComponent';
+import { getPartOfProducts } from 'src/serverPart/ApiRoot';
 
 export function ShopCard({ products, sortValue }: ShopCardProps) {
   const [searchTerm, setSearchTerm] = useState<string>('');
@@ -31,6 +32,16 @@ export function ShopCard({ products, sortValue }: ShopCardProps) {
   const handlePageChange = (event: ChangeEvent<unknown>, value: number) => {
     event.preventDefault();
     setPage(value);
+  };
+
+  let pageNum = 1;
+  const handleOnClick = async (
+    event: MouseEvent<HTMLButtonElement>,
+  ): Promise<void> => {
+    event.preventDefault();
+    const data = await getPartOfProducts(pageNum);
+    console.log(data, 'data', pageNum);
+    pageNum += 1;
   };
 
   const filteredProducts = products.filter(product => {
@@ -215,11 +226,12 @@ export function ShopCard({ products, sortValue }: ShopCardProps) {
                     </Box>
                   )}
                   <Button
-                    onClick={e => {
-                      e.preventDefault();
-                    }}
+                    // onClick={e => {
+                    //   e.preventDefault();
+                    // }}
                     variant="outlined"
                     sx={{ marginTop: '10px' }}
+                    onClick={event => void handleOnClick(event)}
                   >
                     Add to Cart
                   </Button>
