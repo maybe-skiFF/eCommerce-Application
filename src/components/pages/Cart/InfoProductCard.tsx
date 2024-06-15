@@ -74,6 +74,7 @@ export const InfoProductCard = (product: LineItem): JSX.Element => {
       </Box>
     );
   }
+
   return (
     <Box
       sx={{ display: 'flex', width: '100%', marginBottom: '2%' }}

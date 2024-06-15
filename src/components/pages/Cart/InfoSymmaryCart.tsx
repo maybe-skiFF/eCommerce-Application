@@ -1,6 +1,5 @@
 import { ErrorObject } from '@commercetools/platform-sdk';
 import { Box, Paper, Typography } from '@mui/material';
-import { EmptyCart } from './EmptyCart';
 import { getTextForm } from 'src/utils/createFormControl';
 import { ChangeEvent, FormEvent, SyntheticEvent, useState } from 'react';
 import { SubmitButton } from 'src/components/SubmitButton/SubmitButton';
@@ -59,9 +58,7 @@ export const InfoSummaryCart = () => {
       .catch((error: ErrorObject) => setOpen(error.message));
   };
 
-  return typeof cart.totalPrice === 'undefined' ? (
-    EmptyCart()
-  ) : (
+  return (
     <Box
       sx={{
         p: 2,

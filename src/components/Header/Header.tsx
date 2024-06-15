@@ -16,6 +16,7 @@ import { SyntheticEvent, useState, useRef } from 'react';
 import { useIsAuth } from 'src/context/context';
 import { deleteCookie } from 'src/utils/cookieWork';
 import InfoIcon from '@mui/icons-material/Info';
+import Marquee from 'react-fast-marquee';
 
 export function Header() {
   const { isAuth, setIsAuth } = useIsAuth();
@@ -115,7 +116,7 @@ export function Header() {
         <Toolbar
           sx={{
             flexGrow: 1,
-            '@media (max-width: 767px)': {
+            '@media (max-width: 769px)': {
               display: 'flex',
               flexDirection: 'column',
             },
@@ -143,9 +144,6 @@ export function Header() {
                 component="div"
                 sx={{
                   flexGrow: 1,
-                  '@media (max-width: 767px)': {
-                    marginBottom: '10px',
-                  },
                 }}
               >
                 {SERVICE_MESSAGES.headerTitle}
@@ -158,16 +156,26 @@ export function Header() {
               alignItems: 'center',
               flexWrap: 'wrap',
               justifyContent: 'center',
+              '@media (max-width: 769px)': {
+                marginTop: '10px',
+                justifyContent: 'space-between',
+              },
             }}
           >
             {navigationLinks.map((item, index) => (
               <Box
                 key={index}
                 sx={{
-                  marginRight: '20px',
                   display: 'flex',
                   alignItems: 'center',
-                  width: '60px',
+                  minWidth: '80px',
+                  '@media (max-width: 769px)': {
+                    marginTop: '10px',
+                  },
+                  '@media (max-width: 426px)': {
+                    justifyContent: 'space-between',
+                    width: '30%',
+                  },
                 }}
               >
                 <Link
@@ -189,6 +197,17 @@ export function Header() {
           </Box>
         </Toolbar>
       </AppBar>
+      <Marquee>
+        <Typography variant="h5" sx={{ lineHeight: '100px' }}>
+          BIG <span style={{ color: 'red', fontWeight: '700' }}>SALE</span>:
+          Enter promo code
+          <span style={{ color: 'red', fontWeight: '700' }}>
+            &quot;SALE&quot;
+          </span>{' '}
+          for 25 percent off all items. (the promotion does not apply to
+          discounted items). &nbsp;
+        </Typography>
+      </Marquee>
     </Box>
   );
 }

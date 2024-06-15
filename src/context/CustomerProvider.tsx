@@ -49,4 +49,3 @@ export const CustomerProvider = ({ children }: Props) => {
     </CustomerContext.Provider>
   );
 };
-
