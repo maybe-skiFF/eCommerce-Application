@@ -52,9 +52,13 @@ export const SERVICE_MESSAGES = {
   yourBillingAddress: 'Your billing address',
   about: 'About',
   yourCart: 'Your cart',
+  cartEmpty: 'Empty basket',
+  cartEmptyMessage:
+    'Your basket is still empty, discover everything weve got for you',
   countQuantity: 'Quantity cannot be less 0',
   deleted: 'Product has been removed from your car',
   added: 'Product has been added to your car',
   send: 'Send Your code',
   discountOn: 'Discount successfully applied',
+  returnCatalog: 'return to catalog',
 };

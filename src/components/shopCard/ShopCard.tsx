@@ -99,7 +99,7 @@ export function ShopCard({ products, sortValue }: ShopCardProps) {
   };
 
   const sortedProducts = sortProducts(filteredProducts);
-  
+
   const paginatedProducts = sortedProducts.slice(
     (page - 1) * itemsPerPage,
     page * itemsPerPage,

@@ -29,7 +29,6 @@ export const InfoProductCard = (product: LineItem): JSX.Element => {
     setOpen(false);
   };
 
-  
   const handleChangeQuantity = async (
     event: SyntheticEvent,
     operation: 'plus' | 'minus',
@@ -87,7 +86,7 @@ export const InfoProductCard = (product: LineItem): JSX.Element => {
         alt="picture"
         sx={{ width: '35%', objectFit: 'contain' }}
       />
-      {SimpleSnackbar(SERVICE_MESSAGES.countQuantity, open, handleClose) }
+      {SimpleSnackbar(SERVICE_MESSAGES.countQuantity, open, handleClose)}
       <Box
         sx={{
           display: 'flex',
@@ -127,19 +126,22 @@ export const InfoProductCard = (product: LineItem): JSX.Element => {
           </IconButton>
         </Typography>
         {product.price.discounted ? (
-          <Box sx={{width:"100%"}}>
+          <Box sx={{ width: '100%' }}>
             <Typography sx={{ width: '90%', textAlign: 'center' }}>
               Price of this item :{product.price.value.centAmount}
-            </Typography>                
-            <Typography sx={{ width: '90%', textAlign: 'center', color:'red' }}>
-              Price of this item with discount :{product.price.discounted.value.centAmount}
+            </Typography>
+            <Typography
+              sx={{ width: '90%', textAlign: 'center', color: 'red' }}
+            >
+              Price of this item with discount :
+              {product.price.discounted.value.centAmount}
             </Typography>
           </Box>
-          ) : (
-            <Typography sx={{ width: '90%', textAlign: 'center' }}>
-              Price of this item :{product.price.value.centAmount}
-            </Typography>
-          )}       
+        ) : (
+          <Typography sx={{ width: '90%', textAlign: 'center' }}>
+            Price of this item :{product.price.value.centAmount}
+          </Typography>
+        )}
       </Box>
     </Box>
   );
