@@ -56,7 +56,7 @@ export const MyCart = () => {
     });
   };
 
-  return typeof cart === 'undefined' ? (
+  return !cart.lineItems.length ? (
     EmptyCart()
   ) : (
     <HeaderWrapper>
