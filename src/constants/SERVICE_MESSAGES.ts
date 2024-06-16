@@ -68,4 +68,5 @@ export const SERVICE_MESSAGES = {
   withDiscount: 'Total amount including discount',
   USD: 'USD',
   EUR: 'EUR',
+  benefit: 'Your benefit will be',
 };

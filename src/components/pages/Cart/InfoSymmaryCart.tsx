@@ -95,6 +95,19 @@ export const InfoSummaryCart = () => {
               {SERVICE_MESSAGES.withDiscount}:{cart.totalPrice.centAmount / 100}
               {SERVICE_MESSAGES.USD}
             </Typography>
+            <Typography
+              sx={{
+                width: '100%',
+                textAlign: 'center',
+                color: 'blue',
+                marginBottom: '1.5%',
+              }}
+            >
+              {SERVICE_MESSAGES.benefit}:
+              {cart.discountOnTotalPrice!.includedDiscounts[0].discountedAmount
+                .centAmount / 100}
+              {SERVICE_MESSAGES.USD}
+            </Typography>
           </Box>
         ) : (
           <Typography sx={{ width: '90%', textAlign: 'center' }}>

@@ -14,6 +14,7 @@ import { getCookie } from 'src/utils/cookieWork';
 import { SimpleSnackbar } from 'src/components/SimpleSnackbar/SimpleSnackbar';
 import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
 import { useCart } from 'src/context/context';
+import { createTextForProductCart } from './createTextForProductCart';
 
 let keyOfItem = 0;
 
@@ -133,46 +134,11 @@ export const InfoProductCard = (product: LineItem): JSX.Element => {
               <AddIcon />
             </IconButton>
           </Typography>
-          {product.price.discounted ?? cart.discountOnTotalPrice ? (
-            <Box sx={{ width: '100%' }}>
-              <Typography sx={{ width: '100%', textAlign: 'center' }}>
-                {SERVICE_MESSAGES.withoutDiscount} :
-                {product.price.value.centAmount / 100} {SERVICE_MESSAGES.USD}
-              </Typography>
-              <Typography
-                sx={{ width: '100%', textAlign: 'center', color: 'red' }}
-              >
-                {SERVICE_MESSAGES.withDiscount}:
-                {product.price.discounted?.value.centAmount ??
-                  product.price.value.centAmount / 100}
-                {SERVICE_MESSAGES.USD}
-              </Typography>
-              <Typography
-                sx={{ width: '100%', textAlign: 'center', color: 'blue' }}
-              >
-                {SERVICE_MESSAGES.totalAmountThisItem}:
-                {((product.price.discounted?.value.centAmount ??
-                  product.price.value.centAmount) *
-                  quantity) /
-                  100}
-                {SERVICE_MESSAGES.USD}
-              </Typography>
-            </Box>
-          ) : (
-            <Box>
-              <Typography sx={{ width: '100%', textAlign: 'center' }}>
-                {SERVICE_MESSAGES.totalAmount}:
-                {product.price.value.centAmount / 100} {SERVICE_MESSAGES.USD}
-              </Typography>
-              <Typography
-                sx={{ width: '100%', textAlign: 'center', color: 'blue' }}
-              >
-                {SERVICE_MESSAGES.totalAmountThisItem}:
-                {(product.price.value.centAmount * quantity) / 100}
-                {SERVICE_MESSAGES.USD}
-              </Typography>
-            </Box>
-          )}
+          {product.price.discounted
+            ? createTextForProductCart(quantity, product, 'sale')
+            : cart.discountOnTotalPrice
+              ? createTextForProductCart(quantity, product, 'promo')
+              : createTextForProductCart(quantity, product, 'none')}
         </Box>
       </Box>
     </Paper>
