@@ -18,7 +18,7 @@ import {
   getAnonymnusCart,
   getCartByID,
   addProductToCartByID,
-  setCountryForCart,
+  // setCountryForCart,
   removeProductToCartByID,
 } from 'src/serverPart/BuildCart';
 import { getCookie, setCookie } from 'src/utils/cookieWork';
@@ -70,21 +70,16 @@ export function DetailedProductWrapper({ productDataById }: ProductObj) {
     if (!getCookie('myCart')) {
       const cartAnon = await getAnonymnusCart();
       setCookie('myCart', cartAnon.body.id);
-      const cartFromServer = await setCountryForCart(
-        cartAnon.body.id,
-        cartAnon.body.version,
-        'US',
-      ).then(data => {
-        console.log(data, 'cartAnan');
+      setCart({ ...cart, ...cartAnon.body });
+      return cartAnon;
+    }
+    const cartDeAnon = await getCartByID(getCookie('myCart') ?? '').then(
+      data => {
         setCart({ ...cart, ...data.body });
         return data;
-      });
-      return cartFromServer;
-    }
-    return await getCartByID(getCookie('myCart') ?? '').then(data => {
-      setCart({ ...cart, ...data.body });
-      return data;
-    });
+      },
+    );
+    return cartDeAnon;
   };
 
   const handleClickForAddToCart = async () => {
@@ -163,12 +158,15 @@ export function DetailedProductWrapper({ productDataById }: ProductObj) {
                 {productPrice / 100} EUR
               </Typography>
               <Typography sx={{ color: 'red', fontWeight: '700' }} variant="h6">
-                {(productDiscountPrice ?? 0) / 100} EUR - with discount
+                {(productDiscountPrice ?? 0) / 100} {SERVICE_MESSAGES.USD}- with
+                discount
               </Typography>
             </Box>
           ) : (
             <Box sx={{ height: '80px' }}>
-              <Typography variant="h6">{productPrice / 100} EUR</Typography>
+              <Typography variant="h6">
+                {productPrice / 100} {SERVICE_MESSAGES.USD}
+              </Typography>
             </Box>
           )}
           <FormControl>

@@ -7,21 +7,123 @@ import {
   CardMedia,
   TextField,
   Link,
+  CircularProgress,
 } from '@mui/material';
 import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
 import { ProductPure, ShopCardProps } from 'src/utils/interfaces';
-import { useState, useEffect, ChangeEvent } from 'react';
+import {
+  useState,
+  useEffect,
+  ChangeEvent,
+  MouseEvent,
+  SyntheticEvent,
+} from 'react';
 import { Link as ReactLink } from 'react-router-dom';
 import { PaginationComponent } from '../pagination/PaginationComponent';
 import { SkeletonComponent } from '../skeleton/skeletonComponent';
+import { SimpleSnackbar } from '../SimpleSnackbar/SimpleSnackbar';
+import { useCart } from 'src/context/context';
+import { Cart, ClientResponse, ErrorObject } from '@commercetools/platform-sdk';
+import {
+  addProductToCartByID,
+  // createCustomerCart,
+  getAnonymnusCart,
+  getCartByID,
+  removeProductToCartByID,
+  setCountryForCart,
+} from 'src/serverPart/BuildCart';
+import { getCookie, setCookie } from 'src/utils/cookieWork';
 
 export function ShopCard({ products, sortValue }: ShopCardProps) {
   const [searchTerm, setSearchTerm] = useState<string>('');
+  const [open, setOpen] = useState<string>('');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [page, setPage] = useState<number>(1);
+  const { cart, setCart } = useCart();
+
   const itemsPerPage = 8;
   useEffect(() => {
     setPage(1);
   }, [products]);
+
+  const handleClose = (event: SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return event;
+    }
+    setOpen('');
+  };
+
+  const getMyAnonimnusCart = async (): Promise<ClientResponse<Cart>> => {
+    if (!getCookie('myCart')) {
+      const cartAnon = await getAnonymnusCart();
+      setCookie('myCart', cartAnon.body.id);
+      const cartFromServer = await setCountryForCart(
+        cartAnon.body.id,
+        cartAnon.body.version,
+        'US',
+      ).then(data => {
+        console.log(data, 'cartAnan');
+        setCart({ ...cart, ...data.body });
+        return data;
+      });
+      return cartFromServer;
+    }
+    return await getCartByID(getCookie('myCart') ?? '').then(data => {
+      setCart({ ...cart, ...data.body });
+      return data;
+    });
+  };
+
+  const handleClickForAddToCart = async (
+    event: MouseEvent<HTMLButtonElement>,
+    productID: string,
+  ) => {
+    event.preventDefault();
+    setIsLoading(true);
+    let curCart: Cart;
+    if (!getCookie('myCart')) {
+      const cartFromServer = await getMyAnonimnusCart();
+      curCart = cartFromServer.body;
+    } else {
+      curCart = cart;
+    }
+    await addProductToCartByID(curCart.id, curCart.version, productID)
+      .then(({ body }) => {
+        setCart({ ...cart, ...body });
+        setOpen(SERVICE_MESSAGES.added);
+        setIsLoading(false);
+      })
+      .catch((error: ErrorObject) => setOpen(error.message));
+  };
+
+  const handleClickForDelete = async (
+    event: MouseEvent<HTMLButtonElement>,
+    productID: string,
+  ) => {
+    event.preventDefault();
+    setIsLoading(true);
+    const productInCart = cart.lineItems.filter(
+      line => productID === line.productId,
+    );
+    if (productInCart.length > 0) {
+      await removeProductToCartByID(
+        cart.id,
+        cart.version,
+        productInCart[0].id,
+        productInCart[0].quantity,
+      )
+        .then(({ body }) => {
+          setCart({ ...cart, ...body });
+          setOpen(SERVICE_MESSAGES.deleted);
+          setIsLoading(false);
+        })
+        .catch((error: ErrorObject) => setOpen(error.message));
+    }
+  };
+
+  const isExistToCart = (id: string): boolean => {
+    return cart.lineItems.some(line => line.productId === id);
+  };
 
   const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
@@ -198,30 +300,41 @@ export function ShopCard({ products, sortValue }: ShopCardProps) {
                           color: 'text.secondary',
                         }}
                       >
-                        {product.price / 100} EUR
+                        {product.price / 100} {SERVICE_MESSAGES.USD}
                       </Typography>
                       <Typography
                         sx={{ color: 'red', fontWeight: '700' }}
                         variant="h6"
                       >
-                        {product.discount / 100} EUR - discount
+                        {product.discount / 100} {SERVICE_MESSAGES.USD} -
+                        discount
                       </Typography>
                     </Box>
                   ) : (
                     <Box sx={{ height: '60px' }}>
                       <Typography variant="h6">
-                        {product.price / 100} EUR
+                        {product.price / 100} {SERVICE_MESSAGES.USD}
                       </Typography>
                     </Box>
                   )}
                   <Button
-                    onClick={e => {
-                      e.preventDefault();
-                    }}
                     variant="outlined"
-                    sx={{ marginTop: '10px' }}
+                    sx={{
+                      marginTop: '10px',
+                      padding: '3%',
+                      width: '80%',
+                      fontSize: '85%',
+                    }}
+                    onClick={
+                      isExistToCart(product.id)
+                        ? event => void handleClickForDelete(event, product.id)
+                        : event =>
+                            void handleClickForAddToCart(event, product.id)
+                    }
                   >
-                    Add to Cart
+                    {isExistToCart(product.id)
+                      ? SERVICE_MESSAGES.deleteFromCart
+                      : SERVICE_MESSAGES.addToCart}
                   </Button>
                 </CardContent>
               </Link>
@@ -230,7 +343,15 @@ export function ShopCard({ products, sortValue }: ShopCardProps) {
         ) : (
           <SkeletonComponent />
         )}
+        {SimpleSnackbar(open, open !== '', handleClose)}
       </Box>
+      {isLoading ? (
+        <CircularProgress
+          style={{ position: 'absolute', zIndex: 2, top: '50%', left: '50%' }}
+        />
+      ) : (
+        ''
+      )}
       <PaginationComponent
         count={count}
         page={page}
