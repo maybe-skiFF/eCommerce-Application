@@ -99,27 +99,23 @@ export interface Category {
 export interface ProductData {
   id: string;
   key: string | undefined;
-  masterData: {
-    current: {
-      description: {
-        'en-US': string;
+  description: {
+    'en-US': string;
+  };
+  masterVariant: {
+    images: {
+      url: string;
+    }[];
+    prices: {
+      discounted: {
+        value: {
+          centAmount: number;
+        };
       };
-      masterVariant: {
-        images: {
-          url: string;
-        }[];
-        prices: {
-          discounted: {
-            value: {
-              centAmount: number;
-            };
-          };
-          value: {
-            centAmount: number;
-          };
-        }[];
+      value: {
+        centAmount: number;
       };
-    };
+    }[];
   };
 }
 

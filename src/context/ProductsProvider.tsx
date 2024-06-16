@@ -19,31 +19,27 @@ interface Context {
 const initialProductsData: ProductData = {
   id: '',
   key: '' || undefined,
-  masterData: {
-    current: {
-      description: {
-        'en-US': '',
+  description: {
+    'en-US': '',
+  },
+  masterVariant: {
+    images: [
+      {
+        url: '',
       },
-      masterVariant: {
-        images: [
-          {
-            url: '',
+    ],
+    prices: [
+      {
+        discounted: {
+          value: {
+            centAmount: 0,
           },
-        ],
-        prices: [
-          {
-            discounted: {
-              value: {
-                centAmount: 0,
-              },
-            },
-            value: {
-              centAmount: 0,
-            },
-          },
-        ],
+        },
+        value: {
+          centAmount: 0,
+        },
       },
-    },
+    ],
   },
 };
 
