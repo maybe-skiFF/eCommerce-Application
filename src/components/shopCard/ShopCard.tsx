@@ -238,23 +238,26 @@ export function ShopCard({ products, sortValue }: ShopCardProps) {
           sortProducts(paginatedProducts).map(product => (
             <Card
               key={product.id}
-              sx={{
-                width: '300px',
-                height: '700px',
-                border: '1px solid #ebedf0',
-                marginBottom: '40px',
-                boxSizing: 'border-box',
-                cursor: 'pointer',
-                alignItems: 'center',
-                transition: 'all 0.3s ease',
-                '&:hover': {
-                  transform: 'scale(1.05)',
-                  boxShadow: '0 5px 15px rgba(0, 0, 0, 0.3)',
+              sx={[
+                {
+                  width: '300px',
+                  height: '700px',
+                  border: '1px solid #ebedf0',
+                  marginBottom: '40px',
+                  boxSizing: 'border-box',
+                  cursor: 'pointer',
+                  alignItems: 'center',
+                  transition: 'all 0.3s ease',
+                  '&:hover': {
+                    transform: 'scale(1.05)',
+                    boxShadow: '0 5px 15px rgba(0, 0, 0, 0.3)',
+                  },
+                  '@media (max-width: 426px)': {
+                    width: '100%',
+                  },
                 },
-                '@media (max-width: 426px)': {
-                  width: '100%',
-                },
-              }}
+                isLoading ? { opacity: 0.5 } : { opacity: 1 },
+              ]}
             >
               <Link
                 component={ReactLink}
@@ -345,18 +348,23 @@ export function ShopCard({ products, sortValue }: ShopCardProps) {
         )}
         {SimpleSnackbar(open, open !== '', handleClose)}
       </Box>
-      {isLoading ? (
-        <CircularProgress
-          style={{ position: 'absolute', zIndex: 2, top: '50%', left: '50%' }}
-        />
-      ) : (
-        ''
-      )}
       <PaginationComponent
         count={count}
         page={page}
         handlePageChange={handlePageChange}
       />
+      {isLoading ? (
+        <CircularProgress
+          style={{
+            position: 'fixed',
+            zIndex: 99,
+            top: '50%',
+            left: '50%',
+          }}
+        />
+      ) : (
+        ''
+      )}
     </>
   );
 }

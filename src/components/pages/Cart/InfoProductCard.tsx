@@ -1,4 +1,4 @@
-import { Box, Typography, IconButton, CardMedia } from '@mui/material';
+import { Box, Typography, IconButton, CardMedia, Paper } from '@mui/material';
 import { LineItem } from '@commercetools/platform-sdk';
 import { SyntheticEvent, useState } from 'react';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -76,74 +76,105 @@ export const InfoProductCard = (product: LineItem): JSX.Element => {
   }
 
   return (
-    <Box
-      sx={{ display: 'flex', width: '100%', marginBottom: '2%' }}
+    <Paper
+      elevation={3}
+      sx={{ padding: '5% 7%', width: '80%', marginBottom: '3%' }}
       key={keyOfItem}
     >
-      <CardMedia
-        component="img"
-        height="194"
-        image={product.variant.images![0].url ?? ''}
-        alt="picture"
-        sx={{ width: '35%', objectFit: 'contain' }}
-      />
-      {SimpleSnackbar(SERVICE_MESSAGES.countQuantity, open, handleClose)}
       <Box
         sx={{
           display: 'flex',
-          justifyContent: 'space-around',
-          alignContent: 'center',
-          flexWrap: 'wrap',
-          width: '60%',
+          width: '100%',
         }}
       >
-        <Typography sx={{ width: '90%', textAlign: 'center' }}>
-          {product.name['en-US']}
-        </Typography>
-        <IconButton
-          sx={{ padding: '0', marginBottom: '3%', borderRadius: 0 }}
-          type="button"
-          onClick={event => void handleDelete(event)}
+        <CardMedia
+          component="img"
+          height="194"
+          image={product.variant.images![0].url ?? ''}
+          alt="picture"
+          sx={{ width: '35%', objectFit: 'contain' }}
+        />
+        {SimpleSnackbar(SERVICE_MESSAGES.countQuantity, open, handleClose)}
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-around',
+            alignContent: 'center',
+            flexWrap: 'wrap',
+            width: '60%',
+          }}
         >
-          <DeleteIcon />
-        </IconButton>
-        <Typography>
-          Quantity:
-          <IconButton
-            type="button"
-            onClick={event => void handleChangeQuantity(event, 'minus')}
+          <Typography
+            variant="h6"
+            sx={{ width: '90%', textAlign: 'center', color: 'blue' }}
           >
-            <RemoveIcon />
-          </IconButton>
-          {quantity}
-          <IconButton
-            type="button"
-            onClick={event => void handleChangeQuantity(event, 'plus')}
-          >
-            <AddIcon />
-          </IconButton>
-        </Typography>
-        {product.price.discounted ? (
-          <Box sx={{ width: '100%' }}>
-            <Typography sx={{ width: '90%', textAlign: 'center' }}>
-              {SERVICE_MESSAGES.withoutDiscount} :
-              {product.price.value.centAmount / 100} {SERVICE_MESSAGES.USD}
-            </Typography>
-            <Typography
-              sx={{ width: '90%', textAlign: 'center', color: 'red' }}
-            >
-              {SERVICE_MESSAGES.withDiscount}:
-              {product.price.discounted.value.centAmount / 100}
-              {SERVICE_MESSAGES.USD}
-            </Typography>
-          </Box>
-        ) : (
-          <Typography sx={{ width: '90%', textAlign: 'center' }}>
-            {SERVICE_MESSAGES.totalAmount}:
-            {product.price.value.centAmount / 100} {SERVICE_MESSAGES.USD}
+            {product.name['en-US']}
           </Typography>
-        )}
+          <IconButton
+            sx={{ padding: '0', marginBottom: '3%', borderRadius: 0 }}
+            type="button"
+            onClick={event => void handleDelete(event)}
+          >
+            <DeleteIcon />
+          </IconButton>
+          <Typography sx={{ width: '100%', textAlign: 'center' }}>
+            Quantity:
+            <IconButton
+              type="button"
+              onClick={event => void handleChangeQuantity(event, 'minus')}
+            >
+              <RemoveIcon />
+            </IconButton>
+            {quantity}
+            <IconButton
+              type="button"
+              onClick={event => void handleChangeQuantity(event, 'plus')}
+            >
+              <AddIcon />
+            </IconButton>
+          </Typography>
+          {product.price.discounted ?? cart.discountOnTotalPrice ? (
+            <Box sx={{ width: '100%' }}>
+              <Typography sx={{ width: '100%', textAlign: 'center' }}>
+                {SERVICE_MESSAGES.withoutDiscount} :
+                {product.price.value.centAmount / 100} {SERVICE_MESSAGES.USD}
+              </Typography>
+              <Typography
+                sx={{ width: '100%', textAlign: 'center', color: 'red' }}
+              >
+                {SERVICE_MESSAGES.withDiscount}:
+                {product.price.discounted?.value.centAmount ??
+                  product.price.value.centAmount / 100}
+                {SERVICE_MESSAGES.USD}
+              </Typography>
+              <Typography
+                sx={{ width: '100%', textAlign: 'center', color: 'blue' }}
+              >
+                {SERVICE_MESSAGES.totalAmountThisItem}:
+                {((product.price.discounted?.value.centAmount ??
+                  product.price.value.centAmount) *
+                  quantity) /
+                  100}
+                {SERVICE_MESSAGES.USD}
+              </Typography>
+            </Box>
+          ) : (
+            <Box>
+              <Typography sx={{ width: '100%', textAlign: 'center' }}>
+                {SERVICE_MESSAGES.totalAmount}:
+                {product.price.value.centAmount / 100} {SERVICE_MESSAGES.USD}
+              </Typography>
+              <Typography
+                sx={{ width: '100%', textAlign: 'center', color: 'blue' }}
+              >
+                {SERVICE_MESSAGES.totalAmountThisItem}:
+                {(product.price.value.centAmount * quantity) / 100}
+                {SERVICE_MESSAGES.USD}
+              </Typography>
+            </Box>
+          )}
+        </Box>
       </Box>
-    </Box>
+    </Paper>
   );
 };
