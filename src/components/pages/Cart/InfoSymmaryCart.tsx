@@ -7,11 +7,11 @@ import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
 import {
   addDiscountToCart,
   checkDiscount,
-  createDiscount,
   getCartDiscount,
 } from 'src/serverPart/BuildCart';
 import { useCart } from 'src/context/context';
 import { SimpleSnackbar } from 'src/components/SimpleSnackbar/SimpleSnackbar';
+import { calculateTotalPriceWithoutDiscount } from 'src/utils/calculateTotalPriceWithoutDiscounts';
 
 export const InfoSummaryCart = () => {
   const { cart, setCart } = useCart();
@@ -41,13 +41,7 @@ export const InfoSummaryCart = () => {
     await checkDiscount(code)
       .then(response => {
         const res = getCartDiscount(response.body.cartDiscounts[0].id);
-        console.log(res, 'res');
         return res;
-      })
-      .then(response => {
-        console.log(response);
-        const n = createDiscount(code, response.body.id);
-        console.log(n, 'n');
       })
       .then(() => {
         const t = addDiscountToCart(
@@ -55,7 +49,6 @@ export const InfoSummaryCart = () => {
           cart.version,
           data.get('discount') as string,
         );
-        console.log(t);
         return t;
       })
       .then(res => {
@@ -78,13 +71,37 @@ export const InfoSummaryCart = () => {
       }}
     >
       <Paper elevation={3} sx={{ padding: '5% 7%', width: '100%' }}>
-        <Typography variant={'h6'}>
-          Number of items in cart:{' '}
+        <Typography variant={'h6'} sx={{ width: '100%', marginBottom: '1.5%' }}>
+          Number of items in cart:
           {cart.lineItems.length > 0 ? cart.totalLineItemQuantity : 0}
         </Typography>
-        <Typography variant={'h6'}>
-          Total amount of goods for: {cart.totalPrice.centAmount ?? ''}
-        </Typography>
+        {cart.discountCodes.length ? (
+          <Box sx={{ width: '100%' }}>
+            <Typography
+              sx={{ width: '100%', textAlign: 'center', marginBottom: '1.5%' }}
+            >
+              {SERVICE_MESSAGES.withoutDiscount} :
+              {calculateTotalPriceWithoutDiscount(cart) / 100}{' '}
+              {SERVICE_MESSAGES.USD}
+            </Typography>
+            <Typography
+              sx={{
+                width: '100%',
+                textAlign: 'center',
+                color: 'red',
+                marginBottom: '1.5%',
+              }}
+            >
+              {SERVICE_MESSAGES.withDiscount}:{cart.totalPrice.centAmount / 100}
+              {SERVICE_MESSAGES.USD}
+            </Typography>
+          </Box>
+        ) : (
+          <Typography sx={{ width: '90%', textAlign: 'center' }}>
+            {SERVICE_MESSAGES.totalAmount}:{cart.totalPrice.centAmount / 100}{' '}
+            {SERVICE_MESSAGES.USD}
+          </Typography>
+        )}
         <Box
           component="form"
           onSubmit={event => void handleOnSubmitDiscount(event)}

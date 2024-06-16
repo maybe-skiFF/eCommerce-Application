@@ -74,6 +74,7 @@ export const InfoProductCard = (product: LineItem): JSX.Element => {
       </Box>
     );
   }
+
   return (
     <Box
       sx={{ display: 'flex', width: '100%', marginBottom: '2%' }}
@@ -106,9 +107,6 @@ export const InfoProductCard = (product: LineItem): JSX.Element => {
         >
           <DeleteIcon />
         </IconButton>
-        <Typography
-          sx={{ width: '100%', textAlign: 'center' }}
-        >{`description`}</Typography>
         <Typography>
           Quantity:
           <IconButton
@@ -128,18 +126,21 @@ export const InfoProductCard = (product: LineItem): JSX.Element => {
         {product.price.discounted ? (
           <Box sx={{ width: '100%' }}>
             <Typography sx={{ width: '90%', textAlign: 'center' }}>
-              Price of this item :{product.price.value.centAmount}
+              {SERVICE_MESSAGES.withoutDiscount} :
+              {product.price.value.centAmount / 100} {SERVICE_MESSAGES.USD}
             </Typography>
             <Typography
               sx={{ width: '90%', textAlign: 'center', color: 'red' }}
             >
-              Price of this item with discount :
-              {product.price.discounted.value.centAmount}
+              {SERVICE_MESSAGES.withDiscount}:
+              {product.price.discounted.value.centAmount / 100}
+              {SERVICE_MESSAGES.USD}
             </Typography>
           </Box>
         ) : (
           <Typography sx={{ width: '90%', textAlign: 'center' }}>
-            Price of this item :{product.price.value.centAmount}
+            {SERVICE_MESSAGES.totalAmount}:
+            {product.price.value.centAmount / 100} {SERVICE_MESSAGES.USD}
           </Typography>
         )}
       </Box>

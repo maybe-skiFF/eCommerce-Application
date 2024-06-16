@@ -20,12 +20,12 @@ export function AboutPage() {
       github: 'https://github.com/xsoularisx',
     },
     {
-      name: 'Name1',
-      lastName: 'LastName1',
+      name: 'Denis',
+      lastName: 'Koval',
       role: 'Front-end developer',
-      bio: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident.',
-      photo: 'src/assets/image/albert.JPG',
-      github: 'https://github.com/xsoularisx',
+      bio: 'Hello everyone, my name is Denis, currently I work as a communications engineer. My goal is to become an experienced JavaScript/Front-end Developer. Over the past year, I have been actively developing in this direction. Every day I increase practical experience. I have theoretical knowledge. I have a critical mind and good analytical skills, easy to teach, know how to work in a team, like to solve complex and non-standard tasks.',
+      photo: 'src/assets/image/Denis.jpg',
+      github: 'https://github.com/maybe-skiFF',
     },
     {
       name: 'Aleksandra',

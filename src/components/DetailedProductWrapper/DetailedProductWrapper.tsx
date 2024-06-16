@@ -9,6 +9,7 @@ import {
   RadioGroup,
   Typography,
   IconButton,
+  CircularProgress,
 } from '@mui/material';
 import { SwiperSlider } from '../SwiperSlider/SwiperSlider';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
@@ -17,7 +18,7 @@ import {
   getAnonymnusCart,
   getCartByID,
   addProductToCartByID,
-  setCountryForCart,
+  // setCountryForCart,
   removeProductToCartByID,
 } from 'src/serverPart/BuildCart';
 import { getCookie, setCookie } from 'src/utils/cookieWork';
@@ -30,6 +31,7 @@ import { useCart } from 'src/context/context';
 export function DetailedProductWrapper({ productDataById }: ProductObj) {
   const [open, setOpen] = useState<string>('');
   const { cart, setCart } = useCart();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleClose = (event: SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
@@ -68,24 +70,20 @@ export function DetailedProductWrapper({ productDataById }: ProductObj) {
     if (!getCookie('myCart')) {
       const cartAnon = await getAnonymnusCart();
       setCookie('myCart', cartAnon.body.id);
-      const cartFromServer = await setCountryForCart(
-        cartAnon.body.id,
-        cartAnon.body.version,
-        'US',
-      ).then(data => {
-        console.log(data, 'cartAnan');
+      setCart({ ...cart, ...cartAnon.body });
+      return cartAnon;
+    }
+    const cartDeAnon = await getCartByID(getCookie('myCart') ?? '').then(
+      data => {
         setCart({ ...cart, ...data.body });
         return data;
-      });
-      return cartFromServer;
-    }
-    return await getCartByID(getCookie('myCart') ?? '').then(data => {
-      setCart({ ...cart, ...data.body });
-      return data;
-    });
+      },
+    );
+    return cartDeAnon;
   };
 
   const handleClickForAddToCart = async () => {
+    setIsLoading(true);
     const cartFromServer = await getMyAnonimnusCart();
     const productID = productDataById.id;
     await addProductToCartByID(
@@ -96,11 +94,13 @@ export function DetailedProductWrapper({ productDataById }: ProductObj) {
       .then(({ body }) => {
         setCart({ ...cart, ...body });
         setOpen(SERVICE_MESSAGES.added);
+        setIsLoading(false);
       })
       .catch((error: ErrorObject) => setOpen(error.message));
   };
 
   const handleClickForDelete = async () => {
+    setIsLoading(true);
     const productID = productDataById.id;
     const productInCart = cart.lineItems.filter(
       line => productID === line.productId,
@@ -115,6 +115,7 @@ export function DetailedProductWrapper({ productDataById }: ProductObj) {
         .then(({ body }) => {
           setCart({ ...cart, ...body });
           setOpen(SERVICE_MESSAGES.deleted);
+          setIsLoading(false);
         })
         .catch((error: ErrorObject) => setOpen(error.message));
     }
@@ -123,14 +124,17 @@ export function DetailedProductWrapper({ productDataById }: ProductObj) {
   return (
     <Box sx={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap' }}>
       <Box
-        sx={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          justifyContent: 'center',
-          alignItems: 'flex-end',
-          columnGap: '20px',
-          marginTop: '40px',
-        }}
+        sx={[
+          {
+            display: 'flex',
+            flexWrap: 'wrap',
+            justifyContent: 'center',
+            alignItems: 'flex-end',
+            columnGap: '20px',
+            marginTop: '40px',
+          },
+          isLoading ? { opacity: 0.5 } : { opacity: 1 },
+        ]}
       >
         <Box>
           <SwiperSlider productImgArr={productImgArr} />
@@ -154,12 +158,15 @@ export function DetailedProductWrapper({ productDataById }: ProductObj) {
                 {productPrice / 100} EUR
               </Typography>
               <Typography sx={{ color: 'red', fontWeight: '700' }} variant="h6">
-                {(productDiscountPrice ?? 0) / 100} EUR - with discount
+                {(productDiscountPrice ?? 0) / 100} {SERVICE_MESSAGES.USD}- with
+                discount
               </Typography>
             </Box>
           ) : (
             <Box sx={{ height: '80px' }}>
-              <Typography variant="h6">{productPrice / 100} EUR</Typography>
+              <Typography variant="h6">
+                {productPrice / 100} {SERVICE_MESSAGES.USD}
+              </Typography>
             </Box>
           )}
           <FormControl>
@@ -203,6 +210,13 @@ export function DetailedProductWrapper({ productDataById }: ProductObj) {
           {SimpleSnackbar(open, open !== '', handleClose)}
         </Box>
       </Box>
+      {isLoading ? (
+        <CircularProgress
+          style={{ position: 'absolute', zIndex: 2, top: '50%', left: '50%' }}
+        />
+      ) : (
+        ''
+      )}
     </Box>
   );
 }
