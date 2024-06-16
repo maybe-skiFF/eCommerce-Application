@@ -136,7 +136,7 @@ export const InfoProductCard = (product: LineItem): JSX.Element => {
           </Typography>
           {product.price.discounted
             ? createTextForProductCart(quantity, product, 'sale')
-            : cart.discountOnTotalPrice
+            : cart.discountCodes.length > 0
               ? createTextForProductCart(quantity, product, 'promo')
               : createTextForProductCart(quantity, product, 'none')}
         </Box>

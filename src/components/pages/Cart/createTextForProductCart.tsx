@@ -49,17 +49,20 @@ export const createTextForProductCart = (
         </Typography>
       </Box>
     );
-  } else {
-    <Box>
-      <Typography sx={{ width: '100%', textAlign: 'center' }}>
-        {SERVICE_MESSAGES.totalAmount}:{product.price.value.centAmount / 100}{' '}
-        {SERVICE_MESSAGES.USD}
-      </Typography>
-      <Typography sx={{ width: '100%', textAlign: 'center', color: 'blue' }}>
-        {SERVICE_MESSAGES.totalAmountThisItem}:
-        {(product.price.value.centAmount * quantity) / 100}
-        {SERVICE_MESSAGES.USD}
-      </Typography>
-    </Box>;
+  }
+  if (discount === 'none') {
+    return (
+      <Box>
+        <Typography sx={{ width: '100%', textAlign: 'center' }}>
+          {SERVICE_MESSAGES.totalAmount}:{product.price.value.centAmount / 100}
+          {SERVICE_MESSAGES.USD}
+        </Typography>
+        <Typography sx={{ width: '100%', textAlign: 'center', color: 'blue' }}>
+          {SERVICE_MESSAGES.totalAmountThisItem}:
+          {(product.price.value.centAmount * quantity) / 100}
+          {SERVICE_MESSAGES.USD}
+        </Typography>
+      </Box>
+    );
   }
 };
