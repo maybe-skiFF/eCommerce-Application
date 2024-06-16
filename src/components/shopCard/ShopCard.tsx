@@ -10,26 +10,15 @@ import {
 } from '@mui/material';
 import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
 import { ProductPure, ShopCardProps } from 'src/utils/interfaces';
-import { useState, useEffect, ChangeEvent } from 'react';
+import { useState, ChangeEvent } from 'react';
 import { Link as ReactLink } from 'react-router-dom';
-import { PaginationComponent } from '../pagination/PaginationComponent';
 import { SkeletonComponent } from '../skeleton/skeletonComponent';
 
 export function ShopCard({ products, sortValue }: ShopCardProps) {
   const [searchTerm, setSearchTerm] = useState<string>('');
-  const [page, setPage] = useState<number>(1);
-  const itemsPerPage = 8;
-  useEffect(() => {
-    setPage(1);
-  }, [products]);
 
   const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
-    setPage(1);
-  };
-
-  const handlePageChange = (_event: ChangeEvent<unknown>, page: number) => {
-    setPage(page);
   };
 
   const filteredProducts = products.filter(product => {
@@ -100,12 +89,6 @@ export function ShopCard({ products, sortValue }: ShopCardProps) {
 
   const sortedProducts = sortProducts(filteredProducts);
 
-  const paginatedProducts = sortedProducts.slice(
-    (page - 1) * itemsPerPage,
-    page * itemsPerPage,
-  );
-  const count = Math.ceil(sortedProducts.length / itemsPerPage);
-
   return (
     <>
       <TextField
@@ -132,8 +115,8 @@ export function ShopCard({ products, sortValue }: ShopCardProps) {
           },
         }}
       >
-        {paginatedProducts && paginatedProducts.length > 0 ? (
-          sortProducts(paginatedProducts).map(product => (
+        {sortedProducts && sortedProducts.length > 0 ? (
+          sortProducts(sortedProducts).map(product => (
             <Card
               key={product.id}
               sx={{
@@ -231,11 +214,6 @@ export function ShopCard({ products, sortValue }: ShopCardProps) {
           <SkeletonComponent />
         )}
       </Box>
-      <PaginationComponent
-        count={count}
-        page={page}
-        handlePageChange={handlePageChange}
-      />
     </>
   );
 }

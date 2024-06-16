@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, ChangeEvent, useEffect } from 'react';
 import { MouseEvent } from 'react';
 import { Box, ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { CategoryImage } from 'src/components/categoryImage/CategoryImage';
@@ -10,23 +10,19 @@ import { CategoryChoiceSub } from '../categoryChoiceSub/categotyChoiceSub';
 import { CreateBreadcrumbs } from '../breadcrumbs/breadcrumbs';
 import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
-
-const getProductsbyCategories = (categoryId: string) => {
-  return apiRoot
-    .productProjections()
-    .search()
-    .get({
-      queryArgs: {
-        filter: `categories.id:subtree("${categoryId}")`,
-        limit: 50,
-        offset: 0,
-        withTotal: true,
-      },
-    })
-    .execute();
-};
+import { PaginationComponent } from '../pagination/PaginationComponent';
 
 export function CategoryChoice() {
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [products, setProducts] = useState([]);
+  const [isSubCategoryVisible, setIsSubCategoryVisible] = useState(false);
+  const [selectedKey, setSelectedKey] = useState<string | null>(null);
+  const [selectedID, setSelectedID] = useState<string | null>(null);
+  const [sortValue, setSortValue] = useState<string>('');
+  const [page, setPage] = useState(1);
+  const [countPage, setCountPage] = useState(1);
+
   const createCategories = async (): Promise<Category[]> => {
     try {
       const response = await getCategories();
@@ -43,31 +39,44 @@ export function CategoryChoice() {
     }
   };
 
-  const createProducts = async (categoryId: string) => {
+  const getProducts = (categoryId: string, offset: number) => {
+    return apiRoot
+      .productProjections()
+      .search()
+      .get({
+        queryArgs: {
+          filter: `categories.id:subtree("${categoryId}")`,
+          limit: 8,
+          offset: offset,
+          withTotal: true,
+        },
+      })
+      .execute();
+  };
+
+  const createProducts = async (categoryId: string, offset: number) => {
     try {
-      const response = await getProductsbyCategories(categoryId);
+      const response = await getProducts(categoryId, offset);
       const products = response.body.results;
+      let countPage = 0;
+      if (response.body.total) {
+        countPage = Math.ceil(response.body.total / 8);
+      }
+      setCountPage(countPage);
       console.log(response);
-      return products;
+      return { products };
     } catch (error) {
       console.error(error);
       throw error;
     }
   };
 
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [products, setProducts] = useState([]);
-  const [isSubCategoryVisible, setIsSubCategoryVisible] = useState(false);
-  const [selectedKey, setSelectedKey] = useState<string | null>(null);
-  const [sortValue, setSortValue] = useState<string>('');
-
-  async function getProductsByCategory(categoryId: string) {
+  async function getProductsByCategory(categoryId: string, offset: number) {
     try {
-      const serverProducts = await createProducts(categoryId);
-      const products = getPureProducts(serverProducts as never[]);
-      setProducts(products as never[]);
-      return <ShopCard products={products} sortValue="" />;
+      const { products } = await createProducts(categoryId, offset);
+      const pureProducts = getPureProducts(products as never[]);
+      setProducts(pureProducts as never[]);
+      return <ShopCard products={pureProducts} sortValue={sortValue} />;
     } catch (error) {
       console.error(error);
     }
@@ -83,6 +92,7 @@ export function CategoryChoice() {
       discount: product.masterVariant.prices[0].discounted?.value?.centAmount,
     }));
   }
+
   const { key } = useParams();
   useEffect(() => {
     const fetchCategoryKeys = async () => {
@@ -92,19 +102,22 @@ export function CategoryChoice() {
 
         if (categories.length > 0) {
           const firstCategoryId = categories[0].id;
+          if (firstCategoryId) {
+            setSelectedID(firstCategoryId);
+          }
           if (key) {
             const matchingCategory = categories.find(c => c.key === key);
             if (matchingCategory) {
               setSelectedCategory(matchingCategory.key ?? '');
-              await getProductsByCategory(matchingCategory.id ?? '');
+              await getProductsByCategory(matchingCategory.id ?? '', 0);
             } else if (categories[0].key) {
               setSelectedCategory(categories[0].key ?? '');
-              await getProductsByCategory(firstCategoryId ?? '');
+              await getProductsByCategory(firstCategoryId ?? '', 0);
               navigate(`/${categories[0].key}`);
             }
           } else {
             setSelectedCategory(categories[0].key ?? '');
-            await getProductsByCategory(firstCategoryId ?? '');
+            await getProductsByCategory(firstCategoryId ?? '', 0);
             navigate(`/${categories[0].key}`);
           }
         }
@@ -122,25 +135,47 @@ export function CategoryChoice() {
   ) => {
     if (newCategory !== null) {
       setSelectedCategory(newCategory);
+      setPage(1);
       if (newCategory === 'cloth' || newCategory === 'toys') {
-        void getProductsByCategory(`${event.currentTarget.dataset.id ?? ''}`);
+        if (event.currentTarget.dataset.id) {
+          setSelectedID(event.currentTarget.dataset.id);
+        }
+        void getProductsByCategory(
+          `${event.currentTarget.dataset.id ?? ''}`,
+          0,
+        );
         navigate(`/for-kids/${newCategory}`);
       } else if (
         newCategory === 'shirts' ||
         newCategory === 'shorts' ||
         newCategory === 'boots'
       ) {
-        void getProductsByCategory(`${event.currentTarget.dataset.id ?? ''}`);
+        if (event.currentTarget.dataset.id) {
+          setSelectedID(event.currentTarget.dataset.id);
+        }
+        void getProductsByCategory(
+          `${event.currentTarget.dataset.id ?? ''}`,
+          0,
+        );
         navigate(`/for-men/${newCategory}`);
       } else if (
         newCategory === 'dresses' ||
         newCategory === 'skirts' ||
         newCategory === 'shoes'
       ) {
-        void getProductsByCategory(`${event.currentTarget.dataset.id ?? ''}`);
+        if (event.currentTarget.dataset.id) {
+          setSelectedID(event.currentTarget.dataset.id);
+        }
+        void getProductsByCategory(
+          `${event.currentTarget.dataset.id ?? ''}`,
+          0,
+        );
         navigate(`/for-women/${newCategory}`);
       } else {
-        void getProductsByCategory(`${event.currentTarget.dataset.id ?? ''}`);
+        void getProductsByCategory(
+          `${event.currentTarget.dataset.id ?? ''}`,
+          0,
+        );
         navigate(`/${newCategory}`);
       }
     }
@@ -158,8 +193,21 @@ export function CategoryChoice() {
     setSelectedKey(key);
   };
 
+  const handleButtonMouseClick = (id: string) => {
+    console.log(id);
+    setSelectedID(id);
+  };
+
   const handleSortValueChange = (newValue: string) => {
     setSortValue(newValue);
+  };
+
+  const handlePageChange = (_event: ChangeEvent<unknown>, page: number) => {
+    setPage(page);
+    const offset = (page - 1) * 8;
+    if (selectedID) {
+      void getProductsByCategory(selectedID, offset);
+    }
   };
 
   return (
@@ -192,6 +240,7 @@ export function CategoryChoice() {
                 data-id={category.id ?? ''}
                 value={category.key ?? ''}
                 onMouseEnter={() => handleButtonMouseEnter(category.key ?? '')}
+                onClick={() => handleButtonMouseClick(category.id ?? '')}
               >
                 {category.key?.toUpperCase() ?? ''}
               </ToggleButton>
@@ -207,6 +256,11 @@ export function CategoryChoice() {
       <CreateBreadcrumbs selectedCategory={selectedCategory ?? ''} />
       <SortItem onValueChange={handleSortValueChange} />
       <ShopCard products={products} sortValue={sortValue} />
+      <PaginationComponent
+        count={countPage}
+        page={page}
+        handlePageChange={handlePageChange}
+      />
     </>
   );
 }

@@ -41,11 +41,11 @@ const initialProductsData: ProductData = {
       },
     ],
   },
-}
+};
 
 const initialState = {
   productsData: initialProductsData,
-  setProductsData: () => { },
+  setProductsData: () => {},
 };
 
 export const ProductsContext = createContext<Context>(initialState);
