@@ -117,7 +117,7 @@ export interface ProductData {
       };
     }[];
   };
-};
+}
 
 export interface ProductPure {
   id: string;

@@ -12,10 +12,18 @@ import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 
 const getProductsbyCategories = (categoryId: string) => {
-  return apiRoot.productProjections().search().get({
-    queryArgs: { filter: `categories.id:subtree("${categoryId}")`, limit: 50, offset: 0, }
-  }).execute();
-}
+  return apiRoot
+    .productProjections()
+    .search()
+    .get({
+      queryArgs: {
+        filter: `categories.id:subtree("${categoryId}")`,
+        limit: 50,
+        offset: 0,
+      },
+    })
+    .execute();
+};
 
 export function CategoryChoice() {
   const createCategories = async (): Promise<Category[]> => {
@@ -70,11 +78,8 @@ export function CategoryChoice() {
       key: product.key,
       description: product.description['en-US'],
       image: product.masterVariant.images[0].url,
-      price:
-        product.masterVariant.prices[0].value.centAmount,
-      discount:
-        product.masterVariant.prices[0].discounted?.value
-          ?.centAmount,
+      price: product.masterVariant.prices[0].value.centAmount,
+      discount: product.masterVariant.prices[0].discounted?.value?.centAmount,
     }));
   }
   const { key } = useParams();
