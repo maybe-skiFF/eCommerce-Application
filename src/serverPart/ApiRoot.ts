@@ -61,29 +61,6 @@ const getCategories = () => {
   return apiRoot.categories().get().execute();
 };
 
-const getProducts = () => {
-  return apiRoot
-    .products()
-    .get({ queryArgs: { limit: 100 } })
-    .execute();
-};
-
-const getCategory = () => {
-  return apiRoot
-    .categories()
-    .withId({ ID: 'b04d2872-18da-4f58-9ecc-6880a2702877' })
-    .get()
-    .execute();
-};
-
-const getPartOfProducts = (numberPage: number) => {
-  return apiRoot
-    .products()
-    .get({ queryArgs: { limit: 8, offset: 8 * numberPage } })
-    .execute();
-};
-
-console.log(getCategory());
 const getProductById = (ID: string) => {
   return apiRoot.products().withId({ ID }).get().execute();
 };
@@ -293,7 +270,5 @@ export {
   createAddress,
   deleteAddress,
   getCategories,
-  getProducts,
   getProductById,
-  getPartOfProducts,
 };
