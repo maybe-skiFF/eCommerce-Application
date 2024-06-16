@@ -20,6 +20,7 @@ const getProductsbyCategories = (categoryId: string) => {
         filter: `categories.id:subtree("${categoryId}")`,
         limit: 50,
         offset: 0,
+        withTotal: true,
       },
     })
     .execute();
@@ -46,7 +47,7 @@ export function CategoryChoice() {
     try {
       const response = await getProductsbyCategories(categoryId);
       const products = response.body.results;
-      console.log(products);
+      console.log(response);
       return products;
     } catch (error) {
       console.error(error);
