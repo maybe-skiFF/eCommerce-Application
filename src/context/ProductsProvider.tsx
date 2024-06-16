@@ -19,37 +19,33 @@ interface Context {
 const initialProductsData: ProductData = {
   id: '',
   key: '' || undefined,
-  masterData: {
-    current: {
-      description: {
-        'en-US': '',
-      },
-      masterVariant: {
-        images: [
-          {
-            url: '',
-          },
-        ],
-        prices: [
-          {
-            discounted: {
-              value: {
-                centAmount: 0,
-              },
-            },
-            value: {
-              centAmount: 0,
-            },
-          },
-        ],
-      },
-    },
+  description: {
+    'en-US': '',
   },
-};
+  masterVariant: {
+    images: [
+      {
+        url: '',
+      },
+    ],
+    prices: [
+      {
+        discounted: {
+          value: {
+            centAmount: 0,
+          },
+        },
+        value: {
+          centAmount: 0,
+        },
+      },
+    ],
+  },
+}
 
 const initialState = {
   productsData: initialProductsData,
-  setProductsData: () => {},
+  setProductsData: () => { },
 };
 
 export const ProductsContext = createContext<Context>(initialState);
