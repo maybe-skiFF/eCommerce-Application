@@ -99,29 +99,25 @@ export interface Category {
 export interface ProductData {
   id: string;
   key: string | undefined;
-  masterData: {
-    current: {
-      description: {
-        'en-US': string;
-      };
-      masterVariant: {
-        images: {
-          url: string;
-        }[];
-        prices: {
-          discounted: {
-            value: {
-              centAmount: number;
-            };
-          };
-          value: {
-            centAmount: number;
-          };
-        }[];
-      };
-    };
+  description: {
+    'en-US': string;
   };
-}
+  masterVariant: {
+    images: {
+      url: string;
+    }[];
+    prices: {
+      discounted: {
+        value: {
+          centAmount: number;
+        };
+      };
+      value: {
+        centAmount: number;
+      };
+    }[];
+  };
+};
 
 export interface ProductPure {
   id: string;

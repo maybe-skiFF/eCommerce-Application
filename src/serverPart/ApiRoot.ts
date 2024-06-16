@@ -61,13 +61,6 @@ const getCategories = () => {
   return apiRoot.categories().get().execute();
 };
 
-const getProducts = () => {
-  return apiRoot
-    .products()
-    .get({ queryArgs: { limit: 100 } })
-    .execute();
-};
-
 const getProductById = (ID: string) => {
   return apiRoot.products().withId({ ID }).get().execute();
 };
@@ -277,6 +270,5 @@ export {
   createAddress,
   deleteAddress,
   getCategories,
-  getProducts,
   getProductById,
 };

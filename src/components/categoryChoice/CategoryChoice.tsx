@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { MouseEvent } from 'react';
 import { Box, ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { CategoryImage } from 'src/components/categoryImage/CategoryImage';
-import { getCategories, getProducts } from 'src/serverPart/ApiRoot';
+import { apiRoot, getCategories } from 'src/serverPart/ApiRoot';
 import { ShopCard } from '../shopCard/ShopCard';
 import { SortItem } from 'src/components/sortItem/sortItem';
 import { Category, ProductData, ProductPure } from 'src/utils/interfaces';
@@ -10,6 +10,12 @@ import { CategoryChoiceSub } from '../categoryChoiceSub/categotyChoiceSub';
 import { CreateBreadcrumbs } from '../breadcrumbs/breadcrumbs';
 import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
+
+const getProductsbyCategories = (categoryId: string) => {
+  return apiRoot.productProjections().search().get({
+    queryArgs: { filter: `categories.id:subtree("${categoryId}")`, limit: 50, offset: 0, }
+  }).execute();
+}
 
 export function CategoryChoice() {
   const createCategories = async (): Promise<Category[]> => {
@@ -30,15 +36,10 @@ export function CategoryChoice() {
 
   const createProducts = async (categoryId: string) => {
     try {
-      const response = await getProducts();
+      const response = await getProductsbyCategories(categoryId);
       const products = response.body.results;
-
-      const filteredProducts = products.filter(product => {
-        return product.masterData.current.categories.some(
-          category => category.id === categoryId,
-        );
-      });
-      return filteredProducts;
+      console.log(products);
+      return products;
     } catch (error) {
       console.error(error);
       throw error;
@@ -67,12 +68,12 @@ export function CategoryChoice() {
     return products.map(product => ({
       id: product.id,
       key: product.key,
-      description: product.masterData.current.description['en-US'],
-      image: product.masterData.current.masterVariant.images[0].url,
+      description: product.description['en-US'],
+      image: product.masterVariant.images[0].url,
       price:
-        product.masterData.current.masterVariant.prices[0].value.centAmount,
+        product.masterVariant.prices[0].value.centAmount,
       discount:
-        product.masterData.current.masterVariant.prices[0].discounted?.value
+        product.masterVariant.prices[0].discounted?.value
           ?.centAmount,
     }));
   }
