@@ -13,6 +13,13 @@ export default defineConfig({
   },
   build: {
     target: 'esnext',
+    rollupOptions: {
+      external: [
+        'src/assets/image/albert.jpg',
+        'src/assets/image/Denis.jpg',
+        'src/assets/image/Aleksandra.jpg',
+      ],
+    },
   },
   optimizeDeps: {
     esbuildOptions: {
