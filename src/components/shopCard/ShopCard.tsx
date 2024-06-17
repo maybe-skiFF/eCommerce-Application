@@ -11,12 +11,7 @@ import {
 } from '@mui/material';
 import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
 import { ProductPure, ShopCardProps } from 'src/utils/interfaces';
-import {
-  useState,
-  ChangeEvent,
-  MouseEvent,
-  SyntheticEvent,
-} from 'react';
+import { useState, ChangeEvent, MouseEvent, SyntheticEvent } from 'react';
 import { Link as ReactLink } from 'react-router-dom';
 import { SkeletonComponent } from '../skeleton/skeletonComponent';
 import { SimpleSnackbar } from '../SimpleSnackbar/SimpleSnackbar';
@@ -219,23 +214,26 @@ export function ShopCard({ products, sortValue }: ShopCardProps) {
           sortProducts(sortedProducts).map(product => (
             <Card
               key={product.id}
-              sx={{
-                width: '300px',
-                height: '700px',
-                border: '1px solid #ebedf0',
-                marginBottom: '40px',
-                boxSizing: 'border-box',
-                cursor: 'pointer',
-                alignItems: 'center',
-                transition: 'all 0.3s ease',
-                '&:hover': {
-                  transform: 'scale(1.05)',
-                  boxShadow: '0 5px 15px rgba(0, 0, 0, 0.3)',
+              sx={[
+                {
+                  width: '300px',
+                  height: '700px',
+                  border: '1px solid #ebedf0',
+                  marginBottom: '40px',
+                  boxSizing: 'border-box',
+                  cursor: 'pointer',
+                  alignItems: 'center',
+                  transition: 'all 0.3s ease',
+                  '&:hover': {
+                    transform: 'scale(1.05)',
+                    boxShadow: '0 5px 15px rgba(0, 0, 0, 0.3)',
+                  },
+                  '@media (max-width: 426px)': {
+                    width: '100%',
+                  },
                 },
-                '@media (max-width: 426px)': {
-                  width: '100%',
-                },
-              }}
+                isLoading ? { opacity: 0.5 } : { opacity: 1 },
+              ]}
             >
               <Link
                 component={ReactLink}
@@ -310,7 +308,7 @@ export function ShopCard({ products, sortValue }: ShopCardProps) {
                       isExistToCart(product.id)
                         ? event => void handleClickForDelete(event, product.id)
                         : event =>
-                          void handleClickForAddToCart(event, product.id)
+                            void handleClickForAddToCart(event, product.id)
                     }
                   >
                     {isExistToCart(product.id)
@@ -329,6 +327,18 @@ export function ShopCard({ products, sortValue }: ShopCardProps) {
       {isLoading ? (
         <CircularProgress
           style={{ position: 'absolute', zIndex: 2, top: '50%', left: '50%' }}
+        />
+      ) : (
+        ''
+      )}
+      {isLoading ? (
+        <CircularProgress
+          style={{
+            position: 'fixed',
+            zIndex: 99,
+            top: '50%',
+            left: '50%',
+          }}
         />
       ) : (
         ''

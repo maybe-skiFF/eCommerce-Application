@@ -76,7 +76,7 @@ export const MyCart = () => {
       </Box>
       <Button
         variant="contained"
-        sx={{ backgroundColor: 'grey' }}
+        sx={{ backgroundColor: 'grey', marginLeft: '80%' }}
         startIcon={<DeleteForeverIcon />}
         onClick={event => void handleAllDelete(event)}
       >
