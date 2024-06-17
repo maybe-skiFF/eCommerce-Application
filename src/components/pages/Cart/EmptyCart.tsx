@@ -2,6 +2,7 @@ import { Box, Link, Typography } from '@mui/material';
 import { HeaderWrapper } from 'src/components/HeaderWrapper/HeaderWrapper';
 import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
 import { Link as RouterLink } from 'react-router-dom';
+import emptyCartImg from 'src/assets/image/emptyCart.png';
 
 export const EmptyCart = (): JSX.Element => {
   return (
@@ -17,7 +18,7 @@ export const EmptyCart = (): JSX.Element => {
       >
         <Box
           sx={{
-            backgroundImage: 'url(src/assets/image/emptyCart.png)',
+            backgroundImage: `url(${emptyCartImg})`,
             backgroundSize: 'contain',
             backgroundRepeat: 'no-repeat',
             backgroundPosition: 'center',

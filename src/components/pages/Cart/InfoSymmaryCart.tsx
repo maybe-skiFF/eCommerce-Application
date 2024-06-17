@@ -70,7 +70,7 @@ export const InfoSummaryCart = () => {
         gap: 1.8,
       }}
     >
-      <Paper elevation={3} sx={{ padding: '5% 7%', width: '100%' }}>
+      <Paper elevation={3} sx={{ padding: '5% 7%' }}>
         <Typography variant={'h6'} sx={{ width: '100%', marginBottom: '1.5%' }}>
           Number of items in cart:
           {cart.lineItems.length > 0 ? cart.totalLineItemQuantity : 0}
