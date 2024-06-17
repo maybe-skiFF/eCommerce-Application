@@ -10,7 +10,7 @@ import {
 } from '@mui/material';
 import denisPhoto from 'src/assets/image/Denis.jpg';
 import aleksandraPhoto from 'src/assets/image/Aleksandra.jpg';
-import albertPhoto from 'src/assets/image/albert.jpg';
+// import albertPhoto from 'src/assets/image/albert.jpg';
 
 export function AboutPage() {
   const team = [
