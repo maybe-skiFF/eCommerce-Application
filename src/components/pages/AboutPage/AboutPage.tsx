@@ -8,8 +8,8 @@ import {
   CardMedia,
   Link,
 } from '@mui/material';
-import aleksandraPhoto from '../../../assets/image/Aleksandra.jpg';
 import albertPhoto from '../../../assets/image/albert.jpg';
+import aleksandraPhoto from '../../../assets/image/Aleksandra.jpg';
 import denisPhoto from '../../../assets/image/Denis.jpg';
 
 export function AboutPage() {
