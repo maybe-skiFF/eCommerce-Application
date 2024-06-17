@@ -152,7 +152,7 @@ export function AboutPage() {
               textDecoration: 'none',
               color: '#000000',
               display: 'flex',
-              backgroundImage: `url('src/assets/image/logo-rsschool.png')`,
+              backgroundImage: `url('https://app.rs.school/static/images/logo-rsschool3.png')`,
               backgroundSize: 'contain',
               backgroundRepeat: 'no-repeat',
               backgroundPosition: 'center',
