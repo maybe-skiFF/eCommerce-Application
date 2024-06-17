@@ -19,7 +19,6 @@ export function AboutPage() {
       lastName: 'Bukharmetsyeu',
       role: 'Front-end developer',
       bio: 'Hello, my name is Albert Bukharmetev. I am from Belarus, and recently I turned thirty years old. I studied at Polotsk State University, majoring in Industrial and Civil Engineering. After university, I worked in the construction industry as a site supervisor for several years. Currently, I work as a design engineer at a project organization in the Soligorsk.',
-      photo: albertPhoto,
       github: 'https://github.com/xsoularisx',
     },
     {
@@ -27,7 +26,6 @@ export function AboutPage() {
       lastName: 'Koval',
       role: 'Front-end developer',
       bio: 'Hello everyone, my name is Denis, currently I work as a communications engineer. My goal is to become an experienced JavaScript/Front-end Developer. Over the past year, I have been actively developing in this direction. Every day I increase practical experience. I have theoretical knowledge. I have a critical mind and good analytical skills, easy to teach, know how to work in a team, like to solve complex and non-standard tasks.',
-      photo: denisPhoto,
       github: 'https://github.com/maybe-skiFF',
     },
     {
@@ -35,7 +33,6 @@ export function AboutPage() {
       lastName: 'Ilchenko',
       role: 'Front-end developer',
       bio: 'Previous jobs are indirectly related to the IT field, but having worked in different directions, I understand that you can always try something new, gaining experience and skills. I consider patience and discipline to be one of my main qualities. After all, having them you can learn anything. Therefore, I know that I can become an experienced web developer. I am attracted to this area by the large IT community and the need for constant development.',
-      photo: aleksandraPhoto,
       github: 'https://github.com/Aleksa013',
     },
   ];
