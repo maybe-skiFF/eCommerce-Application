@@ -184,71 +184,195 @@ export function AboutPage() {
             },
           }}
         >
-          {team.map(member => (
-            <Card
-              key={member.name + member.lastName}
+          <Card
+            key={team[0].name + team[0].lastName}
+            sx={{
+              width: '400px',
+              height: '800px',
+              border: '1px solid #ebedf0',
+              marginBottom: '40px',
+              boxSizing: 'border-box',
+              cursor: 'pointer',
+              alignItems: 'center',
+              transition: 'all 0.3s ease',
+              '&:hover': {
+                transform: 'scale(1.05)',
+                boxShadow: '0 5px 15px rgba(0, 0, 0, 0.3)',
+              },
+              '@media (max-width: 426px)': {
+                width: '100%',
+              },
+            }}
+          >
+            <CardMedia
+              component="div"
+              image={team[0].photo}
               sx={{
-                width: '400px',
-                height: '800px',
-                border: '1px solid #ebedf0',
-                marginBottom: '40px',
+                width: '100%',
+                height: '400px',
                 boxSizing: 'border-box',
-                cursor: 'pointer',
-                alignItems: 'center',
-                transition: 'all 0.3s ease',
-                '&:hover': {
-                  transform: 'scale(1.05)',
-                  boxShadow: '0 5px 15px rgba(0, 0, 0, 0.3)',
-                },
-                '@media (max-width: 426px)': {
-                  width: '100%',
-                },
+                border: '1px solid #ebedf0',
+                padding: '0',
+                backgroundSize: 'cover',
               }}
-            >
-              <CardMedia
-                component="div"
-                image={member.photo}
+            />
+            <CardContent>
+              <Typography
+                variant="h5"
+                component="h3"
                 sx={{
-                  width: '100%',
-                  height: '400px',
-                  boxSizing: 'border-box',
-                  border: '1px solid #ebedf0',
-                  padding: '0',
-                  backgroundSize: 'cover',
+                  marginBottom: '10px',
+                  fontWeight: '500',
+                  color: 'hsl(210, 100%, 42%)',
                 }}
-              />
-              <CardContent>
-                <Typography
-                  variant="h5"
-                  component="h3"
-                  sx={{
-                    marginBottom: '10px',
-                    fontWeight: '500',
-                    color: 'hsl(210, 100%, 42%)',
-                  }}
-                >
-                  {member.name} {member.lastName}
-                </Typography>
-                <Typography variant="body1" sx={{ height: '40px' }}>
-                  {member.role}
-                </Typography>
-                <Typography
-                  variant="body1"
-                  sx={{ color: 'hsl(215, 15%, 50%)', height: '240px' }}
-                >
-                  {member.bio}
-                </Typography>
-                <Button
-                  href={member.github}
-                  target="_blank"
-                  variant="outlined"
-                  sx={{ marginTop: '10px' }}
-                >
-                  GitHub
-                </Button>
-              </CardContent>
-            </Card>
-          ))}
+              >
+                {team[0].name} {team[0].lastName}
+              </Typography>
+              <Typography variant="body1" sx={{ height: '40px' }}>
+                {team[0].role}
+              </Typography>
+              <Typography
+                variant="body1"
+                sx={{ color: 'hsl(215, 15%, 50%)', height: '240px' }}
+              >
+                {team[0].bio}
+              </Typography>
+              <Button
+                href={team[0].github}
+                target="_blank"
+                variant="outlined"
+                sx={{ marginTop: '10px' }}
+              >
+                GitHub
+              </Button>
+            </CardContent>
+          </Card>
+          <Card
+            key={team[1].name + team[1].lastName}
+            sx={{
+              width: '400px',
+              height: '800px',
+              border: '1px solid #ebedf0',
+              marginBottom: '40px',
+              boxSizing: 'border-box',
+              cursor: 'pointer',
+              alignItems: 'center',
+              transition: 'all 0.3s ease',
+              '&:hover': {
+                transform: 'scale(1.05)',
+                boxShadow: '0 5px 15px rgba(0, 0, 0, 0.3)',
+              },
+              '@media (max-width: 426px)': {
+                width: '100%',
+              },
+            }}
+          >
+            <CardMedia
+              component="div"
+              image={team[1].photo}
+              sx={{
+                width: '100%',
+                height: '400px',
+                boxSizing: 'border-box',
+                border: '1px solid #ebedf0',
+                padding: '0',
+                backgroundSize: 'cover',
+              }}
+            />
+            <CardContent>
+              <Typography
+                variant="h5"
+                component="h3"
+                sx={{
+                  marginBottom: '10px',
+                  fontWeight: '500',
+                  color: 'hsl(210, 100%, 42%)',
+                }}
+              >
+                {team[1].name} {team[1].lastName}
+              </Typography>
+              <Typography variant="body1" sx={{ height: '40px' }}>
+                {team[1].role}
+              </Typography>
+              <Typography
+                variant="body1"
+                sx={{ color: 'hsl(215, 15%, 50%)', height: '240px' }}
+              >
+                {team[1].bio}
+              </Typography>
+              <Button
+                href={team[1].github}
+                target="_blank"
+                variant="outlined"
+                sx={{ marginTop: '10px' }}
+              >
+                GitHub
+              </Button>
+            </CardContent>
+          </Card>
+          <Card
+            key={team[2].name + team[2].lastName}
+            sx={{
+              width: '400px',
+              height: '800px',
+              border: '1px solid #ebedf0',
+              marginBottom: '40px',
+              boxSizing: 'border-box',
+              cursor: 'pointer',
+              alignItems: 'center',
+              transition: 'all 0.3s ease',
+              '&:hover': {
+                transform: 'scale(1.05)',
+                boxShadow: '0 5px 15px rgba(0, 0, 0, 0.3)',
+              },
+              '@media (max-width: 426px)': {
+                width: '100%',
+              },
+            }}
+          >
+            <CardMedia
+              component="div"
+              image={team[2].photo}
+              sx={{
+                width: '100%',
+                height: '400px',
+                boxSizing: 'border-box',
+                border: '1px solid #ebedf0',
+                padding: '0',
+                backgroundSize: 'cover',
+              }}
+            />
+            <CardContent>
+              <Typography
+                variant="h5"
+                component="h3"
+                sx={{
+                  marginBottom: '10px',
+                  fontWeight: '500',
+                  color: 'hsl(210, 100%, 42%)',
+                }}
+              >
+                {team[2].name} {team[2].lastName}
+              </Typography>
+              <Typography variant="body1" sx={{ height: '40px' }}>
+                {team[2].role}
+              </Typography>
+              <Typography
+                variant="body1"
+                sx={{ color: 'hsl(215, 15%, 50%)', height: '240px' }}
+              >
+                {team[2].bio}
+              </Typography>
+              <Button
+                href={team[2].github}
+                target="_blank"
+                variant="outlined"
+                sx={{ marginTop: '10px' }}
+              >
+                GitHub
+              </Button>
+            </CardContent>
+          </Card>
         </Box>
       </Box>
     </HeaderWrapper>
