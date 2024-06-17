@@ -51,9 +51,9 @@ export const MyCart = () => {
         sx={{
           width: '100%',
           display: 'flex',
-          justifyContent: 'column',
+          justifyContent: 'center',
           flexWrap: 'wrap',
-          alignItems: 'flex-start',
+          alignItems: 'center',
         }}
       >
         <Typography
@@ -65,9 +65,9 @@ export const MyCart = () => {
         <Box
           sx={{
             display: 'flex',
-            width: '60%',
             flexDirection: 'column',
             marginBottom: '2%',
+            padding: '15px',
           }}
         >
           <LoopProductCard />
@@ -76,7 +76,13 @@ export const MyCart = () => {
       </Box>
       <Button
         variant="contained"
-        sx={{ backgroundColor: 'grey', marginLeft: '80%' }}
+        sx={{
+          backgroundColor: 'grey',
+          display: 'flex',
+          justifyContent: 'center',
+          margin: '0 auto',
+          marginBottom: '20px',
+        }}
         startIcon={<DeleteForeverIcon />}
         onClick={event => void handleAllDelete(event)}
       >
