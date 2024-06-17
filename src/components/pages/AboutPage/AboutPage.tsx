@@ -8,9 +8,9 @@ import {
   CardMedia,
   Link,
 } from '@mui/material';
-import denisPhoto from 'src/assets/image/Denis.jpg';
-import aleksandraPhoto from 'src/assets/image/Aleksandra.jpg';
-import albertPhoto from 'src/assets/image/albert.jpg';
+import denisPhoto from '../../../assets/image/Denis.jpg';
+import aleksandraPhoto from '../../../assets/image/Aleksandra.jpg';
+import albertPhoto from '../../../assets/image/albert.jpg';
 
 export function AboutPage() {
   const team = [
@@ -206,7 +206,7 @@ export function AboutPage() {
           >
             <CardMedia
               component="div"
-              image={team[0].photo}
+              image={albertPhoto}
               sx={{
                 width: '100%',
                 height: '400px',
@@ -269,7 +269,7 @@ export function AboutPage() {
           >
             <CardMedia
               component="div"
-              image={team[1].photo}
+              image={denisPhoto}
               sx={{
                 width: '100%',
                 height: '400px',
@@ -332,7 +332,7 @@ export function AboutPage() {
           >
             <CardMedia
               component="div"
-              image={team[2].photo}
+              image={aleksandraPhoto}
               sx={{
                 width: '100%',
                 height: '400px',
