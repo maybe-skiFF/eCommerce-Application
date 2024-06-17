@@ -203,7 +203,7 @@ export function AboutPage() {
           >
             <CardMedia
               component="div"
-              image={albertPhoto}
+              image={denisPhoto}
               sx={{
                 width: '100%',
                 height: '400px',
