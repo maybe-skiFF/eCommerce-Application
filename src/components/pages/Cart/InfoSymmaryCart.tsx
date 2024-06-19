@@ -65,9 +65,10 @@ export const InfoSummaryCart = () => {
         p: 2,
         borderRadius: 2,
         bgcolor: 'background.default',
-        display: 'grid',
-        gridTemplateColumns: { md: '1fr' },
-        gap: 1.8,
+        display: 'flex',
+        // gridTemplateColumns: { md: '1fr' },
+        // gap: 1.8,
+        width: 'clamp(30%, 400px ,100%)',
       }}
     >
       <Paper elevation={3} sx={{ padding: '5% 7%', width: '100%' }}>

@@ -65,7 +65,7 @@ export const MyCart = () => {
         <Box
           sx={{
             display: 'flex',
-            width: '60%',
+            width: 'clamp(60%, 600px ,100%)',
             flexDirection: 'column',
             marginBottom: '2%',
           }}
