@@ -63,7 +63,6 @@ export function CategoryChoice() {
         countPage = Math.ceil(response.body.total / 8);
       }
       setCountPage(countPage);
-      console.log(response);
       return { products };
     } catch (error) {
       console.error(error);
