@@ -35,7 +35,10 @@ import {
 import { checkFullData } from 'src/utils/CheckFullData';
 import { getAddressesArray } from 'src/utils/getAddressesArray';
 import { getCookie, setCookie } from 'src/utils/cookieWork';
-import { getMergeCart } from 'src/serverPart/BuildCart';
+import {
+  createCustomerCart,
+  setCustomerToCart,
+} from 'src/serverPart/BuildCart';
 
 export const RegistrationBlock = () => {
   const [formData, setFormData] = useState<string>(SERVICE_MESSAGES.startCheck);
@@ -132,24 +135,24 @@ export const RegistrationBlock = () => {
           data.get('password') as string,
         ).then(async ({ body }: ClientResponse<CustomerSignInResult>) => {
           setCookie('myID', body.customer.id);
-          const oldCart = body.cart;
-          const cartId = getCookie('myCart')
+          const oldCart = await createCustomerCart(myApi, 'US');
+          console.log(oldCart, 'oldCart');
+          getCookie('myCart')
             ? getCookie('myCart')
             : oldCart
-              ? oldCart.id
+              ? oldCart.body.id
               : '';
-          const customer = await getMergeCart(
-            myApi,
-            data.get('email') as string,
-            data.get('password') as string,
-            cartId ?? '',
-          ).then(newCart => {
-            const newCartData = newCart.body;
-            setCart({ ...cart, ...newCartData });
-            return newCart;
-          });
-          if (customer.body.cart)
-            setCookie('myCart', customer.body.cart.id ?? '');
+          const customer = await setCustomerToCart(
+            oldCart.body,
+            body.customer.id,
+          )
+            .then(newCart => {
+              const newCartData = newCart.body;
+              setCart({ ...cart, ...newCartData });
+              return newCart;
+            })
+            .catch((error: ErrorObject) => console.log(error.message));
+          if (customer) setCookie('myCart', customer.body.id ?? '');
         });
       })
       .catch((error: ErrorObject) => {

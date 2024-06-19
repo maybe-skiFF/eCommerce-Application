@@ -61,6 +61,22 @@ const getMergeCart = async (
     .execute();
 };
 
+const setCustomerToCart = async (
+  cart: Cart,
+  id: string,
+): Promise<ClientResponse<Cart>> => {
+  return await apiRoot
+    .carts()
+    .withId({ ID: cart.id })
+    .post({
+      body: {
+        version: cart.version,
+        actions: [{ action: 'setCustomerId', customerId: id }],
+      },
+    })
+    .execute();
+};
+
 const setCountryForCart = (
   IDCart: string,
   version: number,
@@ -259,4 +275,5 @@ export {
   checkDiscount,
   addDiscountToCart,
   getCartDiscount,
+  setCustomerToCart,
 };
