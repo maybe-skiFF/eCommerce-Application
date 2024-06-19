@@ -12,22 +12,23 @@ import {
 } from 'src/serverPart/BuildCart';
 import { getCookie } from 'src/utils/cookieWork';
 import { SimpleSnackbar } from 'src/components/SimpleSnackbar/SimpleSnackbar';
-import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
 import { useCart } from 'src/context/context';
 import { createTextForProductCart } from './createTextForProductCart';
+import { ErrorObject } from '@commercetools/platform-sdk';
 
 let keyOfItem = 0;
 
 export const InfoProductCard = (product: LineItem): JSX.Element => {
   const [quantity, setQuantity] = useState<number>(product.quantity);
-  const [open, setOpen] = useState<boolean>(false);
+  const [open, setOpen] = useState<string>('');
+  const [disabled, setDisabled] = useState<boolean>(false);
   const { cart, setCart } = useCart();
 
   const handleClose = (event: SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
       return event;
     }
-    setOpen(false);
+    setOpen('');
   };
 
   const handleChangeQuantity = async (
@@ -48,23 +49,30 @@ export const InfoProductCard = (product: LineItem): JSX.Element => {
       cart.body.version,
       product.id,
       operation === 'plus' ? quantity + 1 : quantity - 1,
-    ).then(newCart => {
-      const newCartData = newCart.body;
-      setCart({ ...cart, ...newCartData });
-    });
+    )
+      .then(newCart => {
+        const newCartData = newCart.body;
+        setCart({ ...cart, ...newCartData });
+      })
+      .catch((error: ErrorObject) => {
+        setOpen(error.message);
+      });
   };
   const handleDelete = async (event: SyntheticEvent): Promise<void> => {
     event.persist();
-
+    setDisabled(true);
     await removeProductToCartByID(
       getCookie('myCart') ?? '',
       cart.version,
       product.id,
       quantity,
-    ).then(newCart => {
-      const newCartData = newCart.body;
-      setCart({ ...cart, ...newCartData });
-    });
+    )
+      .then(newCart => {
+        const newCartData = newCart.body;
+        setDisabled(false);
+        setCart({ ...cart, ...newCartData });
+      })
+      .catch((error: ErrorObject) => setOpen(error.message));
   };
 
   keyOfItem += 1;
@@ -95,7 +103,7 @@ export const InfoProductCard = (product: LineItem): JSX.Element => {
           alt="picture"
           sx={{ width: '35%', objectFit: 'contain' }}
         />
-        {SimpleSnackbar(SERVICE_MESSAGES.countQuantity, open, handleClose)}
+        {SimpleSnackbar(open, open !== '', handleClose)}
         <Box
           sx={{
             display: 'flex',
@@ -121,6 +129,7 @@ export const InfoProductCard = (product: LineItem): JSX.Element => {
           <Typography sx={{ width: '100%', textAlign: 'center' }}>
             Quantity:
             <IconButton
+              disabled={disabled}
               type="button"
               onClick={event => void handleChangeQuantity(event, 'minus')}
             >
@@ -128,6 +137,7 @@ export const InfoProductCard = (product: LineItem): JSX.Element => {
             </IconButton>
             {quantity}
             <IconButton
+              disabled={disabled}
               type="button"
               onClick={event => void handleChangeQuantity(event, 'plus')}
             >

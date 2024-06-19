@@ -8,6 +8,9 @@ import {
   CardMedia,
   Link,
 } from '@mui/material';
+import denisPhoto from 'src/assets/image/Denis.jpg';
+import aleksandraPhoto from 'src/assets/image/Aleksandra.jpg';
+import albertPhoto from 'src/assets/image/albert1.jpg';
 
 export function AboutPage() {
   const team = [
@@ -16,7 +19,6 @@ export function AboutPage() {
       lastName: 'Bukharmetsyeu',
       role: 'Front-end developer',
       bio: 'Hello, my name is Albert Bukharmetev. I am from Belarus, and recently I turned thirty years old. I studied at Polotsk State University, majoring in Industrial and Civil Engineering. After university, I worked in the construction industry as a site supervisor for several years. Currently, I work as a design engineer at a project organization in the Soligorsk.',
-      photo: 'src/assets/image/albert.JPG',
       github: 'https://github.com/xsoularisx',
     },
     {
@@ -24,7 +26,6 @@ export function AboutPage() {
       lastName: 'Koval',
       role: 'Front-end developer',
       bio: 'Hello everyone, my name is Denis, currently I work as a communications engineer. My goal is to become an experienced JavaScript/Front-end Developer. Over the past year, I have been actively developing in this direction. Every day I increase practical experience. I have theoretical knowledge. I have a critical mind and good analytical skills, easy to teach, know how to work in a team, like to solve complex and non-standard tasks.',
-      photo: 'src/assets/image/Denis.jpg',
       github: 'https://github.com/maybe-skiFF',
     },
     {
@@ -32,7 +33,6 @@ export function AboutPage() {
       lastName: 'Ilchenko',
       role: 'Front-end developer',
       bio: 'Previous jobs are indirectly related to the IT field, but having worked in different directions, I understand that you can always try something new, gaining experience and skills. I consider patience and discipline to be one of my main qualities. After all, having them you can learn anything. Therefore, I know that I can become an experienced web developer. I am attracted to this area by the large IT community and the need for constant development.',
-      photo: 'src/assets/image/Aleksandra.JPG',
       github: 'https://github.com/Aleksa013',
     },
   ];
@@ -152,7 +152,7 @@ export function AboutPage() {
               textDecoration: 'none',
               color: '#000000',
               display: 'flex',
-              backgroundImage: `url('src/assets/image/logo-rsschool.png')`,
+              backgroundImage: `url('https://app.rs.school/static/images/logo-rsschool3.png')`,
               backgroundSize: 'contain',
               backgroundRepeat: 'no-repeat',
               backgroundPosition: 'center',
@@ -181,71 +181,195 @@ export function AboutPage() {
             },
           }}
         >
-          {team.map(member => (
-            <Card
-              key={member.name + member.lastName}
+          <Card
+            key={team[0].name + team[0].lastName}
+            sx={{
+              width: '400px',
+              height: '800px',
+              border: '1px solid #ebedf0',
+              marginBottom: '40px',
+              boxSizing: 'border-box',
+              cursor: 'pointer',
+              alignItems: 'center',
+              transition: 'all 0.3s ease',
+              '&:hover': {
+                transform: 'scale(1.05)',
+                boxShadow: '0 5px 15px rgba(0, 0, 0, 0.3)',
+              },
+              '@media (max-width: 426px)': {
+                width: '100%',
+              },
+            }}
+          >
+            <CardMedia
+              component="div"
+              image={albertPhoto}
               sx={{
-                width: '400px',
-                height: '800px',
-                border: '1px solid #ebedf0',
-                marginBottom: '40px',
+                width: '100%',
+                height: '400px',
                 boxSizing: 'border-box',
-                cursor: 'pointer',
-                alignItems: 'center',
-                transition: 'all 0.3s ease',
-                '&:hover': {
-                  transform: 'scale(1.05)',
-                  boxShadow: '0 5px 15px rgba(0, 0, 0, 0.3)',
-                },
-                '@media (max-width: 426px)': {
-                  width: '100%',
-                },
+                border: '1px solid #ebedf0',
+                padding: '0',
+                backgroundSize: 'cover',
               }}
-            >
-              <CardMedia
-                component="div"
-                image={member.photo}
+            />
+            <CardContent>
+              <Typography
+                variant="h5"
+                component="h3"
                 sx={{
-                  width: '100%',
-                  height: '400px',
-                  boxSizing: 'border-box',
-                  border: '1px solid #ebedf0',
-                  padding: '0',
-                  backgroundSize: 'cover',
+                  marginBottom: '10px',
+                  fontWeight: '500',
+                  color: 'hsl(210, 100%, 42%)',
                 }}
-              />
-              <CardContent>
-                <Typography
-                  variant="h5"
-                  component="h3"
-                  sx={{
-                    marginBottom: '10px',
-                    fontWeight: '500',
-                    color: 'hsl(210, 100%, 42%)',
-                  }}
-                >
-                  {member.name} {member.lastName}
-                </Typography>
-                <Typography variant="body1" sx={{ height: '40px' }}>
-                  {member.role}
-                </Typography>
-                <Typography
-                  variant="body1"
-                  sx={{ color: 'hsl(215, 15%, 50%)', height: '240px' }}
-                >
-                  {member.bio}
-                </Typography>
-                <Button
-                  href={member.github}
-                  target="_blank"
-                  variant="outlined"
-                  sx={{ marginTop: '10px' }}
-                >
-                  GitHub
-                </Button>
-              </CardContent>
-            </Card>
-          ))}
+              >
+                {team[0].name} {team[0].lastName}
+              </Typography>
+              <Typography variant="body1" sx={{ height: '40px' }}>
+                {team[0].role}
+              </Typography>
+              <Typography
+                variant="body1"
+                sx={{ color: 'hsl(215, 15%, 50%)', height: '240px' }}
+              >
+                {team[0].bio}
+              </Typography>
+              <Button
+                href={team[0].github}
+                target="_blank"
+                variant="outlined"
+                sx={{ marginTop: '10px' }}
+              >
+                GitHub
+              </Button>
+            </CardContent>
+          </Card>
+          <Card
+            key={team[1].name + team[1].lastName}
+            sx={{
+              width: '400px',
+              height: '800px',
+              border: '1px solid #ebedf0',
+              marginBottom: '40px',
+              boxSizing: 'border-box',
+              cursor: 'pointer',
+              alignItems: 'center',
+              transition: 'all 0.3s ease',
+              '&:hover': {
+                transform: 'scale(1.05)',
+                boxShadow: '0 5px 15px rgba(0, 0, 0, 0.3)',
+              },
+              '@media (max-width: 426px)': {
+                width: '100%',
+              },
+            }}
+          >
+            <CardMedia
+              component="div"
+              image={denisPhoto}
+              sx={{
+                width: '100%',
+                height: '400px',
+                boxSizing: 'border-box',
+                border: '1px solid #ebedf0',
+                padding: '0',
+                backgroundSize: 'cover',
+              }}
+            />
+            <CardContent>
+              <Typography
+                variant="h5"
+                component="h3"
+                sx={{
+                  marginBottom: '10px',
+                  fontWeight: '500',
+                  color: 'hsl(210, 100%, 42%)',
+                }}
+              >
+                {team[1].name} {team[1].lastName}
+              </Typography>
+              <Typography variant="body1" sx={{ height: '40px' }}>
+                {team[1].role}
+              </Typography>
+              <Typography
+                variant="body1"
+                sx={{ color: 'hsl(215, 15%, 50%)', height: '240px' }}
+              >
+                {team[1].bio}
+              </Typography>
+              <Button
+                href={team[1].github}
+                target="_blank"
+                variant="outlined"
+                sx={{ marginTop: '10px' }}
+              >
+                GitHub
+              </Button>
+            </CardContent>
+          </Card>
+          <Card
+            key={team[2].name + team[2].lastName}
+            sx={{
+              width: '400px',
+              height: '800px',
+              border: '1px solid #ebedf0',
+              marginBottom: '40px',
+              boxSizing: 'border-box',
+              cursor: 'pointer',
+              alignItems: 'center',
+              transition: 'all 0.3s ease',
+              '&:hover': {
+                transform: 'scale(1.05)',
+                boxShadow: '0 5px 15px rgba(0, 0, 0, 0.3)',
+              },
+              '@media (max-width: 426px)': {
+                width: '100%',
+              },
+            }}
+          >
+            <CardMedia
+              component="div"
+              image={aleksandraPhoto}
+              sx={{
+                width: '100%',
+                height: '400px',
+                boxSizing: 'border-box',
+                border: '1px solid #ebedf0',
+                padding: '0',
+                backgroundSize: 'cover',
+              }}
+            />
+            <CardContent>
+              <Typography
+                variant="h5"
+                component="h3"
+                sx={{
+                  marginBottom: '10px',
+                  fontWeight: '500',
+                  color: 'hsl(210, 100%, 42%)',
+                }}
+              >
+                {team[2].name} {team[2].lastName}
+              </Typography>
+              <Typography variant="body1" sx={{ height: '40px' }}>
+                {team[2].role}
+              </Typography>
+              <Typography
+                variant="body1"
+                sx={{ color: 'hsl(215, 15%, 50%)', height: '240px' }}
+              >
+                {team[2].bio}
+              </Typography>
+              <Button
+                href={team[2].github}
+                target="_blank"
+                variant="outlined"
+                sx={{ marginTop: '10px' }}
+              >
+                GitHub
+              </Button>
+            </CardContent>
+          </Card>
         </Box>
       </Box>
     </HeaderWrapper>
