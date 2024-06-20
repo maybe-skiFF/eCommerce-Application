@@ -8,6 +8,7 @@ import {
   LastModifiedBy,
   StoreKeyReference,
   Address,
+  Product,
 } from '@commercetools/platform-sdk';
 import { ClientResponse } from '@commercetools/sdk-client-v2';
 import { ErrorResponse } from 'react-router-dom';
@@ -98,27 +99,23 @@ export interface Category {
 export interface ProductData {
   id: string;
   key: string | undefined;
-  masterData: {
-    current: {
-      description: {
-        'en-US': string;
+  description: {
+    'en-US': string;
+  };
+  masterVariant: {
+    images: {
+      url: string;
+    }[];
+    prices: {
+      discounted: {
+        value: {
+          centAmount: number;
+        };
       };
-      masterVariant: {
-        images: {
-          url: string;
-        }[];
-        prices: {
-          discounted: {
-            value: {
-              centAmount: number;
-            };
-          };
-          value: {
-            centAmount: number;
-          };
-        }[];
+      value: {
+        centAmount: number;
       };
-    };
+    }[];
   };
 }
 
@@ -258,6 +255,12 @@ export interface AnswerAddress {
   postalCode: string;
 }
 
+export interface PaginationComponentProps {
+  count: number;
+  page: number;
+  handlePageChange: (event: React.ChangeEvent<unknown>, value: number) => void;
+}
+
 export type ValueOfCustomer =
   | string
   | number
@@ -270,3 +273,7 @@ export type ValueOfCustomer =
   | CustomerGroupReference
   | CustomFields
   | StoreKeyReference[];
+
+export interface ProductObj {
+  productDataById: Product | undefined;
+}

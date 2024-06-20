@@ -1,4 +1,4 @@
-import { Product } from '@commercetools/platform-sdk';
+import { Cart, ClientResponse, ErrorObject } from '@commercetools/platform-sdk';
 
 import {
   Box,
@@ -8,14 +8,38 @@ import {
   Radio,
   RadioGroup,
   Typography,
+  IconButton,
+  CircularProgress,
 } from '@mui/material';
 import { SwiperSlider } from '../SwiperSlider/SwiperSlider';
-
-interface ProductObj {
-  productDataById: Product | undefined;
-}
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+import DeleteIcon from '@mui/icons-material/Delete';
+import {
+  getAnonymnusCart,
+  getCartByID,
+  addProductToCartByID,
+  // setCountryForCart,
+  removeProductToCartByID,
+} from 'src/serverPart/BuildCart';
+import { getCookie, setCookie } from 'src/utils/cookieWork';
+import { ProductObj } from 'src/utils/interfaces';
+import { SyntheticEvent, useState } from 'react';
+import { SERVICE_MESSAGES } from 'src/constants/SERVICE_MESSAGES';
+import { SimpleSnackbar } from '../SimpleSnackbar/SimpleSnackbar';
+import { useCart } from 'src/context/context';
 
 export function DetailedProductWrapper({ productDataById }: ProductObj) {
+  const [open, setOpen] = useState<string>('');
+  const { cart, setCart } = useCart();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const handleClose = (event: SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return event;
+    }
+    setOpen('');
+  };
+
   if (!productDataById) return;
 
   const productDiscountPrice =
@@ -38,17 +62,79 @@ export function DetailedProductWrapper({ productDataById }: ProductObj) {
     return false;
   }
 
+  const isExistToCart = cart.lineItems.some(
+    line => line.productId === productDataById.id,
+  );
+
+  const getMyAnonimnusCart = async (): Promise<ClientResponse<Cart>> => {
+    if (!getCookie('myCart')) {
+      const cartAnon = await getAnonymnusCart();
+      setCookie('myCart', cartAnon.body.id);
+      setCart({ ...cart, ...cartAnon.body });
+      return cartAnon;
+    }
+    const cartDeAnon = await getCartByID(getCookie('myCart') ?? '').then(
+      data => {
+        setCart({ ...cart, ...data.body });
+        return data;
+      },
+    );
+    return cartDeAnon;
+  };
+
+  const handleClickForAddToCart = async () => {
+    setIsLoading(true);
+    const cartFromServer = await getMyAnonimnusCart();
+    const productID = productDataById.id;
+    await addProductToCartByID(
+      cartFromServer.body.id,
+      cartFromServer.body.version,
+      productID,
+    )
+      .then(({ body }) => {
+        setCart({ ...cart, ...body });
+        setOpen(SERVICE_MESSAGES.added);
+        setIsLoading(false);
+      })
+      .catch((error: ErrorObject) => setOpen(error.message));
+  };
+
+  const handleClickForDelete = async () => {
+    setIsLoading(true);
+    const productID = productDataById.id;
+    const productInCart = cart.lineItems.filter(
+      line => productID === line.productId,
+    );
+    if (productInCart.length > 0) {
+      await removeProductToCartByID(
+        cart.id,
+        cart.version,
+        productInCart[0].id,
+        productInCart[0].quantity,
+      )
+        .then(({ body }) => {
+          setCart({ ...cart, ...body });
+          setOpen(SERVICE_MESSAGES.deleted);
+          setIsLoading(false);
+        })
+        .catch((error: ErrorObject) => setOpen(error.message));
+    }
+  };
+
   return (
     <Box sx={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap' }}>
       <Box
-        sx={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          justifyContent: 'center',
-          alignItems: 'center',
-          columnGap: '20px',
-          marginTop: '40px',
-        }}
+        sx={[
+          {
+            display: 'flex',
+            flexWrap: 'wrap',
+            justifyContent: 'center',
+            alignItems: 'flex-end',
+            columnGap: '20px',
+            marginTop: '40px',
+          },
+          isLoading ? { opacity: 0.5 } : { opacity: 1 },
+        ]}
       >
         <Box>
           <SwiperSlider productImgArr={productImgArr} />
@@ -72,12 +158,15 @@ export function DetailedProductWrapper({ productDataById }: ProductObj) {
                 {productPrice / 100} EUR
               </Typography>
               <Typography sx={{ color: 'red', fontWeight: '700' }} variant="h6">
-                {(productDiscountPrice ?? 0) / 100} EUR - with discount
+                {(productDiscountPrice ?? 0) / 100} {SERVICE_MESSAGES.USD}- with
+                discount
               </Typography>
             </Box>
           ) : (
             <Box sx={{ height: '80px' }}>
-              <Typography variant="h6">{productPrice / 100} EUR</Typography>
+              <Typography variant="h6">
+                {productPrice / 100} {SERVICE_MESSAGES.USD}
+              </Typography>
             </Box>
           )}
           <FormControl>
@@ -102,8 +191,32 @@ export function DetailedProductWrapper({ productDataById }: ProductObj) {
               />
             </RadioGroup>
           </FormControl>
+          <IconButton
+            sx={{ marginBottom: '0%', borderRadius: 0 }}
+            disabled={isExistToCart}
+            type="button"
+            onClick={() => void handleClickForAddToCart()}
+          >
+            <AddShoppingCartIcon fontSize="large" />
+          </IconButton>
+          <IconButton
+            sx={{ marginBottom: '0%', borderRadius: 0 }}
+            disabled={!isExistToCart}
+            type="button"
+            onClick={() => void handleClickForDelete()}
+          >
+            <DeleteIcon fontSize="large" />
+          </IconButton>
+          {SimpleSnackbar(open, open !== '', handleClose)}
         </Box>
       </Box>
+      {isLoading ? (
+        <CircularProgress
+          style={{ position: 'absolute', zIndex: 2, top: '50%', left: '50%' }}
+        />
+      ) : (
+        ''
+      )}
     </Box>
   );
 }

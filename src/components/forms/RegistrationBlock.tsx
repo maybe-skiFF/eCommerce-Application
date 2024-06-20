@@ -1,6 +1,6 @@
 import { ChangeEvent, FormEvent, SyntheticEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useCustomer, useIsAuth } from 'src/context/context';
+import { useCart, useCustomer, useIsAuth } from 'src/context/context';
 import {
   Box,
   Grid,
@@ -34,12 +34,14 @@ import {
 } from '@commercetools/platform-sdk';
 import { checkFullData } from 'src/utils/CheckFullData';
 import { getAddressesArray } from 'src/utils/getAddressesArray';
-import { setCookie } from 'src/utils/cookieWork';
+import { getCookie, setCookie } from 'src/utils/cookieWork';
+import { createCustomerCart, getMergeCart } from 'src/serverPart/BuildCart';
 
 export const RegistrationBlock = () => {
   const [formData, setFormData] = useState<string>(SERVICE_MESSAGES.startCheck);
 
   const { customer, setCustomer } = useCustomer();
+  const { cart, setCart } = useCart();
 
   const [openDefaultAddress, setOpenDefaultAddress] = useState<boolean>(false);
 
@@ -121,7 +123,6 @@ export const RegistrationBlock = () => {
           navigate('/');
           localStorage.setItem('isAuth', 'true');
           setIsAuth(true);
-          location.reload();
         }
       })
       .then(async () => {
@@ -129,9 +130,27 @@ export const RegistrationBlock = () => {
           myApi,
           data.get('email') as string,
           data.get('password') as string,
-        ).then(({ body }: ClientResponse<CustomerSignInResult>) => {
-          console.log(body, 'thisBody');
+        ).then(async ({ body }: ClientResponse<CustomerSignInResult>) => {
           setCookie('myID', body.customer.id);
+          const oldCart = await createCustomerCart(myApi, 'US');
+          if (getCookie('myCart')) {
+            await getMergeCart(
+              myApi,
+              data.get('email') as string,
+              data.get('password') as string,
+              getCookie('myCart') ?? '',
+            )
+              .then(newCart => {
+                const newCartData = newCart.body.cart;
+                setCart({ ...cart, ...newCartData });
+                setCookie('myCart', newCartData!.id);
+                return newCart;
+              })
+              .catch((error: ErrorObject) => console.log(error.message));
+          } else {
+            setCookie('myCart', oldCart.body.id);
+            setCart({ ...cart, ...oldCart });
+          }
         });
       })
       .catch((error: ErrorObject) => {

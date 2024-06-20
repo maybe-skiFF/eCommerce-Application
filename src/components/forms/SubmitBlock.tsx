@@ -15,15 +15,16 @@ import {
   checkValidationFieldEmail,
   checkValidationFieldPassword,
 } from 'src/utils/checkValidationField';
-import { setCookie } from 'src/utils/cookieWork';
+import { getCookie, setCookie } from 'src/utils/cookieWork';
 import { useNavigate } from 'react-router-dom';
-import { useIsAuth } from 'src/context/context';
+import { useCart, useIsAuth } from 'src/context/context';
 import { SimpleSnackbar } from '../SimpleSnackbar/SimpleSnackbar';
 import {
   ClientResponse,
   CustomerSignInResult,
   ErrorObject,
 } from '@commercetools/platform-sdk';
+import { getMergeCart } from 'src/serverPart/BuildCart';
 
 export const SubmitBlock = (): ReactNode => {
   const [currentStatusEmail, setCurrentStatusEmail] = useState<string>(
@@ -36,6 +37,7 @@ export const SubmitBlock = (): ReactNode => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
   const { setIsAuth } = useIsAuth();
+  const { cart, setCart } = useCart();
 
   const handleClose = (event: SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
@@ -81,18 +83,54 @@ export const SubmitBlock = (): ReactNode => {
       data.get('email') as string,
       data.get('password') as string,
     )
-      .then(({ body, statusCode }: ClientResponse<CustomerSignInResult>) => {
-        if (statusCode !== 200) {
-          setOpen(true);
-          setServerMessage(SERVICE_MESSAGES.errorMail);
-        } else {
-          navigate('/');
-          localStorage.setItem('isAuth', 'true');
-          setIsAuth(true);
-          setCookie('myID', body.customer.id);
-          location.reload();
-        }
-      })
+      .then(
+        async ({ body, statusCode }: ClientResponse<CustomerSignInResult>) => {
+          if (statusCode !== 200) {
+            setOpen(true);
+            setServerMessage(SERVICE_MESSAGES.errorMail);
+          } else {
+            navigate('/');
+            localStorage.setItem('isAuth', 'true');
+            setIsAuth(true);
+            setCookie('myID', body.customer.id);
+            const oldCart = body.cart;
+            const cartId = getCookie('myCart')
+              ? getCookie('myCart')
+              : oldCart
+                ? oldCart.id
+                : '';
+            if (getCookie('myCart')) {
+              await getMergeCart(
+                myApi,
+                data.get('email') as string,
+                data.get('password') as string,
+                cartId ?? '',
+              ).then(newCart => {
+                const newCartData = newCart.body.cart;
+                setCart({ ...cart, ...newCartData });
+                setCookie('myCart', newCartData!.id);
+                return newCart;
+              });
+            } else {
+              setCookie('myCart', oldCart!.id);
+              setCart({ ...cart, ...oldCart });
+            }
+            //   const customer = await getMergeCart(
+            //     myApi,
+            //     data.get('email') as string,
+            //     data.get('password') as string,
+            //     cartId ?? '',
+            //   ).then(newCart => {
+            //     const newCartData = newCart.body.cart;
+            //     setCart({ ...cart, ...newCartData });
+            //     setCookie('myCart', newCartData!.id);
+            //     return newCart;
+            //   });
+            //   if (customer.body.cart)
+            //     setCookie('myCart', customer.body.cart.id ?? '');
+          }
+        },
+      )
       .catch((error: ErrorObject) => {
         setServerMessage(error.message);
         setOpen(true);
