@@ -35,10 +35,7 @@ import {
 import { checkFullData } from 'src/utils/CheckFullData';
 import { getAddressesArray } from 'src/utils/getAddressesArray';
 import { getCookie, setCookie } from 'src/utils/cookieWork';
-import {
-  createCustomerCart,
-  setCustomerToCart,
-} from 'src/serverPart/BuildCart';
+import { createCustomerCart, getMergeCart } from 'src/serverPart/BuildCart';
 
 export const RegistrationBlock = () => {
   const [formData, setFormData] = useState<string>(SERVICE_MESSAGES.startCheck);
@@ -136,23 +133,24 @@ export const RegistrationBlock = () => {
         ).then(async ({ body }: ClientResponse<CustomerSignInResult>) => {
           setCookie('myID', body.customer.id);
           const oldCart = await createCustomerCart(myApi, 'US');
-          console.log(oldCart, 'oldCart');
-          getCookie('myCart')
-            ? getCookie('myCart')
-            : oldCart
-              ? oldCart.body.id
-              : '';
-          const customer = await setCustomerToCart(
-            oldCart.body,
-            body.customer.id,
-          )
-            .then(newCart => {
-              const newCartData = newCart.body;
-              setCart({ ...cart, ...newCartData });
-              return newCart;
-            })
-            .catch((error: ErrorObject) => console.log(error.message));
-          if (customer) setCookie('myCart', customer.body.id ?? '');
+          if (getCookie('myCart')) {
+            await getMergeCart(
+              myApi,
+              data.get('email') as string,
+              data.get('password') as string,
+              getCookie('myCart') ?? '',
+            )
+              .then(newCart => {
+                const newCartData = newCart.body.cart;
+                setCart({ ...cart, ...newCartData });
+                setCookie('myCart', newCartData!.id);
+                return newCart;
+              })
+              .catch((error: ErrorObject) => console.log(error.message));
+          } else {
+            setCookie('myCart', oldCart.body.id);
+            setCart({ ...cart, ...oldCart });
+          }
         });
       })
       .catch((error: ErrorObject) => {
