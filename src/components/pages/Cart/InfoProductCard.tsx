@@ -36,6 +36,7 @@ export const InfoProductCard = (product: LineItem): JSX.Element => {
     operation: 'plus' | 'minus',
   ) => {
     event.persist();
+    setDisabled(true);
     if (operation === 'plus') {
       setQuantity(quantity => quantity + 1);
     } else {
@@ -54,6 +55,7 @@ export const InfoProductCard = (product: LineItem): JSX.Element => {
       .then(newCart => {
         const newCartData = newCart.body;
         setCart({ ...cart, ...newCartData });
+        setDisabled(false);
       })
       .catch((error: ErrorObject) => {
         setOpen(error.message);
