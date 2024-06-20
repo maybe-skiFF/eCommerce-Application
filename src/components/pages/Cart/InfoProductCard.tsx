@@ -44,6 +44,7 @@ export const InfoProductCard = (product: LineItem): JSX.Element => {
     const cart = !getCookie('myID')
       ? await getCartByID(getCookie('myCart') ?? '')
       : await getCustomerCart(getCookie('myID') ?? '');
+    console.log(cart, 'my');
     await changeProductQuantityToCartByID(
       getCookie('myCart') ?? '',
       cart.body.version,

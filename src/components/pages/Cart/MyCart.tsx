@@ -18,6 +18,7 @@ export const MyCart = () => {
     if (!getCookie('myCart')) {
       return <Box> No Product</Box>;
     }
+    console.log(cart);
     const arr = cart.lineItems.map((item: LineItem) => InfoProductCard(item));
     return arr;
   };
